@@ -45,7 +45,7 @@ class test_noDuplicate(TestCase):
 # And: The system displays the course credits can't be using alphabets.
     def test_invalidCourseCredit(self):
         response = self.client.post('/course/', {"number": "MATH231", "credit": "a"}, follow=True)
-        self.assetEqual("The course credit can't us alphabets.", response.context["message"])
+        self.assetEqual("The course credit can't use alphabets.", response.context["message"])
 
 
 
