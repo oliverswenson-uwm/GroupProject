@@ -4,11 +4,11 @@ from django.test import TestCase
 def SetUp():
     pass
 
-Class TestCreateValid(TestCase):
+class TestCreateValid(TestCase):
     pass
 
-Class TestCreateInvalid(TestCase):
+class TestCreateInvalid(TestCase):
     pass
 
-Class TestCreateDuplicate(TestCase):
+class TestCreateDuplicate(TestCase):
     pass

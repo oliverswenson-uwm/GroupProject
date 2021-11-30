@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from GroupNullProject.models import User
 
 class SuccessFulLogin(TestCase):
-
+    pass
 
 class FailedLogin(TestCase):
 
