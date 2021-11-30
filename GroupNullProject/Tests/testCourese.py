@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from django.test import Client
 
-from .models import *
+from GroupNullProject.models import *
 
 # Writing test as admin as user which have their name as admin.
 # Writing test Course as course database.

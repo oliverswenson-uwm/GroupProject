@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
-from GroupNullProject.models import User
+
+from GroupNullProject.models import *
 
 class SuccessFulLogin(TestCase):
     pass
