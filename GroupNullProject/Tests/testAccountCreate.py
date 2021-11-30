@@ -1,8 +1,13 @@
 from django.test import TestCase
 #from myapp.models import (USER)
+from django.test import Client
 
-def SetUp():
-    pass
+from GroupNullProject.models import *
+
+def SetUp(self):
+    self.client = Client()
+    user = User(name="role", password="password")
+    user.save()
 
 class TestCreateValid(TestCase):
     pass
