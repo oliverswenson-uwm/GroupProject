@@ -2,4 +2,4 @@ workspace.xml
 usage.statistics.xml
 tasks.xml
 shelf/
-venv
+.venv
