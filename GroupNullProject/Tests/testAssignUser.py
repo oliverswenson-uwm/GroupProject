@@ -1,19 +1,36 @@
-from django.test import TestCase
-#from myapp.models import (USER)
-from django.test import Client
+class AssignUser():
+    def setUP(self):
+        pass
 
-from GroupNullProject.models import *
+    def test_validUser(self):
+        pass
 
-def SetUp(self):
-    self.client = Client()
-    user = User(name="role", password="password")
-    user.save()
+    def test_invalidUser(self):
+        pass
 
-class TestAssignTA(TestCase):
-    pass
+    def test_validCourse(self):
+        pass
 
-class TestAssignProf(TestCase):
-    pass
+    def test_inValidCourse(self):
+        pass
 
-class TestAssignAdmin(TestCase):
-    pass
+    def test_assignTAToLab(self):
+        pass
+
+    def test_assignTAToCourse(self):
+        pass
+
+    def test_assignInstructorToLab(self):
+        pass
+
+    def test_assignIntructorToCourse(self):
+        pass
+
+    def test_assignDuplicateToCourse(self):
+        pass
+
+    def test_assignMultipleSections(self):
+        pass
+
+    def test_assignMultipleInsturctors(self):
+        pass
