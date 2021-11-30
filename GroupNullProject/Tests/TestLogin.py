@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from GroupNullProject.models import *
 
-class SuccessFulLogin(TestCase):
+class SuccessfulLogin(TestCase):
     pass
 
 class FailedLogin(TestCase):
@@ -19,12 +19,9 @@ class FailedLogin(TestCase):
 
         for i in self.userList.keys():
 
-            temp = MyUser(name=i, password=i)
+            temp = MyUser(name=i, password = i)
             print(temp)
             #temp.save()#save in database
-
-        for j in self.userList[i]:
-            Stuff(name=j, owner=temp).save()
 
 
 def test_badPasswordProvided(self):
