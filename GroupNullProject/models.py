@@ -4,7 +4,7 @@ from django.db import models
 
 class Course(models.Model):
     name = models.CharField(max_length=80)
-    numCredits = models.IntegerField()
+    numCredits = models.IntegerFiel()
 
 class User(models.Model):
     name = models.CharField(max_length=20)
