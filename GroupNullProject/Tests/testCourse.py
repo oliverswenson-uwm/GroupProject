@@ -14,7 +14,7 @@ class test_noDuplicate(TestCase):
         user = User(name="admin", password="password")
         user.save()
 
-        Course(number="337", credit="4").save()
+        Course(number="COMPSCI337", credit="4").save()
 
     # As a system admin, I want to create a new course, so that I could add new courses on the page.
     # Given: The course that admin is trying to make does not exist.
@@ -25,7 +25,7 @@ class test_noDuplicate(TestCase):
 
     def test_defualt(self):
         response = self.client.post('/course/', {"number": "MATH231", "credit": "3"}, follow=True)
-        self.assertEqual("100", response.context["course"])
+        self.assertEqual("MATH231", response.context["course"])
         self.assertEqual("3", response.context["credit"])
 
     # As a system admin, I want to create a new course, so that I could add new courses on the page.
@@ -86,13 +86,13 @@ class test_Duplicate(TestCase):
         user = User(name="admin", password="password")
         user.save()
 
-        Course(number="337", credit="4").save()
+        Course(number="COMPSCI337", credit="4").save()
 
     # As a system admin, I want to create a new course, so that I could add new courses on the page.
     # Given: The course that admin is trying to make exist.
     # When: The admin creates the new course.
     # Then: The system does not create course.
     # And: The system displays there is already course exist.
-    def test_noCourseCredit(self):
-        response = self.client.post('/course/', {"number": "337", "credit": "3"}, follow=True)
+    def test_DuplicaeName(self):
+        response = self.client.post('/course/', {"number": "COMPSCI337", "credit": "3"}, follow=True)
         self.assertEqual("The course already exist", response.context["message"])
