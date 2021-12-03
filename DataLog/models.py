@@ -2,12 +2,12 @@ from django.db import models
 
 
 class Staff(models.Model):
-    firstName = models.CharField(max_length=25)
-    lastName = models.CharField(max_length=25)
-    email = models.EmailField(max_length=75)
-    password = models.CharField(max_length=25)
-    phoneNum = models.IntegerField()
-    mailAddress = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)  # staff name, i.e, John Smith
+    email = models.EmailField(max_length=75)  # email fo the staff, i.e., johnsmith@uwm.edu
+    userName = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
+    password = models.CharField(max_length=25)  # password of the staff for login
+    phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567
+    mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
 
     # any user can change there personal information
     # def setFirstName(self, name):
@@ -24,7 +24,7 @@ class Staff(models.Model):
         pass
 
     def __str__(self):
-        return self.firstName + " " + self.lastName
+        return self.name
 
     class Meta:
         abstract = True
@@ -36,6 +36,9 @@ class Admin(Staff, models.Model):
         pass
 
     def createCourse(self):
+        pass
+
+    def assignStaff(self):
         pass
 
 
@@ -55,17 +58,24 @@ class TA(Staff, models.Model):
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)  # name of the course, i.e., SC361
+    section = models.IntegerField()  # section of this course i.e., 401
+    credits = models.IntegerField()  # number of credits for this course i.e., 3
+    prereqs = models.CharField(max_length=100)  # prereqs that this course required
+    description = models.CharField(max_length=255)  # quick summary of the course
 
     def __str__(self):
-        return self.name
+        return self.name + "-" + str(self.section)
 
 
 class Lab(models.Model):
-    name = models.CharField(max_length=255)
+    # name of the lab, should be similar to course name
+    # since its is assigning to a course, i.e.,  CS361
+    name = models.CharField(max_length=100)
+    section = models.IntegerField()  # section of lab, i.e., 802
 
     def __str__(self):
-        return self.name
+        return self.name + "-" + self.section
 
 
 class LabToCourse(models.Model):
