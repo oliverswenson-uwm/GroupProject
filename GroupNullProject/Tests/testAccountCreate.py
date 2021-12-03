@@ -2,7 +2,6 @@ from django.test import TestCase
 #from myapp.models import (USER)
 from django.test import Client
 
-from GroupNullProject.models import *
 
 def SetUp(self):
     self.client = Client()
