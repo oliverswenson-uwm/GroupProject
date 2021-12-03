@@ -45,27 +45,27 @@ class FailedLogin(TestCase):
             print(temp)
             temp.save() #save in database
 
-def test_passwordNotMatch(self):
-    resp = self.client.post("/", {"name": "userone", "password": "passtwo"}, follow=True)
-    self.assertEqual(resp.context["message"], "bad password", "no failed login. user:userone, pass:passtwo")
-    #potentially change error message
+    def test_passwordNotMatch(self):
+        resp = self.client.post("/", {"name": "userone", "password": "passtwo"}, follow=True)
+        self.assertEqual(resp.context["message"], "bad password", "no failed login. user:userone, pass:passtwo")
+        #potentially change error message
 
-def test_userNotExist(self):
-    resp = self.client.post("/", {"name": "userdoesnotexist", "password": "passone"}, follow=True)
-    self.assertEqual(resp.context["message"], "user does not exist", "no failed login. user:userdoesnotexist, pass:passone")
-    # potentially change error message
+    def test_userNotExist(self):
+        resp = self.client.post("/", {"name": "userdoesnotexist", "password": "passone"}, follow=True)
+        self.assertEqual(resp.context["message"], "user does not exist", "no failed login. user:userdoesnotexist, pass:passone")
+        # potentially change error message
 
-def test_noPasswordProvided(self):
-    resp = self.client.post("/", {"name": "userone", "password": ""}, follow=True)
-    self.assertEqual(resp.context["message"], "no password provided", "no failed login. user:userone, pass: NULL")
-    # potentially change error message
+    def test_noPasswordProvided(self):
+        resp = self.client.post("/", {"name": "userone", "password": ""}, follow=True)
+        self.assertEqual(resp.context["message"], "no password provided", "no failed login. user:userone, pass: NULL")
+        # potentially change error message
 
-def test_noUserProvided(self):
-    resp = self.client.post("/", {"name": "", "password": "passthree"}, follow=True)
-    self.assertEqual(resp.context["message"], "no username provided", "no failed login. user:NULL, pass: passthree")
-    # potentially change error message
+    def test_noUserProvided(self):
+        resp = self.client.post("/", {"name": "", "password": "passthree"}, follow=True)
+        self.assertEqual(resp.context["message"], "no username provided", "no failed login. user:NULL, pass: passthree")
+        # potentially change error message
 
-def test_twoBlankFields(self):
-    resp = self.client.post("/", {"name": "", "password": ""}, follow=True)
-    self.assertEqual(resp.context["message"], "no username or password provided", "no failed login. user:NULL, pass: NULL")
-    # potentially change error message
+    def test_twoBlankFields(self):
+        resp = self.client.post("/", {"name": "", "password": ""}, follow=True)
+        self.assertEqual(resp.context["message"], "no username or password provided", "no failed login. user:NULL, pass: NULL")
+        # potentially change error message

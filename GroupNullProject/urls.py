@@ -18,4 +18,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home', index.as_view()),
+    path('home/', History.as_view())
 ]
