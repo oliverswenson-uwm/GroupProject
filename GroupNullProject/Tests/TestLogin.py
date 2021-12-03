@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from GroupNullProject.models import *
+
 
 class SuccessfulLogin(TestCase):
 

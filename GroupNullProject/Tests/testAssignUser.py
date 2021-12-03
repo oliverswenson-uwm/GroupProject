@@ -1,7 +1,6 @@
-from django.test import TestCase
 # from myapp.models import (USER) test
 from django.test import Client
-from GroupNullProject.models import *
+
 
 class AssignUser():
 
