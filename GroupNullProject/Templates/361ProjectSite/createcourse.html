@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang = "en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>New Account</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href= "index.html">click this link.</a></span>
+    <h1 id="thetitle2">Create Course</h1>
+    <p id="group1">
+
+  <div class="container">
+
+    <p>Please include the name of the course you want to create, as well as whether it is undergraduate or graduate. Remember, no duplicate course names!</p>
+
+    <hr>
+
+  <p class="formfield">
+    <label for="cnum"><b>Course Number</b></label>
+    <input type="text" placeholder="Enter Course Num..." id="cnum" required>
+    <br>
+
+    <label for="credits"><b>Credits</b></label>
+    <input type="text" placeholder="Enter Credits..." id="credits" required>
+    <br>
+
+    <label for="reqa"><b>Prereqs</b></label>
+    <input type="text" placeholder="Enter Prereqs..." id="reqa" required>
+    <br>
+
+
+    <label for="desc"><b>Course Description</b></label>
+    <textarea rows="4" cols="30" id="desc">
+    Enter your description here...
+    </textarea>
+  </p>
+    <br>
+    
+    <br><br><br>
+    <form>
+      <input type="button" value="Create Course!" onclick="history.back()">
+    </form>
+  </div>
+  </body>
+</html>

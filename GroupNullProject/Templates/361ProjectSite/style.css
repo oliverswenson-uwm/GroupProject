@@ -1,0 +1,58 @@
+#header
+{ /*body*/
+  background-size: 100% 100%;
+  border-style: double;
+  border-width: 1px;
+  padding: 10px;
+}
+
+#group1
+{
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 80%;
+  color: black;
+}
+
+#thetitle1
+{
+  color: darkred;
+  text-align: center;
+  border-style: solid;
+  border-color: blue;
+  border-width: 2px;
+}
+
+#thetitle2
+{
+  color: black;
+  text-align: center;
+  border-style: dashed;
+  border-color: gray;
+  border-width: 1px;
+}
+
+#thetitle3
+{
+  color: black;
+  text-align: center;
+  border-style: dashed;
+  border-color: gray;
+  border-width: 1px;
+}
+
+body {
+background-color: #DBF9FC;
+text-align: center;
+}
+
+.formfield * {
+  vertical-align: middle;
+}
+
+label {
+    width: 150px;
+}
+
+table {
+  text-align: center;
+}
