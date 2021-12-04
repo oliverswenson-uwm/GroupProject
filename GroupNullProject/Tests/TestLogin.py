@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from DataLog.models.py import Staff
 
 
 class SuccessfulLogin(TestCase):
@@ -12,7 +13,7 @@ class SuccessfulLogin(TestCase):
             "userthree": "passthree" #user three
         }
         for i in self.userList.keys():
-            temp = MyUser(name=i, password = userList.get(i))
+            temp = Staff(userName=i, password = userList.get(i))
             print(temp)
             temp.save() #save in database
 
@@ -41,7 +42,7 @@ class FailedLogin(TestCase):
             "userthree": "passthree" #user three
         }
         for i in self.userList.keys():
-            temp = MyUser(name=i, password = userList.get(i))
+            temp = Staff(userName=i, password = userList.get(i))
             print(temp)
             temp.save() #save in database
 
