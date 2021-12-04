@@ -17,5 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),#django administration page
+    path('', Home.as_view()),
+    path('adminpage/', AdminPage.as_view())#admin of the scheduling app page
+    path('assignuser/', AssignUser.as_view()),
+    path('createcourse/', CreateCourse.as_view()),
+    path('newaccount/', NewAcc.as_view()),
+    path('profpage/', ProfPage.as_view()),
+    path('tapage/', TaPage.as_view()),
 ]
