@@ -2,6 +2,8 @@ from django.views import View
 from django.shortcuts import render
 from .models import Lab, Course, Staff
 
+from GroupNullProject import templates
+
 #TODO: make more specific get/post methods
 
 #HOMEPAGE
