@@ -22,7 +22,7 @@ class AdminPage(View):
 class AssignUser(View):
     def get(self,request):
         return render(request, "assignuser.html")
-    def post(self,request)
+    def post(self,request):
         pass
 
 #CREATECOURSE
