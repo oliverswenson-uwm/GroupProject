@@ -4,11 +4,10 @@ from django.db import models
 class Staff(models.Model):
     name = models.CharField(max_length=100)  # staff name, i.e, John Smith
     email = models.EmailField(max_length=75)  # email fo the staff, i.e., johnsmith@uwm.edu
-    userName = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
+    username = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
-
     # any user can change there personal information
     # def setFirstName(self, name):
     #     pass
@@ -19,9 +18,20 @@ class Staff(models.Model):
     # def setEmail(self, email):
     #     pass
 
-    # This function will return first and last name and email of all users
-    def getPublicInfo(self):
-        pass
+    def getUser(self, username):
+        queryList = []
+        queryList.append(Admin.objects.filter(username=username))
+        queryList.append(Professor.objects.filter(username=username))
+        queryList.append(TA.objects.filter(username=username))
+        # a = queryList[0]
+        print(queryList)
+        user = None
+        for query in queryList:
+            if len(query) == 0:
+                continue
+            else:
+                user = query[0]
+        return user
 
     def __str__(self):
         return self.name
@@ -31,9 +41,23 @@ class Staff(models.Model):
 
 
 class Admin(Staff, models.Model):
+    def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
+        admin = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        admin.save()
+        print(admin)
+        return admin
 
-    def createAccount(self):
-        pass
+    def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
+        prof = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        prof.save()
+        print(prof)
+        return prof
+
+    def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
+        ta = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        ta.save()
+        print(ta)
+        return ta
 
     def createCourse(self):
         pass

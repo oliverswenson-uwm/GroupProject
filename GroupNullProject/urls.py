@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from DataLog.views import Home, AdminPage, AssignUser, CreateCourse, NewAcc, ProfPage, TaPage
+from DataLog import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),#django administration page
-    path('', Home.as_view()),
-    path('adminpage/', AdminPage.as_view()),#admin of the scheduling app page
-    path('assignuser/', AssignUser.as_view()),
-    path('createcourse/', CreateCourse.as_view()),
-    path('newaccount/', NewAcc.as_view()),
-    path('profpage/', ProfPage.as_view()),
-    path('tapage/', TaPage.as_view()),
+    path('', views.Login.as_view()),
+    path('createuser/', views.CreateUser.as_view()),
+    # path('assignuser/', AssignUser.as_view()),
+    # path('createcourse/', CreateCourse.as_view()),
+    # path('newaccount/', NewAcc.as_view()),
+    # path('profpage/', ProfPage.as_view()),
+    # path('tapage/', TaPage.as_view()),
 ]
