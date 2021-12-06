@@ -21,7 +21,6 @@ from DataLog.views import Login, AssignUser, CreateCourse, NewAcc, ProfPage, TaP
 urlpatterns = [
     path('admin/', admin.site.urls),#django administration page
     path('', Login.as_view()),
-#    path('adminpage/', AdminPage.as_view()),#admin of the scheduling app page
     path('assignuser/', AssignUser.as_view()),
     path('createcourse/', CreateCourse.as_view()),
     path('newaccount/', NewAcc.as_view()),
