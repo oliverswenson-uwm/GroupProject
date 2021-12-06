@@ -21,6 +21,9 @@ from DataLog import views
 urlpatterns = [
     path('admin/', admin.site.urls),#django administration page
     path('', views.Login.as_view()),
+    path('supervisor/', views.AdminView.as_view()),
+    path('professor/', views.ProfessorView.as_view()),
+    path('ta/', views.TaView.as_view()),
     path('createuser/', views.CreateUser.as_view()),
     # path('assignuser/', AssignUser.as_view()),
     # path('createcourse/', CreateCourse.as_view()),
