@@ -4,15 +4,9 @@ from DataLog.models import Staff, Admin, Professor, TA, Course, Lab, LabToCourse
 
 class SuccessfulLogin(TestCase):
 
-    client = None
-    def SetUp(self):
+    def setUp(self):
+        client = None
         self.client = Client()
-        temp = Staff(username="userone", password = "passone")
-        temp.save() #save in database
-        temp = Staff(username="usertwo", password="passtwo")
-        temp.save()  # save in database
-        temp = Staff(username="userthree", password="passthree")
-        temp.save()  # save in database
 
     def goodLoginOne(self):
         resp = self.client.post("/", {"username": "userone", "password": "passone"}, follow=True)
@@ -27,15 +21,10 @@ class SuccessfulLogin(TestCase):
         self.assertEqual(resp.context["msg"], "INVALID Username OR Password", "failed login. user:userthree, pass:passthree")
 
 class FailedLogin(TestCase):
-    client = None
+
     def setUp(self):
+        client = None
         self.client = Client()
-        temp = Staff(username="userone", password = "passone")
-        temp.save() #save in database
-        temp = Staff(username="usertwo", password="passtwo")
-        temp.save()  # save in database
-        temp = Staff(username="userthree", password="passthree")
-        temp.save()  # save in database
 
     def test_passwordNotMatch(self):
         resp = self.client.post("/", {"username": "userone", "password": "passtwo"}, follow=True)
