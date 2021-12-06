@@ -19,7 +19,7 @@
 
     <hr>
 
-    <form action="/createuser/" method="post">
+    <form action="/createuser" method="post">
         {% csrf_token %}
         <label for="fullname"><b>Full Name</b></label>
         <input name="fullName" type="text" placeholder="Staff Fullname" id="fullname" required>
@@ -52,8 +52,12 @@
         <input type="submit" value="Create Account">
     </form>
 
+    <form action="/supervisor">
+        <button type="submit">Home</button>
+    </form>
+
     {{ msg }}
 
 </div>
 </body>
-</html> 
+</html>

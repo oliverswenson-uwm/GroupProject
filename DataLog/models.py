@@ -36,11 +36,36 @@ class Staff(models.Model):
         abstract = True
 
 
-
 class Admin(Staff, models.Model):
+    # description: this function will create a admin in Admin database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the admin will get created in Admin table
+    # side effects: Admin table will get modified
+    def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
+        admin = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        admin.save()
+        print(admin)
+        return admin
 
-    def createAccount(self):
-        pass
+    # description: this function will create a professor in Professor database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the professor will get created in Professor table
+    # side effects: Professor table will get modified
+    def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
+        prof = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        prof.save()
+        print(prof)
+        return prof
+
+    # description: this function will create a ta in TA database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the ta will get created in TA table
+    # side effects: TA table will get modified
+    def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
+        ta = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        ta.save()
+        print(ta)
+        return ta
 
     def createCourse(self):
         pass

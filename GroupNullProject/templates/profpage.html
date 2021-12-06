@@ -1,35 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang = "en">
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Prof Vision</title>
-    <link href="../static/style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-  <span style="font-weight:bold">This is the page that a professor account will see after a successful login.</span>
-    <h1 id="thetitle2">Your Courses</h1>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<span style="font-weight:bold">This is the page that a professor account will see after a successful login.</span>
+<h1 id="thetitle2">Your Courses</h1>
 
-  <table>
-    <tr>  
-        <th>Class No.</th><td>
+<table>
+    <tr>
+        <th>Class No.</th>
+        <td>
 
     </tr>
-  </table>
+</table>
 
-    <h1 id="thetitle3">Your TAs</h1>
+<h1 id="thetitle3">Your TAs</h1>
 
-  <table>
-    <tr>  
-        <th>TA Name</th><td>
-        <th>Course</th><td>
-        <th>Section</th><td>
+<table>
+    <tr>
+        <th>TA Name</th>
+        <td>
+        <th>Course</th>
+        <td>
+        <th>Section</th>
+        <td>
     </tr>
-  </table>
+</table>
 <br>
 <br>
-<form>
- <input type="button" value="Back to Login" onclick="history.back()">
+<form action="/professor">
+    <button type="submit">Home</button>
+</form>
+<form action="/">
+    <button type="submit">Log Out</button>
 </form>
 </body>
 </html>
