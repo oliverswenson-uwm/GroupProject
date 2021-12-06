@@ -12,36 +12,39 @@
     <p id="group1">
 
   <div class="container">
+    <form method="post" action="/createcourse/">
 
     <p>Please include the name of the course you want to create, as well as whether it is undergraduate or graduate. Remember, no duplicate course names!</p>
 
     <hr>
 
-  <p class="formfield">
-    <label for="cnum"><b>Course Number</b></label>
-    <input type="text" placeholder="Enter Course Num..." id="cnum" required>
-    <br>
+        {% csrf_token %}
+        <label for="name"><b>Course Name</b></label>
+        <input name="name" type="text" placeholder="Enter Course Name..." id="name" >
+        <br>
 
-    <label for="credits"><b>Credits</b></label>
-    <input type="text" placeholder="Enter Credits..." id="credits" required>
-    <br>
+        <label for ="section"><b>Course Section</b></label>
+        <input name="section" type="text" placeholder="Enter Course Section..." id="section">
+        <br>
 
-    <label for="reqa"><b>Prereqs</b></label>
-    <input type="text" placeholder="Enter Prereqs..." id="reqa" required>
-    <br>
+        <label for="credits"><b>Credits</b></label>
+        <input name="credits" type="text" placeholder="Enter Credits..." id="credits" >
+        <br>
+
+        <label for="prereqs"><b>Prereqs</b></label>
+        <input name="prereqs" type="text" placeholder="Enter Prereqs..." id="prereqs">
+        <br>
 
 
-    <label for="desc"><b>Course Description</b></label>
-    <textarea rows="4" cols="30" id="desc">
-    Enter your description here...
-    </textarea>
-  </p>
-    <br>
-    
-    <br><br><br>
-    <form>
-      <input type="button" value="Create Course!" onclick="history.back()">
+        <label for="desc"><b>Course Description</b></label>
+        <textarea rows="4" cols="30" name="description">
+        Enter your description here...
+        </textarea>
+        <br>
+
+        <input type="submit" value="Create Course!">
     </form>
+    {{ msg }}
   </div>
   </body>
 </html>

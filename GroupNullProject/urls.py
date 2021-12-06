@@ -26,7 +26,7 @@ urlpatterns = [
     path('ta/', views.TaView.as_view()),
     path('createuser/', views.CreateUser.as_view()),
     # path('assignuser/', AssignUser.as_view()),
-    # path('createcourse/', CreateCourse.as_view()),
+    path('createcourse/', views.CreateCourse.as_view()),
     # path('newaccount/', NewAcc.as_view()),
     # path('profpage/', ProfPage.as_view()),
     # path('tapage/', TaPage.as_view()),
