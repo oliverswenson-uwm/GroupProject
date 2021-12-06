@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>TA Vision</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<span style="font-weight:bold">This is the page that a TA account will see after a successful login.</span>
+<h1 id="thetitle2">Your Assignments</h1>
+
+<table>
+    <tr>
+        <th>Class No.</th>
+        <td>
+        <th>Professor</th>
+        <td>
+        <th>Section</th>
+        <td>
+    </tr>
+</table>
+<br>
+<br>
+<form action="/ta">
+    <button type="submit">Home</button>
+</form>
+<form action="/">
+    <button type="submit">Log Out</button>
+</form>
+</body>
+</html>

@@ -1,6 +1,5 @@
-from django.views import View
 from django.shortcuts import render, redirect
-from GroupNullProject import templates
+from django.views import View
 from DataLog.models import Staff, Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab
 
 
@@ -20,15 +19,15 @@ class Login(View):
                 if isinstance(user, Admin):
                     request.session['user'] = user.username
                     request.session['role'] = 'admin'
-                    return render(request, "adminpage.html")
+                    return redirect("/supervisor/")
                 elif isinstance(user, Professor):
                     request.session['user'] = user.username
                     request.session['role'] = 'professor'
-                    return render(request, "profpage.html")
+                    return redirect("/professor/")
                 elif isinstance(user, TA):
                     request.session['user'] = user.username
                     request.session['role'] = 'ta'
-                    return render(request)
+                    return redirect("/ta/")
             else:
                 request.session.flush()  # log out logged user
                 return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
@@ -36,6 +35,47 @@ class Login(View):
             request.session.flush()  # log out logged user
             return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
 
+class AdminView(View):
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                return redirect('/', {'msg': 'Please logging as Admin'})
+        else:
+            return redirect('/', {'msg': 'Please logging as Admin'})
+
+        return render(request, "adminpage.html")
+
+class ProfessorView(View):
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'professor':
+                return redirect('/', {'msg': 'Please logging as Professor'})
+        else:
+            return redirect('/', {'msg': 'Please logging as Professor'})
+
+        return render(request, "profpage.html")
+
+class TaView(View):
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'ta':
+                return redirect('/', {'msg': 'Please logging as TA'})
+        else:
+            return redirect('/', {'msg': 'Please logging as TA'})
+
+        return render(request, "tapage.html")
 
 class CreateUser(View):
     def get(self, request):
@@ -77,7 +117,8 @@ class CreateUser(View):
         else:
             return render(request, "newacc.html", {'msg': "Fail: Username exist, Please Pick a new Username"})
 
-#ASSIGNUSER
+
+# ASSIGNUSER
 class AssignUser(View):
     def get(self, request):
         return render(request, "assignuser.html")
@@ -85,7 +126,8 @@ class AssignUser(View):
     def post(self, request):
         pass
 
-#CREATECOURSE
+
+# CREATECOURSE
 class CreateCourse(View):
     def get(self, request):
         return render(request, "createcourse.html")
@@ -93,15 +135,8 @@ class CreateCourse(View):
     def post(self, request):
         pass
 
-#NEWACC
-class NewAcc(View):
-    def get(self, request):
-        return render(request, "newacc.html")
 
-    def post(self, request):
-        pass
-
-#PROFPAGE
+# PROFPAGE
 class ProfPage(View):
     def get(self, request):
         return render(request, "profpage.html")
@@ -109,7 +144,8 @@ class ProfPage(View):
     def post(self, request):
         pass
 
-#TA PAGE
+
+# TA PAGE
 class TaPage(View):
     def get(self, request):
         return render(request, "tapage.html")
