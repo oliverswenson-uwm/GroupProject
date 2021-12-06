@@ -33,7 +33,7 @@ class Staff(models.Model):
         return self.name
 
     class Meta:
-        abstract = True
+       abstract = True
 
 
 
