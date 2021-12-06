@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'DataLog.apps.DataLogConfig'
+    'DataLog.apps.DataLogConfig',
+    'GroupNullProject'
 ]
 
 MIDDLEWARE = [
@@ -52,11 +53,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'GroupNullProject.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +70,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'GroupNullProject.wsgi.application'
 

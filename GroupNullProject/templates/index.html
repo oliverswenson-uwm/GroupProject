@@ -1,44 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-     <title>Team Null's Login Page</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-  
-    <h1 id="header">Team Null's Login Page</h1>
-    <p><span style="font-weight:bold">This is the login page for Team Null's COMPSCI 361 project. Here you can log into the website to view your current assignment, and other information depending on the role your account is assigned.</span></p>
-    <hr>
-    <h2>Login Here:</h2>
+    <title>Team Null's Login Page</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css">
+</head>
+<body>
 
-    <div class="container">
-    <form>
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Your username..." id="uname" required>
-    <br>
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Your password..." id="psw" required>
-    <br>
-    <br>
+<h1 id="header">Team Null's Login Page</h1>
+<p><span style="font-weight:bold">This is the login page for Team Null's COMPSCI 361 project. Here you can log into the website to view your current assignment, and other information depending on the role your account is assigned.</span>
+</p>
+<hr>
+<h2>Login Here:</h2>
+
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="uname"><b>Username</b></label>
+        <input name ="username" type="text" placeholder="Your username..." id="uname" required>
+        <br>
+        <label for="psw"><b>Password</b></label>
+        <input name="password" type="password" placeholder="Your password..." id="psw" required>
+        <br>
+        <br>
+        <button type="submit">Login</button>
     </form>
-    <form action="tapage.html">
-    <button type="submit">Login</button>
-    <br>
-    <br>
-    </form>
-  
-  </div>
 
-  <p>For testing and review, the three links below show each view of what will be the main page depending on the account's type:</p>
+    {{ msg }}
+
+</div>
+
+<p>For testing and review, the three links below show each view of what will be the main page depending on the account's
+    type:</p>
 
 
-<a href= "tapage.html">TA View</a>
-<a href= "profpage.html">Prof View</a>
-<a href= "adminpage.html">Admin View</a>
+<a href="tapage.html">TA View</a>
+<a href="profpage.html">Prof View</a>
+<a href="adminpage.html">Admin View</a>
 
 
-
-  </body>
+</body>
 </html>

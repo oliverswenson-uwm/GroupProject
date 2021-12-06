@@ -1,42 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang = "en">
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Admin Vision</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <span style="font-weight:bold">This is the page that an administrative account will see after a successful login.</span>
-    <h1 id="thetitle2">Administrative Options</h1>
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<span style="font-weight:bold">This is the page that an administrative account will see after a successful login.</span>
+<h1 id="thetitle2">Administrative Options</h1>
 
-    <p>Here are the options an administrator has. They can create an account, create a course, and assign a user to a course.</p>
+<p>Here are the options an administrator has. They can create an account, create a course, and assign a user to a
+    course.</p>
 <br>
 <br>
-<form>
-
-<input type="button" value="Back to Login" onclick="history.back()">
- 
+<form action="/">
+    <button type="submit">Log out</button>
 </form>
 
 <br>
 
-<form action="newacc.html">
-<button type="submit">Create Account</button>
+<form action="/createuser">
+    <button type="submit">Create Account</button>
 </form>
 
 <br>
 
-<form action="createcourse.html">
-<button type="submit">Create Course</button>
+<form action="/createcourse">
+    <button type="submit">Create Course</button>
 </form>
 
 
 <br>
 <form action="assignuser.html">
-<button type="submit">Assign User</button>
+    <button type="submit">Assign User</button>
 </form>
 
 
-  </body>
+</body>
 </html>

@@ -1,44 +1,63 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang = "en">
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>New Account</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href= "index.html">click this link.</a></span>
-    <h1 id="thetitle2">Create Account</h1>
-    <p id="group1">
+    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href="index.html">click this link.</a></span>
+<h1 id="thetitle2">Create Account</h1>
+<p id="group1">
 
-  <div class="container">
+<div class="container">
 
-    <p>Here you can create an account. Fill in the person's name and create a password for the account. Also indicate what type of account this is.</p>
+    <p>Here you can create an account. Fill in the person's name and create a password for the account. Also indicate
+        what type of account this is.</p>
 
     <hr>
 
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Person's name" id="uname" required>
-    <br>
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" id="psw" required>
-    <br>
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" id="psw-repeat" required>
-    <br>
-    
-    <label for="acc-type"><b>What kind of account is this?</b></label>
-    <select name="acc-types" id="acc-type" size="3" required>
-      <option value="ta">TA</option>
-      <option value="prof">Professor</option>
-      <option value="admin">Administrator</option>  
-    </select>
-    
-    <br><br><br>
-    <form>
-      <input type="button" value="Create Account" onclick="history.back()">
+    <form action="/createuser" method="post">
+        {% csrf_token %}
+        <label for="fullname"><b>Full Name</b></label>
+        <input name="fullName" type="text" placeholder="Staff Fullname" id="fullname" required>
+        <br>
+        <label for="email"><b>Email</b></label>
+        <input name="email" type="email" placeholder="Staff Email" id="email" required>
+        <br>
+        <label for="uname"><b>Username</b></label>
+        <input name="username" type="text" placeholder="Username" id="uname" required>
+        <br>
+        <label for="psw"><b>Password</b></label>
+        <input name="password" type="password" placeholder="Password" id="psw" required>
+        <br>
+        <label for="psw-repeat"><b>Repeat Password</b></label>
+        <input type="password" placeholder="Repeat Password" id="psw-repeat" required>
+        <br>
+        <label for="phNumber"><b>Phone Number</b></label>
+        <input name="phNumber" type="number" placeholder="Phone Number" id="phNumber" required>
+        <br>
+        <label for="mailAdrs"><b>Mailing Address</b></label>
+        <input name="mailAdrs" type="text" placeholder="Mailing Address" id="mailAdrs" required>
+        <br>
+        <label for="acc-type"><b>What kind of account is this?</b></label>
+        <select name="accType" id="acc-type" size="3" required>
+            <option value="ta">TA</option>
+            <option value="prof">Professor</option>
+            <option value="admin">Administrator</option>
+        </select>
+        <br>
+        <input type="submit" value="Create Account">
     </form>
 
-  </div>
-  </body>
+    <form action="/supervisor">
+        <button type="submit">Home</button>
+    </form>
+
+    {{ msg }}
+
+</div>
+</body>
 </html>

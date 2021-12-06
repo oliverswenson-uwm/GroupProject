@@ -4,36 +4,68 @@ from django.db import models
 class Staff(models.Model):
     name = models.CharField(max_length=100)  # staff name, i.e, John Smith
     email = models.EmailField(max_length=75)  # email fo the staff, i.e., johnsmith@uwm.edu
-    userName = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
+    username = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
 
-    # any user can change there personal information
-    # def setFirstName(self, name):
-    #     pass
-    #
-    # def setLastName(self, name):
-    #     pass
-    #
-    # def setEmail(self, email):
-    #     pass
-
-    # This function will return first and last name and email of all users
-    def getPublicInfo(self):
-        pass
+    # description: this function will look the Staff database and will return the user,
+    #   if not exists, returns None
+    # preconditions: username can not be None type
+    # post conditions: user from the table if exists, will get returned
+    # side effects: none
+    def getUser(self, username):
+        queryList = []
+        queryList.append(Admin.objects.filter(username=username))
+        queryList.append(Professor.objects.filter(username=username))
+        queryList.append(TA.objects.filter(username=username))
+        # a = queryList[0]
+        print(queryList)
+        user = None
+        for query in queryList:
+            if len(query) == 0:
+                continue
+            else:
+                user = query[0]
+        return user
 
     def __str__(self):
         return self.name
 
     class Meta:
-        abstract = True
+       abstract = True
 
 
 class Admin(Staff, models.Model):
+    # description: this function will create a admin in Admin database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the admin will get created in Admin table
+    # side effects: Admin table will get modified
+    def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
+        admin = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        admin.save()
+        print(admin)
+        return admin
 
-    def createAccount(self):
-        pass
+    # description: this function will create a professor in Professor database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the professor will get created in Professor table
+    # side effects: Professor table will get modified
+    def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
+        prof = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        prof.save()
+        print(prof)
+        return prof
+
+    # description: this function will create a ta in TA database
+    # preconditions: all fields should be valid and not None type, username should be unique
+    # post conditions: the ta will get created in TA table
+    # side effects: TA table will get modified
+    def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
+        ta = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        ta.save()
+        print(ta)
+        return ta
 
     def createCourse(self):
         pass
