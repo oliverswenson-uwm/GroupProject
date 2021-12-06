@@ -100,6 +100,10 @@ class CreateUser(View):
         mailAdrs = request.POST['mailAdrs']
         accType = request.POST['accType']
 
+        # cheacking if input is valid
+        for field in request.POST:
+            if field == "" or field[0] == " ":
+                return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
         print(request.POST)
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
