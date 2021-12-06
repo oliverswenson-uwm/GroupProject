@@ -130,10 +130,31 @@ class AssignUser(View):
 # CREATECOURSE
 class CreateCourse(View):
     def get(self, request):
-        return render(request, "createcourse.html")
+        return render(request, "createcourse.html", {})
 
     def post(self, request):
-        pass
+        try:
+            m = Course.objects.get(name=request.POST['name'])
+            if m is not None:
+                return render(request, "createcourse.html", {'msg': "The course already exist"})
+        except:
+            if request.POST['name'] == "":
+                return render(request, "createcourse.html", {'msg': "Course name cannot be empty"})
+            if request.POST['section'] == "":
+                return render(request, "createcourse.html", {'msg': "Course section cannot be empty"})
+            if request.POST['credits'] == "":
+                return render(request, "createcourse.html", {'msg': "Course credit cannot be empty"})
+            if '0' > request.POST['credits'] or request.POST['credits'] > '9':
+                return render(request, "createcourse.html", {'msg': "Credits should be number between 0 and 9"})
+            else:
+                Course(name=request.POST['name'], section=request.POST['section'], credits=request.POST['credits'],
+                       prereqs=request.POST['prereqs'], description=request.POST['description']).save()
+            return render(request, "createcourse.html", {'name': request.POST['name'],
+                                                         'section': request.POST['section'],
+                                                         'credits': request.POST['credits'],
+                                                         'prereqs': request.POST['prereqs'],
+                                                         'description': request.POST['description'],
+                                                         'msg': "The course has been created."})
 
 
 # PROFPAGE
