@@ -6,7 +6,7 @@ class Staff(models.Model):
     email = models.EmailField(max_length=75)  # email fo the staff, i.e., johnsmith@uwm.edu
     username = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
     password = models.CharField(max_length=25)  # password of the staff for login
-    phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567
+    phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
 
     # description: this function will look the Staff database and will return the user,
