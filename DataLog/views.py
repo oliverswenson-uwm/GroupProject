@@ -35,6 +35,7 @@ class Login(View):
             request.session.flush()  # log out logged user
             return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
 
+
 class AdminView(View):
     def get(self, request):
         # the following if else statement check if someone is logged in or not
@@ -48,6 +49,7 @@ class AdminView(View):
             return redirect('/', {'msg': 'Please logging as Admin'})
 
         return render(request, "adminpage.html")
+
 
 class ProfessorView(View):
     def get(self, request):
@@ -63,6 +65,7 @@ class ProfessorView(View):
 
         return render(request, "profpage.html")
 
+
 class TaView(View):
     def get(self, request):
         # the following if else statement check if someone is logged in or not
@@ -76,6 +79,7 @@ class TaView(View):
             return redirect('/', {'msg': 'Please logging as TA'})
 
         return render(request, "tapage.html")
+
 
 class CreateUser(View):
     def get(self, request):
@@ -140,8 +144,23 @@ class AssignUser(View):
         return render(request, "assignuser.html")
 
     def post(self, request):
-        pass
+        username = request.POST['usern']
+        courseNumber = request.Post['cnum']
+        courseSection = request.Post['csec']
 
+        staff = Staff.getUser(self, username)
+        course = Course.getCourse(self, courseNumber, courseSection)
+        if staff is None:
+            return render(request, "assignuser.html", {'msg': "Invalid Username"})
+        elif course is None:
+            return render(request, "assignuser.html", {'msg': "Invalid course number or section"})
+        elif staff is Professor:
+            if ProfessorToCourse.objects.get(professor=staff, course=course) is None:
+                ProfessorToCourse.objects.create(professor=staff, course=course)
+        elif staff is TA:
+            if TaToCourse.objects.get(ta=staff, course=course) is None:
+                TAToCourse.objects.create(ta=staff, course=course)
+        return render(request, "assignuser.html", {'usern': username, 'cnum': courseNumber, 'csec': courseSection})
 
 # CREATECOURSE
 class CreateCourse(View):
