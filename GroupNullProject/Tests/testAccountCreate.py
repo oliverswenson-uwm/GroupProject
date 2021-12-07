@@ -95,7 +95,7 @@ class TestCreateInvalid(TestCase):
         self.assertEqual("Failed: A empty field in form", resp.context['msg'],
                          "blank username worked. user: , pass:passone")
 
-    def invalidPhoneNum(self):
+    def testInvalidPhoneNum(self):
         resp = self.client.post("/createuser/", {"fullName": "", "email": "",
                                                  "username": "", "password": "",
                                                  "phNumber": "", "mailAdrs": "",

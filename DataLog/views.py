@@ -101,9 +101,21 @@ class CreateUser(View):
         accType = request.POST['accType']
 
         # cheacking if input is valid
-        for field in request.POST:
-            if field == "" or field[0] == " ":
-                return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        if fullName == "" or fullName[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif email == "" or email[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif username == "" or username[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif password == "" or password[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif phNumber == "" or phNumber[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif mailAdrs == "" or mailAdrs[0] == " ":
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+        elif accType == "" or accType[0] == " " or type(accType) is None:
+            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+
         print(request.POST)
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
