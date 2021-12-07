@@ -15,10 +15,8 @@ class Staff(models.Model):
     # post conditions: user from the table if exists, will get returned
     # side effects: none
     def getUser(self, username):
-        queryList = []
-        queryList.append(Admin.objects.filter(username=username))
-        queryList.append(Professor.objects.filter(username=username))
-        queryList.append(TA.objects.filter(username=username))
+        queryList = [Admin.objects.filter(username=username), Professor.objects.filter(username=username),
+                     TA.objects.filter(username=username)]
         # a = queryList[0]
         print(queryList)
         user = None
@@ -33,7 +31,7 @@ class Staff(models.Model):
         return self.name
 
     class Meta:
-       abstract = True
+        abstract = True
 
 
 class Admin(Staff, models.Model):
@@ -42,7 +40,8 @@ class Admin(Staff, models.Model):
     # post conditions: the admin will get created in Admin table
     # side effects: Admin table will get modified
     def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
-        admin = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        admin = Admin(name=fullName, email=email, username=username, password=password,
+                      phoneNum=phNumber, mailAddress=mailAdrs)
         admin.save()
         print(admin)
         return admin
@@ -52,7 +51,8 @@ class Admin(Staff, models.Model):
     # post conditions: the professor will get created in Professor table
     # side effects: Professor table will get modified
     def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
-        prof = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        prof = Professor(name=fullName, email=email, username=username, password=password,
+                         phoneNum=phNumber, mailAddress=mailAdrs)
         prof.save()
         print(prof)
         return prof
@@ -62,7 +62,8 @@ class Admin(Staff, models.Model):
     # post conditions: the ta will get created in TA table
     # side effects: TA table will get modified
     def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
-        ta = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber, mailAddress=mailAdrs)
+        ta = TA(name=fullName, email=email, username=username, password=password,
+                phoneNum=phNumber, mailAddress=mailAdrs)
         ta.save()
         print(ta)
         return ta
@@ -98,6 +99,22 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name + "-" + str(self.section)
+
+    # description: this function will look the Course database and will return the course,
+    #   if not exists, returns None
+    # preconditions: courseName and sectionNumber can not be None
+    # post conditions: returns specified course
+    # side effects: none
+    def getCourse(self, courseName, sectionNumber):
+        queryList = [Course.objects.filter(name=courseName).filter(section=sectionNumber)]
+        print(queryList)
+        course = None
+        for query in queryList:
+            if len(query) == 0:
+                continue
+            else:
+                course = query[0]
+        return course
 
 
 class Lab(models.Model):
