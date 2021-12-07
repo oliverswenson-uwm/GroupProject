@@ -1,5 +1,5 @@
 from django.test import TestCase
-from DataLog.models import Staff
+from DataLog.models import Staff, Admin, Professor, TA
 from django.test import Client
 
 
@@ -20,7 +20,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "4546768988", "mailAdrs": "123 Admin Ln.",
                                                  "accType": "Admin"
                                                  }, follow=True)
-        self.assertEqual(resp.context["msg"], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context["msg"],
                          "failed creation. One or more fields invalid")
 
         resp = self.client.post("/createuser/", {"fullName": "admintwo", "email": "admintest@gmail.com",
@@ -28,7 +28,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "1112223333", "mailAdrs": "150 Admin Blvd.",
                                                  "accType": "Admin"
                                                  }, follow=True)
-        self.assertEqual(resp.context["msg"], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context["msg"],
                          "failed creation. One or more fields invalid")
 
     # Create TA accounts
@@ -38,7 +38,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "1234567890", "mailAdrs": "123 Applesauce Ln.",
                                                  "accType": "TA"
                                                  }, follow=True)
-        self.assertEqual(resp.context["msg"], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context["msg"],
                          "failed creation. One or more fields invalid")
 
         resp = self.client.post("/createuser/", {"fullName": "nametwo", "email": "test345@gmail.com",
@@ -46,7 +46,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "9999999999", "mailAdrs": "150 Kenwood Blvd.",
                                                  "accType": "TA"
                                                  }, follow=True)
-        self.assertEqual(resp.context["msg"], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context["msg"],
                          "failed creation. One or more fields invalid")
 
     # Create professor accounts
@@ -56,7 +56,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "1334667999", "mailAdrs": "7 Professor Circle",
                                                  "accType": "Professor"
                                                  }, follow=True)
-        self.assertEqual(resp.context['msg'], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context['msg'],
                          "failed creation. One or more fields invalid")
 
         resp = self.client.post("/createuser/", {"fullName": "proftwo", "email": "proftwo@gmail.com",
@@ -64,7 +64,7 @@ class TestCreateValid(TestCase):
                                                  "phNumber": "2222222222", "mailAdrs": "2 Professor way.",
                                                  "accType": "Professor"
                                                  }, follow=True)
-        self.assertEqual(resp.context['msg'], "Success: New Account has been create ",
+        self.assertEqual( "Success: New Account has been create ",resp.context['msg'],
                          "failed creation. One or more fields invalid")
 
 
@@ -74,6 +74,8 @@ class TestCreateInvalid(TestCase):
     def setUp(self):
         client = None
         client = Client()
+        Professor(name="ProfessorMan", email="profthree@uwm.edu", username="ProfThree", password="Profpassthree",
+                  phoneNum="1234567777", mailAddress="123 Professor ln.").save()
 
     def testMissingFields(self):
         # all blank
@@ -95,27 +97,13 @@ class TestCreateInvalid(TestCase):
         self.assertEqual("Failed: A empty field in form", resp.context['msg'],
                          "blank username worked. user: , pass:passone")
 
-    def testInvalidPhoneNum(self):
-        resp = self.client.post("/createuser/", {"fullName": "", "email": "",
-                                                 "username": "", "password": "",
-                                                 "phNumber": "", "mailAdrs": "",
-                                                 "accType": ""
-                                                 }, follow=True)
-        self.assertEqual(resp.context['msg'], "Fail: Username exist, Please Pick a new Username",
-                         "blank username worked. user: , pass:passone")
-
-    def testDuplicate(self):
+    def testDuplicateUserName(self):
         #creating user in database to duplicate
-        temp = Staff(fullName = "dupename", email = "dupe@gmail.com",
-        username = "dupe", password = "dupepass",
-        phNumber = "5556667777", mailAdrs = "2 Equalusers Lane",
-        accType = "Professor")
-        temp.save()
-
-        resp = self.client.post("/createuser/", {"fullName": "dupename", "email": "dupe@gmail.com",
-                                                 "username": "dupe", "password": "dupepass",
+        resp = self.client.post("/createuser/", {"fullName": "UniqueName", "email": "uniqueEmail@uwm.edu",
+                                                 "username": "ProfThree", "password": "randompass",
                                                  "phNumber": "5556667777", "mailAdrs": "2 Equalusers Lane",
                                                  "accType": "Professor"
                                                  }, follow=True)
         self.assertEqual(resp.context['msg'], "Fail: Username exist, Please Pick a new Username",
                          "failed creation. One or more fields invalid")
+
