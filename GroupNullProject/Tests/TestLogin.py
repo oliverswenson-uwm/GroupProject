@@ -12,20 +12,20 @@ class SuccessfulLogin(TestCase):
         Admin(name="AdminMan", email="admintestaccounttwo@uwm.edu", username="AdminTwo", password="Adminpasstwo", phoneNum="1231231111", mailAddress="123 Admin ln.").save()
         Professor(name="ProfessorMan", email="profthree@uwm.edu", username="ProfThree", password="Profpassthree",phoneNum="1234567777", mailAddress="123 Professor ln.").save()
 
-    #TA login, checking if redirect sent 200 OK code
+    #TA login, checking if sent to correct URL after successful login
     def test_goodLoginOne(self):
-        resp = self.client.post("", {"username": "TAone", "password": "TApassone"}, follow=True)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post("", {"username": "TAone", "password": "TApassone"}, follow=False)
+        self.assertEqual(resp.url, "/ta/")
 
-    #admin login, checking if http respose is a redirect (dont follow)
+    #admin login, checking if sent to correct URL after successful login
     def test_goodLoginTwo(self):
         resp = self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=False)
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.url, "/supervisor/")
 
-    # professor login, checking if redirect sent 200 OK code after folloring
+    # professor login, checking if sent to correct URL after successful login
     def test_goodLoginThree(self):
-        resp = self.client.post("", {"username": "ProfThree", "password": "Profpassthree"}, follow=True)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post("", {"username": "ProfThree", "password": "Profpassthree"}, follow=False)
+        self.assertEqual(resp.url, "/professor/")
 
 
 class FailedLogin(TestCase):
