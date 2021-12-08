@@ -18,6 +18,12 @@ class TestCourseNoDuplicate(TestCase):
 
     def test_empty_Name(self):
         Admin.createCourse(self, nm="", sec="301", cre="3", pre="", des="")
+        temp = Course.getCourse(self, "", "301")
+        self.assertEqual(temp, None)
+
+    def test_empty_Two(self):
+        Admin.createCourse(self, nm="", sec="401", cre="4", pre="", des="")
         temp = Course.getCourse(self, "", "401")
         self.assertEqual(temp, None)
+
 
