@@ -41,7 +41,7 @@ class Admin(Staff, models.Model):
     # side effects: Admin table will get modified
     def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber)!=int:
+        if type(phNumber) != int:
             return None
         elif phNumber > 9999999999:
             return None
@@ -113,8 +113,12 @@ class Admin(Staff, models.Model):
         print(ta)
         return ta
 
-    def createCourse(self):
-        pass
+    def createCourse(self, nm, sec, cre, pre, des):
+        if nm == "" or nm[0] == "" :
+            return None
+        co = Course(name=nm, section=sec, credits=cre, prereqs=pre, description=des)
+        co.save()
+        return co
 
     def assignStaff(self):
         pass
@@ -141,9 +145,6 @@ class Course(models.Model):
     credits = models.IntegerField()  # number of credits for this course i.e., 3
     prereqs = models.CharField(max_length=100)  # prereqs that this course required
     description = models.CharField(max_length=255)  # quick summary of the course
-
-    def __str__(self):
-        return self.name + "-" + str(self.section)
 
     # description: this function will look the Course database and will return the course,
     #   if not exists, returns None

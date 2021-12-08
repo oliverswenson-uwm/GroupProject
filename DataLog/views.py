@@ -162,6 +162,7 @@ class AssignUser(View):
                 TAToCourse.objects.create(ta=staff, course=course)
         return render(request, "assignuser.html", {'usern': username, 'cnum': courseNumber, 'csec': courseSection})
 
+
 # CREATECOURSE
 class CreateCourse(View):
     def get(self, request):
@@ -182,8 +183,14 @@ class CreateCourse(View):
             if '0' > request.POST['credits'] or request.POST['credits'] > '9':
                 return render(request, "createcourse.html", {'msg': "Credits should be number between 0 and 9"})
             else:
-                Course(name=request.POST['name'], section=request.POST['section'], credits=request.POST['credits'],
-                       prereqs=request.POST['prereqs'], description=request.POST['description']).save()
+                # Course(name=request.POST['name'], section=request.POST['section'], credits=request.POST['credits'],
+                #        prereqs=request.POST['prereqs'], description=request.POST['description']).save()
+                nm = request.POST['name']
+                sec = request.POST['section']
+                cre = request.POST['credits']
+                pre = request.POST['prereqs']
+                des = request.POST['description']
+                Admin.createCourse(self, nm, sec, cre, pre, des)
             return render(request, "createcourse.html", {'name': request.POST['name'],
                                                          'section': request.POST['section'],
                                                          'credits': request.POST['credits'],
