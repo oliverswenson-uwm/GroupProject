@@ -40,6 +40,21 @@ class Admin(Staff, models.Model):
     # post conditions: the admin will get created in Admin table
     # side effects: Admin table will get modified
     def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
+        # checking fields for validity/blanks
+        if type(phNumber)!=int:
+            return None
+        elif phNumber > 9999999999:
+            return None
+        if fullName == "" or fullName[0] == " ":
+            return None
+        elif email == "" or email[0] == " ":
+            return None
+        elif username == "" or username[0] == " ":
+            return None
+        elif password == "" or password[0] == " ":
+            return None
+        elif mailAdrs == "" or mailAdrs[0] == " ":
+            return None
         admin = Admin(name=fullName, email=email, username=username, password=password,
                       phoneNum=phNumber, mailAddress=mailAdrs)
         admin.save()
@@ -51,6 +66,21 @@ class Admin(Staff, models.Model):
     # post conditions: the professor will get created in Professor table
     # side effects: Professor table will get modified
     def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
+        # checking fields for validity/blanks
+        if type(phNumber) != int:
+            return None
+        elif phNumber > 9999999999:
+            return None
+        if fullName == "" or fullName[0] == " ":
+            return None
+        elif email == "" or email[0] == " ":
+            return None
+        elif username == "" or username[0] == " ":
+            return None
+        elif password == "" or password[0] == " ":
+            return None
+        elif mailAdrs == "" or mailAdrs[0] == " ":
+            return None
         prof = Professor(name=fullName, email=email, username=username, password=password,
                          phoneNum=phNumber, mailAddress=mailAdrs)
         prof.save()
@@ -62,6 +92,21 @@ class Admin(Staff, models.Model):
     # post conditions: the ta will get created in TA table
     # side effects: TA table will get modified
     def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
+        # checking fields for validity/blanks
+        if type(phNumber) != int:
+            return None
+        elif phNumber > 9999999999:
+            return None
+        if fullName == "" or fullName[0] == " ":
+            return None
+        elif email == "" or email[0] == " ":
+            return None
+        elif username == "" or username[0] == " ":
+            return None
+        elif password == "" or password[0] == " ":
+            return None
+        elif mailAdrs == "" or mailAdrs[0] == " ":
+            return None
         ta = TA(name=fullName, email=email, username=username, password=password,
                 phoneNum=phNumber, mailAddress=mailAdrs)
         ta.save()
