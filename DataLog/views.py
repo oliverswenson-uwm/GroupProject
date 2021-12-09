@@ -12,7 +12,6 @@ class Login(View):
         username = request.POST['username']
         password = request.POST['password']
         print(username, password)
-
         user = Staff.getUser(self, username)
         if user:
             if password == user.password:
@@ -104,35 +103,25 @@ class CreateUser(View):
         mailAdrs = request.POST['mailAdrs']
         accType = request.POST['accType']
 
-        # cheacking if input is valid
-        if fullName == "" or fullName[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif email == "" or email[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif username == "" or username[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif password == "" or password[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif phNumber == "" or phNumber[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif mailAdrs == "" or mailAdrs[0] == " ":
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-        elif accType == "" or accType[0] == " " or type(accType) is None:
-            return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-
         print(request.POST)
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
             newUser = None
-            if accType == 'Admin':
+            if accType == 'admin':
                 newUser = Admin.createAdmin(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
-            elif accType == 'Professor':
+                if newUser is None:
+                    return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+            elif accType == 'prof':
                 newUser = Admin.createProf(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
-            elif accType == 'TA':
+                if newUser is None:
+                    return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
+            elif accType == 'ta':
                 newUser = Admin.createTA(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
+                if newUser is None:
+                    return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
             return render(request, "newacc.html", {'msg': "Success: New Account has been create "})
         else:
             return render(request, "newacc.html", {'msg': "Fail: Username exist, Please Pick a new Username"})
@@ -158,7 +147,7 @@ class AssignUser(View):
             if ProfessorToCourse.objects.get(professor=staff, course=course) is None:
                 ProfessorToCourse.objects.create(professor=staff, course=course)
         elif staff is TA:
-            if TaToCourse.objects.get(ta=staff, course=course) is None:
+            if TAToCourse.objects.get(ta=staff, course=course) is None:
                 TAToCourse.objects.create(ta=staff, course=course)
         return render(request, "assignuser.html", {'usern': username, 'cnum': courseNumber, 'csec': courseSection})
 
