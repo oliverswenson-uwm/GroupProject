@@ -153,6 +153,7 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
+<<<<<<< Baljinder-Singh
     # description: this function will allow the creation of new Lab
     # preconditions: name should be similar to course that the lab will assign to
     # post conditions: the new lab for course will get created
@@ -202,6 +203,12 @@ class Admin(Staff, models.Model):
     # post conditions:
     # side effects:
     def assignStaff(self):
+=======
+    def assignProf(self, prof, course):
+        pass
+
+    def assignTA(self, TA, course):
+>>>>>>> master
         pass
 
 
@@ -272,6 +279,9 @@ class Course(models.Model):
             else:
                 course = query[0]
         return course
+
+    def __str__(self):
+        return self.name + "-"+self.section
 
 
 class Lab(models.Model):
