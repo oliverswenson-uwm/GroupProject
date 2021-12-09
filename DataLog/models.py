@@ -127,7 +127,10 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
-    def assignStaff(self):
+    def assignProf(self, prof, course):
+        pass
+
+    def assignTA(self, TA, course):
         pass
 
 
@@ -190,6 +193,9 @@ class Course(models.Model):
             else:
                 course = query[0]
         return course
+
+    def __str__(self):
+        return self.name + "-"+self.section
 
 
 class Lab(models.Model):
