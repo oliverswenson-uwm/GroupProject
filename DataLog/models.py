@@ -27,6 +27,13 @@ class Staff(models.Model):
                 user = query[0]
         return user
 
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
+    def getContactInfo(self):
+        pass
+
     def __str__(self):
         return self.name
 
@@ -113,6 +120,10 @@ class Admin(Staff, models.Model):
         print(ta)
         return ta
 
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
     def createCourse(self, nm, sec, cre, pre, des):
         if nm == "" or nm[0] == "":
             return None
@@ -127,15 +138,71 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
+    # description: this function will allow the creation of new Lab
+    # preconditions: name should be similar to course that the lab will assign to
+    # post conditions: the new lab for course will get created
+    # side effects: Lab table will have this new lab in it
+    def createLab(self, name, section):
+        lab = None
+        if not name or not section:
+            return lab
+
+        # cheery pick bad case before creating a lab
+        if type(name) is int:
+            return lab
+        elif name == "":
+            return lab
+        elif name[0] == " ":
+            return lab
+        elif type(name[0]) is int:
+            return lab
+        elif name[0] in [' @_!#$%^&*()<>?/\|}{~: ']:
+            return lab
+        elif type(section) is not int:
+            return lab
+        elif type(section) is float:
+            return lab
+        elif section > 99999:
+            return lab
+        elif section < 1:
+            return lab
+
+        courseExist = Course.objects.filter(name=name)
+        courseSimToLab = Course.objects.filter(name=name, section=section)
+        labExist = Lab.objects.filter(name=name, section=section)
+        if not courseExist:
+            return lab
+        elif courseSimToLab:
+            return lab
+        elif labExist:
+            return lab
+
+        lab = Lab(name=name, section=section)
+        lab.save()
+
+        return lab
+
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
     def assignStaff(self):
         pass
 
 
 class Professor(Staff, models.Model):
 
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
     def assignTA(self, ta, lab):
         pass
 
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
     def createAssignment(self, name, dueDate, course):
         assignment = Assignment(owner=self, name=name, dueDate=dueDate, course=course)
         assignment.save()
@@ -199,7 +266,7 @@ class Lab(models.Model):
     section = models.IntegerField()  # section of lab, i.e., 802
 
     def __str__(self):
-        return self.name + "-" + self.section
+        return self.name + "-" + str(self.section)
 
 
 

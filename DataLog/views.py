@@ -124,13 +124,13 @@ class CreateUser(View):
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
             newUser = None
-            if accType == 'Admin':
+            if accType == 'admin':
                 newUser = Admin.createAdmin(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
-            elif accType == 'Professor':
+            elif accType == 'prof':
                 newUser = Admin.createProf(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
-            elif accType == 'TA':
+            elif accType == 'ta':
                 newUser = Admin.createTA(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
             return render(request, "newacc.html", {'msg': "Success: New Account has been create "})

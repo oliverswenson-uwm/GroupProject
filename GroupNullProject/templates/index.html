@@ -2,44 +2,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Team Null's Login Page</title>
-    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Login</title>
 </head>
-<body>
+<body style="background-color: rgb(255, 255, 255);">
+    <div class="container">
+        <div style="height: 95vh" class="row align-items-center">
+            <div class="col">
 
-<h1 id="header">Team Null's Login Page</h1>
-<p><span style="font-weight:bold">This is the login page for Team Null's COMPSCI 361 project. Here you can log into the website to view your current assignment, and other information depending on the role your account is assigned.</span>
-</p>
-<hr>
-<h2>Login Here:</h2>
+            </div>
+            <div class="col p-5 shadow-lg bg-white rounded">
+                <h1 style="background-color:#0069d9;" class="p-4 text-white rounded-pill">Log In</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label>Username</label>
+                      <input name ="username" type="text" class="form-control" id="user" aria-describedby="emailHelp" placeholder="Enter Username">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Password</label>
+                      <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                  </form>
+            </div>
+            <div class="col">
 
-<div class="container">
-    <form action="" method="post">
-        {% csrf_token %}
-        <label for="uname"><b>Username</b></label>
-        <input name ="username" type="text" placeholder="Your username..." id="uname" required>
-        <br>
-        <label for="psw"><b>Password</b></label>
-        <input name="password" type="password" placeholder="Your password..." id="psw" required>
-        <br>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-
-    {{ msg }}
-
-</div>
-
-<!--<p>For testing and review, the three links below show each view of what will be the main page depending on the account's
-    type:</p>-->
-
-
-<!--<a href="tapage.html">TA View</a>
-<a href="profpage.html">Prof View</a>
-<a href="adminpage.html">Admin View</a>-->
-
-
+            </div>
+          </div>
+    </div>
 </body>
 </html>
