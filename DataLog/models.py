@@ -31,8 +31,23 @@ class Staff(models.Model):
     # preconditions:
     # post conditions:
     # side effects:
-    def getContactInfo(self):
-        pass
+    def getContactInfo(self, staff):
+        q = None
+        staffType = ['admin', 'prof', 'ta']
+        if type(staff) is None:
+            return None
+
+        if staff not in staffType:
+            return q
+        else:
+            if staff == 'admin':
+                q = Admin.objects.all();
+            elif staff == 'prof':
+                q = Professor.objects.all()
+            elif staff == 'ta':
+                q = TA.objects.all()
+            return q
+
 
     def __str__(self):
         return self.name
