@@ -74,24 +74,21 @@ class TestInvalidInputDontAccept(TestCase):
         temp = Staff.getUser(self, "adminhelpme")
         self.assertEqual(temp, None)  # shouldnt create account because phonenumber is one digit too large
 
-    def testInvalidEmail(self):
-        pass
-
     def testBlankFields(self):
         Admin.createAdmin(self, fullName="", email="", username="pleasedontcreate",
                           password="", phNumber=1234567888, mailAdrs="")
         temp = Staff.getUser(self, "pleasedontcreate")
-        self.assertEqual(temp, None)  # shouldnt create account because phonenumber is one digit too large
+        self.assertEqual(temp, None)
 
         Admin.createProf(self, fullName="", email="", username="dontcreatethisProf",
                           password="", phNumber=0, mailAdrs="")
         temp = Staff.getUser(self, "dontcreatethisProf")
-        self.assertEqual(temp, None)  # shouldnt create account because phonenumber is one digit too large
+        self.assertEqual(temp, None)
 
         Admin.createTA(self, fullName="", email="", username="dontcreatethisTA",
                           password="", phNumber=0, mailAdrs="")
         temp = Staff.getUser(self, "dontcreatethisTA")
-        self.assertEqual(temp, None)  # shouldnt create account because phonenumber is one digit too large
+        self.assertEqual(temp, None)
 
 class TestGetNonexistant(TestCase):
 

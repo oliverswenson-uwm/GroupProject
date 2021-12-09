@@ -8,7 +8,6 @@ class Staff(models.Model):
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
-    accType = models.CharField(max_length=25) # added this for editing account tests
 
     # description: this function will look the Staff database and will return the user,
     #   if not exists, returns None
@@ -124,31 +123,33 @@ class Admin(Staff, models.Model):
     def assignStaff(self):
         pass
 
-    def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
-        pass
 
 class Professor(Staff, models.Model):
 
     def assignTA(self, ta, lab):
         pass
 
+    #inputs: none
+    #functionality: makes sure caller is a professor then queries database for assignments
+    #outputs: returns all assignments related to professor in database
     def viewCourseAssignments(self):
+        #check - is self is instance of professor?
+            #yes:
+                #queryList = database query for professor's assignments
+                #return queryList
+            #no:
+                #return None
         pass
 
-# The contact information of a Prof or a TA should just be their phone number and mailing address.
-# They do not have permission to change their emails (since it's a school email)
-    def EditContact(self, phNumber, mailAdrs):
-        pass
 
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
         pass
 
-# The contact information of a Prof or a TA should just be their phone number and mailing address.
-# They do not have permission to change their emails (since it's a school email)
-    def EditContact(self, phNumber, mailAdrs):
-        pass
+class Assignment(models.Model):
+    name = models.CharField(max_length=100)  # name of the assignment, i.e... Homework 5
+
 
 
 class Course(models.Model):
@@ -185,6 +186,11 @@ class Lab(models.Model):
         return self.name + "-" + self.section
 
 
+#TODO:
+#class ProfToAssignment(models.Model):
+#class TAtoAssignment(models.Model):
+
+
 class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -216,4 +222,3 @@ class TAToLab(models.Model):
 
     def __str__(self):
         return "TA " + self.ta.__str__() + " is assigned to lab " + self.lab.__str__()
-
