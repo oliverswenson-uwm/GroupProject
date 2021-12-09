@@ -153,7 +153,7 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
-<<<<<<< Baljinder-Singh
+#<<<<<<< Baljinder-Singh
     # description: this function will allow the creation of new Lab
     # preconditions: name should be similar to course that the lab will assign to
     # post conditions: the new lab for course will get created
@@ -203,12 +203,13 @@ class Admin(Staff, models.Model):
     # post conditions:
     # side effects:
     def assignStaff(self):
-=======
+        pass
+#=======
     def assignProf(self, prof, course):
         pass
 
     def assignTA(self, TA, course):
->>>>>>> master
+#>>>>>>> master
         pass
 
 
@@ -221,6 +222,16 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
+    # inputs: none
+    # functionality: makes sure caller is a professor then queries database for assignments
+    # outputs: returns all assignments related to professor in database
+    def viewCourseAssignments(self, course):
+        queryList = [Assignment.objects.filter(owner=self.username, course=course)]
+        print(queryList)
+        if len(queryList) == 0:
+            return None
+        return queryList
+
     # description:
     # preconditions:
     # post conditions:
@@ -230,18 +241,7 @@ class Professor(Staff, models.Model):
         assignment.save()
         return assignment
 
-    # inputs: none
-    # functionality: makes sure caller is a professor then queries database for assignments
-    # outputs: returns all assignments related to professor in database
-    def viewCourseAssignments(self, course):
-        # check - is username is instance of professor?
-        # yes:
-        queryList = [Assignment.objects.filter(owner=self.username), Assignment.objects.filter(course=course)]
-        # queryList = database query for professor's assignments
-        # return queryList
-        # no:
-        # return None
-        return queryList
+
 
 
 class TA(Staff, models.Model):
@@ -249,6 +249,8 @@ class TA(Staff, models.Model):
     def viewAssignments(self):
         pass
 
+    #class: coursetoAssignment
+    # class: LabToAssignment
 
 class Assignment(models.Model):
     name = models.CharField(max_length=100)  # name of the assignment, i.e... Homework 5
@@ -256,6 +258,8 @@ class Assignment(models.Model):
     dueDate = models.CharField(max_length=100)
     course = models.CharField(max_length=100)  # name of the course this assignment is tied to
 
+    def __str__(self):
+        return self.owner+"-"+self.name+"-"+self.dueDate
 
 class Course(models.Model):
     name = models.CharField(max_length=100)  # name of the course, i.e., SC361
@@ -293,10 +297,6 @@ class Lab(models.Model):
     def __str__(self):
         return self.name + "-" + str(self.section)
 
-
-
-# class: coursetoAssignment
-# class, LabToAssignment
 
 class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
