@@ -114,11 +114,18 @@ class Admin(Staff, models.Model):
         return ta
 
     def createCourse(self, nm, sec, cre, pre, des):
-        if nm == "" or nm[0] == "" :
+        if nm == "" or nm[0] == "":
             return None
-        co = Course(name=nm, section=sec, credits=cre, prereqs=pre, description=des)
-        co.save()
-        return co
+        if sec == "" or sec[0] == "":
+            return None
+        if cre == "" or cre[0] == "":
+            return None
+        if not (cre.isdecimal()):
+            return None
+        else:
+            co = Course(name=nm, section=sec, credits=cre, prereqs=pre, description=des)
+            co.save()
+            return co
 
     def assignStaff(self):
         pass
@@ -129,23 +136,22 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
-
     def createAssignment(self, name, dueDate, course):
-        assignment = Assignment(owner = self, name=name, dueDate=dueDate, course = course)
+        assignment = Assignment(owner=self, name=name, dueDate=dueDate, course=course)
         assignment.save()
         return assignment
 
-    #inputs: none
-    #functionality: makes sure caller is a professor then queries database for assignments
-    #outputs: returns all assignments related to professor in database
+    # inputs: none
+    # functionality: makes sure caller is a professor then queries database for assignments
+    # outputs: returns all assignments related to professor in database
     def viewCourseAssignments(self, course):
-        #check - is username is instance of professor?
-            #yes:
+        # check - is username is instance of professor?
+        # yes:
         queryList = [Assignment.objects.filter(owner=self.username), Assignment.objects.filter(course=course)]
-                #queryList = database query for professor's assignments
-                #return queryList
-            #no:
-                #return None
+        # queryList = database query for professor's assignments
+        # return queryList
+        # no:
+        # return None
         return queryList
 
 
@@ -154,12 +160,12 @@ class TA(Staff, models.Model):
     def viewAssignments(self):
         pass
 
+
 class Assignment(models.Model):
     name = models.CharField(max_length=100)  # name of the assignment, i.e... Homework 5
     owner = models.CharField(max_length=100)  # username of the instructor who created the assignment, i.e... jrock22
     dueDate = models.CharField(max_length=100)
-    course = models.CharField(max_length=100) # name of the course this assignment is tied to
-
+    course = models.CharField(max_length=100)  # name of the course this assignment is tied to
 
 
 class Course(models.Model):
@@ -196,9 +202,9 @@ class Lab(models.Model):
         return self.name + "-" + self.section
 
 
-#TODO:
-#class: coursetoAssignment
-#class, LabToAssignment
+
+# class: coursetoAssignment
+# class, LabToAssignment
 
 class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
