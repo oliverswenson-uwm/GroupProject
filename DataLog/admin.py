@@ -1,5 +1,5 @@
 from django.contrib import admin
-from DataLog.models import Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab, Assignment
+from DataLog.models import Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab
 
 # Register your models here.
 admin.site.register(Admin)
