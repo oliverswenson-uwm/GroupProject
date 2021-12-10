@@ -2,7 +2,7 @@ from django.test import TestCase
 from DataLog.models import *
 
 
-class TestCreateCourse(TestCase):
+class TestCreateLab(TestCase):
     def setUp(self):
         self.admin = Admin(name="Admin One", email="a1@a.com", username="admin", password="admin", phoneNum="1", mailAddress="WI")
         self.admin.save()

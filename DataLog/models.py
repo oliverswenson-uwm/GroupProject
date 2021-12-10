@@ -204,6 +204,7 @@ class Admin(Staff, models.Model):
     def assignStaff(self):
         pass
 #=======
+    #prof username and course name
     def assignProf(self, prof, course):
         pass
 
@@ -221,7 +222,7 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
-    #view whos assigned to your labs
+    #view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         pass
 
@@ -231,8 +232,6 @@ class TA(Staff, models.Model):
     def viewAssignments(self):
         pass
 
-    #class: coursetoAssignment
-    # class: LabToAssignment
 
 
 class Course(models.Model):
