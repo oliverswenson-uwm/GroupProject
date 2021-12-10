@@ -41,13 +41,12 @@ class Staff(models.Model):
             return q
         else:
             if staff == 'admin':
-                q = Admin.objects.all();
+                q = Admin.objects.all()
             elif staff == 'prof':
                 q = Professor.objects.all()
             elif staff == 'ta':
                 q = TA.objects.all()
             return q
-
 
     def __str__(self):
         return self.name
@@ -208,7 +207,7 @@ class Admin(Staff, models.Model):
     def assignProf(self, prof, course):
         pass
 
-    def assignTA(self, TA, course):
+    def assignTA(self, ta, lab):
 #>>>>>>> master
         pass
 
@@ -225,10 +224,6 @@ class Professor(Staff, models.Model):
     #view whos assigned to your labs
     def viewAssignments(self):
         pass
-
-
-
-
 
 
 class TA(Staff, models.Model):
@@ -263,7 +258,7 @@ class Course(models.Model):
         return course
 
     def __str__(self):
-        return self.name + "-"+self.section
+        return self.name + "-"+str(self.section)
 
 
 class Lab(models.Model):
@@ -281,7 +276,7 @@ class LabToCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Lab " + self.ta.__str__() + " is assigned to course " + self.course.__str__()
+        return "Lab " + self.lab.__str__() + " is assigned to course " + self.course.__str__()
 
 
 class ProfessorToCourse(models.Model):
