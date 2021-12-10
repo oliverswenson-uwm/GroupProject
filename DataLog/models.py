@@ -254,7 +254,6 @@ class Course(models.Model):
     # side effects: none
     def getCourse(self, courseName, sectionNumber):
         queryList = [Course.objects.filter(name=courseName).filter(section=sectionNumber)]
-        print(queryList)
         course = None
         for query in queryList:
             if len(query) == 0:
