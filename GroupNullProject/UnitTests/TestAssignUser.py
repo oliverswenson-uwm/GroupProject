@@ -3,43 +3,62 @@ from django.test import TestCase
 
 
 class TestAssignProf(TestCase):
+    admin = Admin(fullName="TestAdminone", email="adminonetest@gmail.com", username="adminonetestuser",
+                  password="adminpassone", phNumber=9529529952, mailAdrs="123 AdminTest Way")
+    prof1 = Admin.createProf(admin, fullName="TestprofOne", email="proftesting1@gmail.com",
+                             username="testprofoneuser",
+                             password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
+    course1 = Admin.createCourse(admin, nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
+
     def test_default(self):
-        prof1 = Admin.createProf(self, fullName="TestprofOne", email="proftesting1@gmail.com",
-                                 username="testprofoneuser",
-                                 password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
-        course1 = Admin.createCourse(self, nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
-        assigned = Admin.assignProf(prof1, course1)
+        assigned = self.admin.assignProf(prof=self.prof1, course=self.course1)
         self.assertEqual(assigned, "Professor TestprofOne is assigned to course MATH240-001")
 
     def test_noProfessor(self):
-        course1 = Admin.createCourse(self, nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
-        assigned = Admin.assignProf(None, course1)
+        assigned = self.admin.assignProf(prof=None, course=self.course1)
         self.assertEqual(assigned, None)
 
     def test_noCourse(self):
-        prof1 = Admin.createProf(self, fullName="TestprofOne", email="proftesting1@gmail.com",
-                                 username="testprofoneuser",
-                                 password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
-        assigned = Admin.assignProf(prof1, None)
+        assigned = self.admin.assignProf(prof=self.prof1, course=None)
+        self.assertEqual(assigned, None)
+
+    def test_duplicateProf(self):
+        self.admin.assignProf(prof=self.prof1, course=self.course1)
+        prof2 = self.admin.createProf(fullName="TestprofTwo", email="proftesting2@gmail.com",
+                                      username="testproftwouser",
+                                      password="profpasstwo", phNumber=3213213211, mailAdrs="2 Professor St.")
+        assigned = self.admin.assignProf(prof=prof2, course=self.course1)
         self.assertEqual(assigned, None)
 
 
 class TestAssignTA(TestCase):
+    admin = Admin(fullName="TestAdminone", email="adminonetest@gmail.com", username="adminonetestuser",
+                  password="adminpassone", phNumber=9529529952, mailAdrs="123 AdminTest Way")
+    ta1 = admin.createTA(fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+                         password="testpassoneTA", phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
+    lab1 = admin.createLab(name="Math240", section=000)
 
     def test_default(self):
-        ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
-                             password="testpassoneTA", phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
-        lab1 = Admin.createLab(self)  # need createLab() to be done
-        assigned = Admin.assignTA(ta1, lab1)
-        self.assertEqual(assigned, "TA TestTAone is assigned to lab ")  # needs createLab() to be done
+        assigned = self.admin.assignTA(ta=self.ta1, lab=self.lab1)
+        self.assertEqual(assigned, "TA TestTAone is assigned to lab ")
 
     def test_noTA(self):
-        lab1 = Admin.createLab(self)  # need createLab() to be done
-        assigned = Admin.assignTA(None, lab1)
+        assigned = self.admin.assignTA(ta=None, lab=self.lab1)
         self.assertEqual(assigned, None)
 
-    def tets_noLab(self):
-        ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
-                             password="testpassoneTA", phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
-        assigned = Admin.assignTA(ta1, None)
+    def test_noLab(self):
+        assigned = self.admin.assignTA(ta=self.ta1, lab=None)
+        self.assertEqual(assigned, None)
+
+    def test_duplicateTA(self):
+        self.admin.assignTA(ta=self.ta1, lab=self.lab1)
+        ta2 = self.admin.createTA(fullName="TestTAtwo", email="taTwoGmail1@gmail.com", username="testTAtwo",
+                                  password="testpasstwoTA", phNumber=1111111111, mailAdrs="3 TeachingAssistant Circle")
+        assigned = self.admin.assignTA(ta=ta2, lab=self.lab1)
+        self.assertEqual(assigned, None)
+
+    def test_multipleLabs(self):
+        self.admin.assignTA(ta=self.ta1, lab=self.lab1)
+        lab2 = self.admin.createLab(name="Math240", section=100)
+        assigned = self.admin.assignTA(ta=self.ta1, lab=lab2)
         self.assertEqual(assigned, None)
