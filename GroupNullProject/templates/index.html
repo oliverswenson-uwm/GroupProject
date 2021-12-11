@@ -29,7 +29,15 @@
                   </form>
             </div>
             <div class="col">
-
+                {% if messages %}
+                  <ul class="messages">
+                      {% for message in messages %}
+                          <label style="color: crimson; font-size: x-large"
+                                  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
+                          </label>
+                      {% endfor %}
+                  </ul>
+              {% endif %}
             </div>
           </div>
     </div>
