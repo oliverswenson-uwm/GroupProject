@@ -152,7 +152,6 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
-#<<<<<<< Baljinder-Singh
     # description: this function will allow the creation of new Lab
     # preconditions: name should be similar to course that the lab will assign to
     # post conditions: the new lab for course will get created
@@ -160,6 +159,11 @@ class Admin(Staff, models.Model):
     def createLab(self, name, section):
         lab = None
         if not name or not section:
+            return lab
+
+        try:
+            section = int(section)
+        except:
             return lab
 
         # cheery pick bad case before creating a lab
@@ -172,10 +176,6 @@ class Admin(Staff, models.Model):
         elif type(name[0]) is int:
             return lab
         elif name[0] in [' @_!#$%^&*()<>?/\|}{~: ']:
-            return lab
-        elif type(section) is not int:
-            return lab
-        elif type(section) is float:
             return lab
         elif section > 99999:
             return lab
@@ -194,7 +194,6 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
-#should be connected to course on creation
         return lab
 
     # description:
