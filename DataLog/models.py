@@ -8,6 +8,7 @@ class Staff(models.Model):
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
+    accFlag = models.CharField(max_length=25) # this is the account flag for what kind of account the admin edits
 
     # description: this function will look the Staff database and will return the user,
     #   if not exists, returns None
@@ -211,6 +212,25 @@ class Admin(Staff, models.Model):
 #>>>>>>> master
         pass
 
+    def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs, accFlag):
+        if accFlag is not "TA" or "Professor" or "Admin":
+            print("You need a valid account flag. Try TA, Professor, or Admin.")
+
+        elif accFlag is "TA":
+            targ = TA(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        elif accFlag is "Professor":
+            targ = Professor(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        elif accFlag is "Admin":
+            targ = Admin(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        targ.save()
+        return targ
+
 
 class Professor(Staff, models.Model):
 
@@ -225,11 +245,39 @@ class Professor(Staff, models.Model):
     def viewAssignments(self):
         pass
 
+    def EditContact(self, username, phNumber, mailAdrs):
+        con = getContactInfo(username)
+
+        if con.phNumber != phNumber:
+            con.phNumber = phNumber
+
+        elif con.mailAdrs != mailAdrs:
+            con.mailAdrs = mailAdrs
+
+        con.save()
+        print(con)
+
 
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
         pass
+
+    # description: Takes an account and alters the variables based on the inputs in thecall
+    # preconditions:
+    # post conditions:
+    # side effects:
+    def EditContact(self, username, phNumber, mailAdrs):
+        con = getContactInfo(username)
+
+        if con.phNumber != phNumber:
+            con.phNumber = phNumber
+
+        elif con.mailAdrs != mailAdrs:
+            con.mailAdrs = mailAdrs
+
+        con.save()
+        print(con)
 
 
 
