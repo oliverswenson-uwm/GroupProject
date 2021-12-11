@@ -8,7 +8,7 @@ class Staff(models.Model):
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
-    accFlag = models.CharField(max_length=25) # this is the account flag for what kind of account the admin edits
+   #accFlag = models.CharField(max_length=25) # this is the account flag for what kind of account the admin edits
 
     # description: this function will look the Staff database and will return the user,
     #   if not exists, returns None
@@ -212,25 +212,30 @@ class Admin(Staff, models.Model):
 #>>>>>>> master
         pass
 
-    def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs, accFlag):
-        if accFlag is not "TA" or "Professor" or "Admin":
+
+    #removed accFlag it caused a crash, got account type from self.class
+    def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
+        accFlag =  self.__class__
+        if accFlag != "TA" or "Professor" or "Admin":
             print("You need a valid account flag. Try TA, Professor, or Admin.")
 
-        elif accFlag is "TA":
-            targ = TA(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+        elif accFlag == "TA":
+            targ = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
                     mailAddress=mailAdrs)
 
-        elif accFlag is "Professor":
-            targ = Professor(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+        elif accFlag == "Professor":
+            targ = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
                     mailAddress=mailAdrs)
 
-        elif accFlag is "Admin":
-            targ = Admin(name=fullName, email=email, username=username, password=passwordm, phoneNum=phNumber,
+        elif accFlag == "Admin":
+            targ = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
                     mailAddress=mailAdrs)
 
         targ.save()
         return targ
 
+    def ArchiveAccount(self, username):
+        pass
 
 class Professor(Staff, models.Model):
 
@@ -246,7 +251,7 @@ class Professor(Staff, models.Model):
         pass
 
     def EditContact(self, username, phNumber, mailAdrs):
-        con = getContactInfo(username)
+        con = Professor.getContactInfo(username)
 
         if con.phNumber != phNumber:
             con.phNumber = phNumber
@@ -268,7 +273,7 @@ class TA(Staff, models.Model):
     # post conditions:
     # side effects:
     def EditContact(self, username, phNumber, mailAdrs):
-        con = getContactInfo(username)
+        con = TA.getContactInfo(username)
 
         if con.phNumber != phNumber:
             con.phNumber = phNumber
