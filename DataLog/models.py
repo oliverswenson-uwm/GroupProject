@@ -234,8 +234,18 @@ class Admin(Staff, models.Model):
         targ.save()
         return targ
 
-    def ArchiveAccount(self, username):
-        pass
+    def archiveAccount(self, username):
+        # get user from username
+        account = Admin.getUser(username)
+
+        #create an archive of this account
+        ArchivedUser.createArchive(username = account.username, name = account.name, password = account.password,
+                                   phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
+        #delete this user
+        Staff.objects.get(account).delete()
+        return account
+
+
 
 class Professor(Staff, models.Model):
 
@@ -320,6 +330,18 @@ class Lab(models.Model):
 
     def __str__(self):
         return self.name + "-" + str(self.section)
+
+class ArchivedUser(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=75)
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=25)
+    phoneNum = models.IntegerField()
+    mailAddress = models.CharField(max_length=100)
+    def createArchive(self, name, email, username, password, phoneNum, mailAddress):
+        temp = ArchivedUser(name = name, email = email, username = username, password = password, phoneNum = phoneNum, mailAddress = mailAddress)
+        temp.save()
+        return temp
 
 
 class LabToCourse(models.Model):
