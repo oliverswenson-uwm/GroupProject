@@ -197,25 +197,37 @@ class Admin(Staff, models.Model):
         lab.save()
         return lab
 
+    def getLab(self, sec):
+        queryList = [Lab.objects.filter(section=sec)]
+        # a = queryList[0]
+        print(queryList)
+        labs = None
+        for query in queryList:
+            if len(query) == 0:
+                continue
+            else:
+                labs = query[0]
+        return labs
+
     # description:
     # preconditions:
     # post conditions:
     # side effects:
     def assignStaff(self):
         pass
-#=======
-    #prof username and course name
+
+    # =======
+    # prof username and course name
     def assignProf(self, prof, course):
         pass
 
     def assignTA(self, ta, lab):
-#>>>>>>> master
+        # >>>>>>> master
         pass
 
-
-    #removed accFlag it caused a crash, got account type from self.class
+    # removed accFlag it caused a crash, got account type from self.class
     def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
-        accFlag =  self.__class__
+        accFlag = self.__class__
         if accFlag != "TA" or "Professor" or "Admin":
             print("You need a valid account flag. Try TA, Professor, or Admin.")
 
@@ -245,6 +257,10 @@ class Admin(Staff, models.Model):
         Staff.objects.get(account).delete()
         return account
 
+    def assignTatoLab(self, ta_name, lab):
+        temp = TAToLab(ta=Admin.getUser(ta_name), lab=Admin.getLab(lab))
+        temp.save()
+        return temp
 
 
 class Professor(Staff, models.Model):
@@ -256,7 +272,7 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
-    #view whos assigned to your labs, should return , TA and course - lab section
+    # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         assignments = []
         courses = ProfessorToCourse.getCourse(self)#get courses associated to professor
@@ -335,7 +351,7 @@ class Course(models.Model):
         return course
 
     def __str__(self):
-        return self.name + "-"+str(self.section)
+        return self.name + "-" + str(self.section)
 
 
 class Lab(models.Model):
@@ -397,9 +413,6 @@ class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
-    def getTA(self, lab):
-        tas = TAToLab.objects.filter(lab = lab)
-        return tas
 
     def __str__(self):
         return "TA " + self.ta.__str__() + " is assigned to lab " + self.lab.__str__()

@@ -9,6 +9,7 @@ class TestCreateCourse(TestCase):
         temp = Course.getCourse(self, "compsci361", "401")
         self.assertEqual(temp.name, "compsci361")
         self.assertEqual(temp.section, 401)
+        self.assertEqual(temp.credits, 3)
 
     def test_create_well_two(self):
         Admin.createCourse(self, nm="compsci351", sec="301", cre="3", pre="", des="Intro")
