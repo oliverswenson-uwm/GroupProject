@@ -258,7 +258,23 @@ class Professor(Staff, models.Model):
 
     #view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
-        pass
+        assignments = []
+        courses = ProfessorToCourse.getCourse(self)#get courses associated to professor
+        for i in courses:
+            labs = LabToCourse.getLab(i.course)#for each course, get labs associated with this course
+            for j in labs:
+                str = i.course
+                str += " : "
+                str += j.lab
+                str += " : "
+                str += (TAToLab.getTA(j.lab))#in those labs, get each TA assigned to them
+                assignments.append(str)
+                #hoping to return a list like
+                # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
+                #then we could display this list as a table on webpage.
+                #TODO: make sure the courses and labs return proper info
+        return assignments
+
 
     def EditContact(self, username, phNumber, mailAdrs):
         con = Professor.getContactInfo(username)
@@ -348,6 +364,10 @@ class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
+    def getLab(self, course):
+        lab = LabToCourse.objects.filter(course = course)
+        return lab
+
     def __str__(self):
         return "Lab " + self.lab.__str__() + " is assigned to course " + self.course.__str__()
 
@@ -356,6 +376,10 @@ class ProfessorToCourse(models.Model):
     # This table is cascaded, mean if any of those field get deleted the whole will get deleted from this table
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def getCourse(self):
+        courses = ProfessorToCourse.objects.filter(professor = self).values()
+        return courses
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
@@ -372,6 +396,10 @@ class TAToCourse(models.Model):
 class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
+
+    def getTA(self, lab):
+        tas = TAToLab.objects.filter(lab = lab)
+        return tas
 
     def __str__(self):
         return "TA " + self.ta.__str__() + " is assigned to lab " + self.lab.__str__()

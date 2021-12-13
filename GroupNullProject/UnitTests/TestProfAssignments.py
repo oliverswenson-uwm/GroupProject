@@ -15,23 +15,19 @@ class testGetAssignmentsGood(TestCase):
         Admin.createCourse(self, nm="compsci361", sec="401", cre="3", pre="compsci251", des="")
         Admin.createCourse(self, nm="compsci351", sec="122", cre="3", pre="compsci251", des="")
         # create Labs
-        lab1 = Admin.createLab(name="compsci361", section=123)
-        lab2 = Admin.createLab(name="compsci351", section=333)
+        lab1 = Admin.createLab(self, name="Lab08", section=123)
+        lab2 = Admin.createLab(self, name="Lab07", section=333)
         # assign prof to courses
-        Admin.assignProf(prof="testprofoneuser", course="compsci361")
-        Admin.assignProf(prof="testprofoneuser", course="compsci351")
+        Admin.assignProf(self, prof="testprofoneuser", course="compsci361")
+        Admin.assignProf(self, prof="testprofoneuser", course="compsci351")
         #assign TA to labs
-        Admin.assignTA(ta = "TestTAone", lab = lab1)
-        Admin.assignTA(ta="TestTAone", lab=lab2)
+        Admin.assignTA(self, ta = "TestTAone", lab = lab1)
+        Admin.assignTA(self, ta="TestTAone", lab=lab2)
     def testGetAssignmentOne(self):
-        self.assertEqual(self.prof1.viewAssignments().TA,"testTAone")
-        self.assertEqual(self.prof1.viewAssignments().course, "compsci361")
-        self.assertEqual(self.prof1.viewAssignments().section, 123)
+        self.assertEqual(self.prof1.viewAssignments()[0],"[compsci361 : Lab08 : TestTAone]")
 
     def testGetAssignmentTwo(self):
-        self.assertEqual(self.prof1.viewAssignments().TA,"testTAone")
-        self.assertEqual(self.prof1.viewAssignments().course, "compsci351")
-        self.assertEqual(self.prof1.viewAssignments().section, 333)
+        self.assertEqual(self.prof1.viewAssignments(),"[compsci351 : Lab07 : TestTAone]")
 
 class testGetAssignmentsFail(TestCase):
     def setUp(self):
@@ -49,8 +45,8 @@ class testGetAssignmentsFail(TestCase):
         Admin.createCourse(self, nm="compsci361", sec="401", cre="3", pre="compsci251", des="")
         Admin.createCourse(self, nm="compsci351", sec="122", cre="3", pre="compsci251", des="")
         # create Labs
-        lab1 = Admin.createLab(name="compsci361", section=123)
-        lab2 = Admin.createLab(name="compsci351", section=333)
+        lab1 = Admin.createLab(self, name="compsci361", section=123)
+        lab2 = Admin.createLab(self, name="compsci351", section=333)
         # assign prof to courses
         Admin.assignProf(prof="testprofoneuser", course="compsci361")
         Admin.assignProf(prof="testprofoneuser", course="compsci351")
