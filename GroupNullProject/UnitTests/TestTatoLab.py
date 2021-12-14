@@ -23,8 +23,9 @@ class test_Ta_Lab(TestCase):
         lab1 = Lab(self, name="Math101", section=401)
         # temp = Admin.getLab(self, "MATH101")
         # self.assertEqual(temp.section, lab1.section)
-        temp = Admin.assignTA(self, ta1.username, lab1.name)
-        # self.assertEqual(temp.ta.name, "TA1")
+        temp = TAToLab(ta=ta1, lab=lab1)
+        self.assertEqual(temp.ta.name, "TestTAone")
+        self.assertEqual("TestTAone", TAToLab.getTa(self).name)
 
     # def add_Ta_Lab_Two(self):
     #     t = Admin.createTA(self, "TA2", "123@a.com", "TA2", "TA2", "222", "2nd")
