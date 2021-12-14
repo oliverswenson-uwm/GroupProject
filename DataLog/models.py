@@ -201,16 +201,31 @@ class Admin(Staff, models.Model):
     # preconditions:
     # post conditions:
     # side effects:
-    def assignStaff(self):
-        pass
-#=======
-    #prof username and course name
-    def assignProf(self, prof, course):
+    def assignStaff(self, user, assignment):
         pass
 
-    def assignTA(self, ta, lab):
-#>>>>>>> master
-        pass
+    #prof username and course name
+    def assignProf(self, prof, course):
+        if prof is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(ProfessorToCourse.objects.filter(course=course)):
+            return None
+        assignment = ProfessorToCourse.objects.create(professor=prof, course=course)
+        assignment.save()
+        return assignment
+
+    def assignTA(self, ta, course):
+        if ta is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(TAToCourse.objects.filter(course=course)):
+            return None
+        assignment = TAToCourse.objects.create(ta=ta, course=course)
+        assignment.save()
+        return assignment
 
 
 class Professor(Staff, models.Model):
@@ -259,7 +274,6 @@ class Course(models.Model):
     def __str__(self):
         return self.name + "-"+str(self.section)
 
-
 class Lab(models.Model):
     # name of the lab, should be similar to course name
     # since its is assigning to a course, i.e.,  CS361
@@ -282,6 +296,9 @@ class ProfessorToCourse(models.Model):
     # This table is cascaded, mean if any of those field get deleted the whole will get deleted from this table
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def getCourse(self):
+        return self.course
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
