@@ -210,18 +210,32 @@ class Admin(Staff, models.Model):
     # preconditions:
     # post conditions:
     # side effects:
-    def assignStaff(self):
+    def assignStaff(self, user, assignment):
         pass
 
-    # =======
-    # prof username and course name
+    #prof username and course name
     def assignProf(self, prof, course):
-        assignment = ProfessorToCourse(professor=prof, course=course)
+        if prof is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(ProfessorToCourse.objects.filter(course=course)):
+            return None
+        assignment = ProfessorToCourse.objects.create(professor=prof, course=course)
         assignment.save()
+        return assignment
 
-    def assignTA(self, ta, lab):
-        # >>>>>>> master
-        pass
+    def assignTA(self, ta, course):
+        if ta is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(TAToCourse.objects.filter(course=course)):
+            return None
+        assignment = TAToCourse.objects.create(ta=ta, course=course)
+        assignment.save()
+        return assignment
+
 
     # removed accFlag it caused a crash, got account type from self.class
     def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
@@ -373,7 +387,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name + "-" + str(self.section)
-
 
 class Lab(models.Model):
     # name of the lab, should be similar to course name
