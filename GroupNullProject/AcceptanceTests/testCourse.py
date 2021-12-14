@@ -141,7 +141,8 @@ class test_Duplicate(TestCase):
                                                        "section": "301", "credits": "3", "prereqs": "COMPSCI251",
                                                        "description": "Introduction to software engineering"}
                                     , follow=True)
-        self.assertEqual("The course already exist", response.context['msg'])
+        self.assertEqual("301", response.context['section'])
+        self.assertEqual("COMPSCI361", response.context["name"])
 
         # Only credit different
         response = self.client.post('/createcourse/', {"name": "COMPSCI361",
@@ -150,22 +151,15 @@ class test_Duplicate(TestCase):
                                     follow=True)
         self.assertEqual("The course already exist", response.context['msg'])
 
-        # Only prereqs different
+        # # Only prereqs different
         response = self.client.post('/createcourse/', {"name": "COMPSCI361",
                                                        "section": "401", "credits": "4", "prereqs": "AA",
                                                        "description": "Introduction to software engineering"},
                                     follow=True)
         self.assertEqual("The course already exist", response.context['msg'])
 
-        # Only descrption different
+        # # Only descrption different
         response = self.client.post('/createcourse/', {"name": "COMPSCI361",
                                                        "section": "401", "credits": "4", "prereqs": "COMPSCI251",
-                                                       "description": "AA"}, follow=True)
-        self.assertEqual("The course already exist", response.context['msg'])
-
-        # Only Name is equal, and everything is different.
-
-        response = self.client.post('/createcourse/', {"name": "COMPSCI361",
-                                                       "section": "101", "credits": "7", "prereqs": "ABC",
                                                        "description": "AA"}, follow=True)
         self.assertEqual("The course already exist", response.context['msg'])

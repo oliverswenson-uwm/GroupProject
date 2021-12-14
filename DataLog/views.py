@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.views import View
 from DataLog.models import Staff, Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab
 
@@ -29,9 +30,11 @@ class Login(View):
                     return redirect("/ta/")
             else:
                 request.session.flush()  # log out logged user
+                messages.add_message(request, messages.INFO, 'INVALID Username OR Password')
                 return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
         else:  # user is None, mean invalid username or password or user does not exist
             request.session.flush()  # log out logged user
+            messages.add_message(request, messages.INFO, 'INVALID Username OR Password')
             return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
 
 
@@ -88,9 +91,11 @@ class CreateUser(View):
         if 'role' in request.session:
             role = request.session['role']
             if role != 'admin':
-                return redirect('/', {'msg': 'Please logging as Admin'})
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
         else:
-            return redirect('/', {'msg': 'Please logging as Admin'})
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
 
         return render(request, "newacc.html")
 
@@ -103,7 +108,7 @@ class CreateUser(View):
         mailAdrs = request.POST['mailAdrs']
         accType = request.POST['accType']
 
-        print(request.POST)
+        print(accType)
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
             newUser = None
@@ -159,7 +164,7 @@ class CreateCourse(View):
 
     def post(self, request):
         try:
-            m = Course.objects.get(name=request.POST['name'])
+            m = Course.objects.get(name=request.POST['name'], section=request.POST['section'])
             if m is not None:
                 return render(request, "createcourse.html", {'msg': "The course already exist"})
         except:
@@ -186,6 +191,38 @@ class CreateCourse(View):
                                                          'prereqs': request.POST['prereqs'],
                                                          'description': request.POST['description'],
                                                          'msg': "The course has been created."})
+
+
+class CreateLab(View):
+
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
+
+        courseQuery = Course.objects.all().values('name').distinct()
+
+        return render(request, "createLab.html", {"courseQuery": courseQuery})
+
+    def post(self, request):
+        labName = request.POST['labName']
+        labSec = request.POST['labSec']
+        print(labName, labSec)
+        newLab = Admin.createLab(self, labName, labSec)
+        print(newLab)
+        if newLab is None:
+            messages.add_message(request, messages.INFO, 'Failed to create Lab')
+            return redirect("/createlab/")
+        messages.add_message(request, messages.INFO, 'Lab created Successfully!')
+        return redirect("/createlab/")
 
 
 # PROFPAGE

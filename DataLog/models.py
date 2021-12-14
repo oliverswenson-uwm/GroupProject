@@ -8,6 +8,7 @@ class Staff(models.Model):
     password = models.CharField(max_length=25)  # password of the staff for login
     phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
+   #accFlag = models.CharField(max_length=25) # this is the account flag for what kind of account the admin edits
 
     # description: this function will look the Staff database and will return the user,
     #   if not exists, returns None
@@ -62,9 +63,12 @@ class Admin(Staff, models.Model):
     # side effects: Admin table will get modified
     def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
@@ -88,9 +92,12 @@ class Admin(Staff, models.Model):
     # side effects: Professor table will get modified
     def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
@@ -114,9 +121,12 @@ class Admin(Staff, models.Model):
     # side effects: TA table will get modified
     def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
@@ -152,7 +162,6 @@ class Admin(Staff, models.Model):
             co.save()
             return co
 
-#<<<<<<< Baljinder-Singh
     # description: this function will allow the creation of new Lab
     # preconditions: name should be similar to course that the lab will assign to
     # post conditions: the new lab for course will get created
@@ -160,6 +169,11 @@ class Admin(Staff, models.Model):
     def createLab(self, name, section):
         lab = None
         if not name or not section:
+            return lab
+
+        try:
+            section = int(section)
+        except:
             return lab
 
         # cheery pick bad case before creating a lab
@@ -172,10 +186,6 @@ class Admin(Staff, models.Model):
         elif type(name[0]) is int:
             return lab
         elif name[0] in [' @_!#$%^&*()<>?/\|}{~: ']:
-            return lab
-        elif type(section) is not int:
-            return lab
-        elif type(section) is float:
             return lab
         elif section > 99999:
             return lab
@@ -194,7 +204,6 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
-#should be connected to course on creation
         return lab
 
     # description:
@@ -228,6 +237,52 @@ class Admin(Staff, models.Model):
         return assignment
 
 
+    # removed accFlag it caused a crash, got account type from self.class
+    def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
+        accFlag = self.__class__
+        if accFlag != "TA" or "Professor" or "Admin":
+            print("You need a valid account flag. Try TA, Professor, or Admin.")
+
+        elif accFlag == "TA":
+            targ = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        elif accFlag == "Professor":
+            targ = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        elif accFlag == "Admin":
+            targ = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
+                    mailAddress=mailAdrs)
+
+        targ.save()
+        return targ
+
+    def archiveAccount(self, account):
+        if account is None:
+            return None
+
+        # get user from username
+        account = Admin.getUser(self, account.username)
+
+        #create an archive of this account
+        ArchivedUser.createArchive(self, username = account.username, name = account.name, password = account.password,
+                                   phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
+        #delete this user
+
+        staff = account.__class__
+        staff.objects.get(username = account.username).delete()
+        return account
+
+    def add_taLab(self, ta, lab):
+        if ta is None:
+            return None
+        if lab is None:
+            return None
+        temp = TAToLab(ta=ta, lab=lab)
+        return temp
+
+
 class Professor(Staff, models.Model):
 
     # description:
@@ -237,15 +292,74 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
-    #view whos assigned to your labs, should return , TA and course - lab section
+    # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
-        pass
+        assignments = []
+        courses = []
+
+
+        #FIRST get ProfessorToCourse objects with the professor in them
+        proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
+
+        #for each ProfessorToCourse object, extract the course and put it in a list
+        for e in proftocourseobj:
+            courses.append(ProfessorToCourse.getCourse(e))
+
+        #iterate through the list of courses and get the CourseToLab objects associated with the courses
+        for i in courses:
+            labs = []  # reset labs because new course
+            coursetolabobj = LabToCourse.objects.filter(course=i)
+
+            # for each CourseToLab object, get the associated labs and add them to the list of labs
+            for k in coursetolabobj:
+                labs.append(LabToCourse.getLab(self, k))
+
+            for j in labs:  # iterate through the lab sections
+                str = i.course
+                str += " : "
+                str += j.lab
+                str += " : "
+                str += (TAToLab.getTA(j.lab))#in those labs, get each TA assigned to them
+                assignments.append(str)
+                #hoping to return a list like
+                # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
+                #then we could display this list as a table on webpage.
+                #TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
+        return assignments
+
+    def EditContact(self, username, phNumber, mailAdrs):
+        con = Professor.getContactInfo(username)
+
+        if con.phNumber != phNumber:
+            con.phNumber = phNumber
+
+        elif con.mailAdrs != mailAdrs:
+            con.mailAdrs = mailAdrs
+
+        con.save()
+        print(con)
 
 
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
         pass
+
+    # description: Takes an account and alters the variables based on the inputs in thecall
+    # preconditions:
+    # post conditions:
+    # side effects:
+    def EditContact(self, username, phNumber, mailAdrs):
+        con = TA.getContactInfo(username)
+
+        if con.phNumber != phNumber:
+            con.phNumber = phNumber
+
+        elif con.mailAdrs != mailAdrs:
+            con.mailAdrs = mailAdrs
+
+        con.save()
+        print(con)
 
 
 
@@ -272,7 +386,7 @@ class Course(models.Model):
         return course
 
     def __str__(self):
-        return self.name + "-"+str(self.section)
+        return self.name + "-" + str(self.section)
 
 class Lab(models.Model):
     # name of the lab, should be similar to course name
@@ -283,10 +397,25 @@ class Lab(models.Model):
     def __str__(self):
         return self.name + "-" + str(self.section)
 
+class ArchivedUser(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=75)
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=25)
+    phoneNum = models.IntegerField()
+    mailAddress = models.CharField(max_length=100)
+    def createArchive(self, name, email, username, password, phoneNum, mailAddress):
+        temp = ArchivedUser(name = name, email = email, username = username, password = password, phoneNum = phoneNum, mailAddress = mailAddress)
+        temp.save()
+        return temp
+
 
 class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def getLab(self, coursetolabobj):
+        return coursetolabobj.lab
 
     def __str__(self):
         return "Lab " + self.lab.__str__() + " is assigned to course " + self.course.__str__()
@@ -297,8 +426,9 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(self):
-        return self.course
+    def getCourse(e):
+        courses = ProfessorToCourse.objects.filter(professor = self).values()
+        return courses
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
@@ -315,6 +445,12 @@ class TAToCourse(models.Model):
 class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
+
+    def getTa(self):
+        return self.ta
+
+    def getLab(self):
+        return self.lab
 
     def __str__(self):
         return "TA " + self.ta.__str__() + " is assigned to lab " + self.lab.__str__()

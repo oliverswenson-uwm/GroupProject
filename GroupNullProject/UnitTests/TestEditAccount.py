@@ -49,7 +49,7 @@ class TestEditAcc(TestCase):
                           password="101", phNumber=4444444444, mailAdrs="123 Wowee Way")
         editedUser, prevUser = Staff.getUser(self, "adminonetestuser")
 
-        editedUser.EditAcc(self, "Tam Sinny", "tamsin@gmail.com", "tsin", "101", 1111144444, "123 Wowee Way")
+        editedUser.EditAcc(self, "Tam Sinny", "tamsin@gmail.com", "tsin", "101", 1111144444, "123 Wowee Way", "Professor")
 
         self.assertEqual(editedUser.phNumber, 1111144444)
 
@@ -59,7 +59,7 @@ class TestEditAcc(TestCase):
                           password="101", phNumber=4444444444, mailAdrs="123 Wowee Way")
         editedUser, prevUser = Staff.getUser(self, "adminonetestuser")
 
-        editedUser.EditAcc(self, "Tam Sinny", "tamsin@gmail.com", "tsin", "101", 4444444444, "Rock Bottom")
+        editedUser.EditAcc(self, "Tam Sinny", "tamsin@gmail.com", "tsin", "101", 4444444444, "Rock Bottom", "TA")
 
         self.assertEqual(editedUser.mailAdrs, "Rock Bottom")
 
