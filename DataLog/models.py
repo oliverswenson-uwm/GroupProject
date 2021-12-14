@@ -144,11 +144,10 @@ class Admin(Staff, models.Model):
         print(ta)
         return ta
 
-    # description: this function would create the new course
-    # preconditions: name, section credits of the course should not be empty. If one of them or all of them is empty the
-    # function would return None.
-    # post conditions: the new course would be created
-    # side effects: Course table will have this new course in it.
+    # description:
+    # preconditions:
+    # post conditions:
+    # side effects:
     def createCourse(self, nm, sec, cre, pre, des):
         if nm == "" or nm[0] == "":
             return None
@@ -205,24 +204,41 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
+        for e in courseExist:#will only run once just needed to pull value out of queryset
+            labtocourse = LabToCourse(lab = lab, course = e)
+        labtocourse.save()
         return lab
 
     # description:
     # preconditions:
     # post conditions:
     # side effects:
-    def assignStaff(self):
+    def assignStaff(self, user, assignment):
         pass
 
-    # =======
-    # prof username and course name
+    #prof username and course name
     def assignProf(self, prof, course):
-        assignment = ProfessorToCourse(professor=prof, course=course)
+        if prof is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(ProfessorToCourse.objects.filter(course=course)):
+            return None
+        assignment = ProfessorToCourse.objects.create(professor=prof, course=course)
         assignment.save()
+        return assignment
 
-    def assignTA(self, ta, lab):
-        # >>>>>>> master
-        pass
+    def assignTA(self, ta, course):
+        if ta is None:
+            return None
+        elif course is None:
+            return None
+        elif 0 != len(TAToCourse.objects.filter(course=course)):
+            return None
+        assignment = TAToCourse.objects.create(ta=ta, course=course)
+        assignment.save()
+        return assignment
+
 
     # removed accFlag it caused a crash, got account type from self.class
     def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
@@ -261,13 +277,6 @@ class Admin(Staff, models.Model):
         staff.objects.get(username = account.username).delete()
         return account
 
-    # description: this function assign Ta to Lab
-    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
-    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
-    # does not exist(=None), the function will return None.
-    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
-    # of TaToLab
-    # side effects: The ta and lab would be in database of TaToLab
     def add_taLab(self, ta, lab):
         if ta is None:
             return None
@@ -284,20 +293,19 @@ class Professor(Staff, models.Model):
     # post conditions:
     # side effects:
     def assignTA(self, ta, lab):
-        pass
+        return Admin.add_taLab(self, ta, lab)
 
     # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         assignments = []
         courses = []
 
-
         #FIRST get ProfessorToCourse objects with the professor in them
         proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
 
         #for each ProfessorToCourse object, extract the course and put it in a list
         for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(e))
+            courses.append(ProfessorToCourse.getCourse(self,e))
 
         #iterate through the list of courses and get the CourseToLab objects associated with the courses
         for i in courses:
@@ -308,13 +316,19 @@ class Professor(Staff, models.Model):
             for k in coursetolabobj:
                 labs.append(LabToCourse.getLab(self, k))
 
+
             for j in labs:  # iterate through the lab sections
-                str = i.course
-                str += " : "
-                str += j.lab
-                str += " : "
-                str += (TAToLab.getTA(j.lab))#in those labs, get each TA assigned to them
-                assignments.append(str)
+                labtotaobj = TAToLab.objects.filter(lab = j)
+                tas = []
+                for t in labtotaobj:
+                    tas.append(TAToLab.getTa(t))
+
+                    stri = str(i)#course
+                    stri += " : "
+                    stri += str(j)#lab
+                    stri += " : "
+                    stri += (t)#in those labs, get each TA assigned to them
+                    assignments.append(str)
                 #hoping to return a list like
                 # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
                 #then we could display this list as a table on webpage.
@@ -382,7 +396,6 @@ class Course(models.Model):
     def __str__(self):
         return self.name + "-" + str(self.section)
 
-
 class Lab(models.Model):
     # name of the lab, should be similar to course name
     # since its is assigning to a course, i.e.,  CS361
@@ -421,9 +434,8 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(self):
-        courses = ProfessorToCourse.objects.filter(professor = self).values()
-        return courses
+    def getCourse(self,e):
+        return e.course
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
@@ -441,17 +453,8 @@ class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
-    # description: this function would return the ta of TAToLab
-    # preconditions: Ta should not be None
-    # post conditions: return ta
-    # side effects: None
     def getTa(self):
         return self.ta
-
-    # description: this function would return the lab of TAToLab
-    # preconditions: Lab should not be None
-    # post conditions: return lab
-    # side effects: None
 
     def getLab(self):
         return self.lab
