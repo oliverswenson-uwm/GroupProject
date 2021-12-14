@@ -244,15 +244,17 @@ class Admin(Staff, models.Model):
         targ.save()
         return targ
 
-    def archiveAccount(self, username):
+    def archiveAccount(self, account):
         # get user from username
-        account = Admin.getUser(username)
+        account = Admin.getUser(self, account.username)
 
         #create an archive of this account
-        ArchivedUser.createArchive(username = account.username, name = account.name, password = account.password,
+        ArchivedUser.createArchive(self, username = account.username, name = account.name, password = account.password,
                                    phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
         #delete this user
-        Staff.objects.get(account).delete()
+
+        staff = account.__class__
+        staff.objects.get(username = account.username).delete()
         return account
 
     def add_taLab(self, ta, lab):
@@ -284,7 +286,7 @@ class Professor(Staff, models.Model):
 
         #for each ProfessorToCourse object, extract the course and put it in a list
         for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(self, e))
+            courses.append(ProfessorToCourse.getCourse(e))
 
         #iterate through the list of courses and get the CourseToLab objects associated with the courses
         for i in courses:
@@ -408,7 +410,7 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(self):
+    def getCourse(e):
         courses = ProfessorToCourse.objects.filter(professor = self).values()
         return courses
 

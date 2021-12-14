@@ -21,5 +21,5 @@ class test_Archieved_user(TestCase):
         ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
                                        password="testpassoneTA",
                                        phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
-        temp = Admin.archiveAccount(self, "testTAone")
+        temp = Admin.archiveAccount(self, ta1)
         # self.assertEqual(temp.name, self.ta1.name)
