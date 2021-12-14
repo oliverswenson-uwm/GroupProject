@@ -204,6 +204,8 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
+        labtocourse = LabToCourse(lab = lab, course = courseExist)
+        labtocourse.save()
         return lab
 
     # description:
@@ -273,20 +275,19 @@ class Professor(Staff, models.Model):
     # post conditions:
     # side effects:
     def assignTA(self, ta, lab):
-        pass
+        return Admin.add_taLab(self, ta, lab)
 
     # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         assignments = []
         courses = []
 
-
         #FIRST get ProfessorToCourse objects with the professor in them
         proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
 
         #for each ProfessorToCourse object, extract the course and put it in a list
         for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(e))
+            courses.append(ProfessorToCourse.getCourse(self,e))
 
         #iterate through the list of courses and get the CourseToLab objects associated with the courses
         for i in courses:
@@ -410,9 +411,8 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(e):
-        courses = ProfessorToCourse.objects.filter(professor = self).values()
-        return courses
+    def getCourse(self,e):
+        return e.course
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
