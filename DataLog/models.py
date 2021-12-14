@@ -204,7 +204,7 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
-        for e in courseExist:#will only run once just needed to pull value out of queryset
+        for e in courseExist: #will only run once just needed to pull value out of queryset
             labtocourse = LabToCourse(lab = lab, course = e)
         labtocourse.save()
         return lab
@@ -335,7 +335,7 @@ class Professor(Staff, models.Model):
                     stri += " : "
                     stri += str(j)#lab
                     stri += " : "
-                    stri += (t)#in those labs, get each TA assigned to them
+                    stri += str(t)#in those labs, get each TA assigned to them
                     assignments.append(str)
                 #hoping to return a list like
                 # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
