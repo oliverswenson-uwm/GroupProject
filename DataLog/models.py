@@ -206,18 +206,6 @@ class Admin(Staff, models.Model):
         lab.save()
         return lab
 
-    def getLab(self, sec):
-        queryList = [Lab.objects.filter(section=sec)]
-        # a = queryList[0]
-        print(queryList)
-        labs = None
-        for query in queryList:
-            if len(query) == 0:
-                continue
-            else:
-                labs = query[0]
-        return labs
-
     # description:
     # preconditions:
     # post conditions:
@@ -267,9 +255,12 @@ class Admin(Staff, models.Model):
         Staff.objects.get(account).delete()
         return account
 
-    def assignTatoLab(self, ta_name, lab_section):
-        temp = TAToLab(ta=Admin.getUser(self, ta_name), lab=Admin.getLab(self, lab_section))
-        temp.save()
+    def add_taLab(self, ta, lab):
+        if ta is None:
+            return None
+        if lab is None:
+            return None
+        temp = TAToLab(ta=ta, lab=lab)
         return temp
 
 
@@ -316,7 +307,6 @@ class Professor(Staff, models.Model):
                 #then we could display this list as a table on webpage.
                 #TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
         return assignments
-
 
     def EditContact(self, username, phNumber, mailAdrs):
         con = Professor.getContactInfo(username)
@@ -443,8 +433,6 @@ class TAToLab(models.Model):
 
     def getLab(self):
         return self.lab
-
-
 
     def __str__(self):
         return "TA " + self.ta.__str__() + " is assigned to lab " + self.lab.__str__()
