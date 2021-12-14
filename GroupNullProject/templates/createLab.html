@@ -10,14 +10,57 @@
 
     <title>Create Lab</title>
   </head>
+  <body>
 
-  <div class="row justify-content-center">
-    <div style="margin-top: 10%; text-align: center;" class="col-lg-4">
-        <h1 class="display-4">Create Lab</h1>
+    <!-- ----------------- Side Bar --------------------------- -->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 280px; height: 98vh; position: absolute;">
+      <span class="text-primary"><strong style="font-size: xx-large;">Admin View</strong></span>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto h5">
+      <li class="nav-item">
+        <a href="/supervisor/" class="nav-link link-dark" aria-current="page">
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="/createuser/" class="nav-link ink-dark">
+          Create Account
+        </a>
+      </li>
+      <li>
+        <a href="/createcourse/" class="nav-link link-dark">
+          Create Course
+        </a>
+      </li>
+      <li>
+        <a href="/createlab/" class="nav-link active">
+          Create Lab
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link link-dark">
+          Edit Account
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="">
+        <a href="/" class="nav-link link-dark text-danger">
+        <strong>Log Out</strong>
+      </a>
     </div>
   </div>
 
-  <div style="margin-top: 5%; max-width: 50%; margin-left: 25%;" class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
+  <!-- ----------------- End Side Bar --------------------------- -->
+
+
+ <div class="row justify-content-center">
+  <div style="margin-top: 10%; margin-left: 10%; text-align: center;" class="col-lg-4">
+      <h1 class="display-4"><strong>Create Lab</strong></h1>
+  </div>
+</div>
+
+  <div style="margin-top: 5%; max-width: 50%; margin-left: 30%;" class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
   <form action="/createlab/" method="post">
     {% csrf_token %}
     <div class="form-group row">

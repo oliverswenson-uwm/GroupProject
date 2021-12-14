@@ -1,45 +1,56 @@
-{% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Admin Vision</title>
-    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Admin View</title>
+  </head>
 <body>
-<span style="font-weight:bold">This is the page that an administrative account will see after a successful login.</span>
-<h1 id="thetitle2">Administrative Options</h1>
+  <!-- ----------------- Side Bar --------------------------- -->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 280px; height: 98vh; position: absolute;">
+      <span class="text-primary"><strong style="font-size: xx-large;">Admin View</strong></span>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto h5">
+      <li class="nav-item">
+        <a href="/supervisor/" class="nav-link active" aria-current="page">
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="/createuser/" class="nav-link link-dark">
+          Create Account
+        </a>
+      </li>
+      <li>
+        <a href="/createcourse/" class="nav-link link-dark">
+          Create Course
+        </a>
+      </li>
+      <li>
+        <a href="/createlab/" class="nav-link link-dark">
+          Create Lab
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link link-dark">
+          Edit Account
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="">
+        <a href="/" class="nav-link link-dark text-danger">
+        <strong>Log Out</strong>
+      </a>
+    </div>
+  </div>
 
-<p>Here are the options an administrator has. They can create an account, create a course, and assign a user to a
-    course.</p>
-<br>
-<br>
-<form action="/">
-    <button type="submit">Log out</button>
-</form>
+  <!-- ----------------- End Side Bar --------------------------- -->
 
-<br>
-
-<form action="/createuser/">
-    <button type="submit">Create Account</button>
-</form>
-
-<br>
-
-<form action="/createcourse/">
-    <button type="submit">Create Course</button>
-</form>
-
-<form action="/createlab/">
-    <button type="submit">Create Lab</button>
-</form>
-
-<br>
-<form action="assignuser.html">
-    <button type="submit">Assign User</button>
-</form>
-
-
-</body>
+  </body>
 </html>

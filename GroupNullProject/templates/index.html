@@ -9,7 +9,7 @@
 </head>
 <body style="background-color: rgb(255, 255, 255);">
     <div class="container">
-        <div style="height: 95vh" class="row align-items-center">
+        <div style="margin-top: 35%; height: 35vh" class="row align-items-center">
             <div class="col">
 
             </div>
@@ -29,7 +29,13 @@
                   </form>
             </div>
             <div class="col">
-                {% if messages %}
+
+            </div>
+          </div>
+    </div>
+    <div class="row justify-content-center">
+    <div style="text-align: center;" class="col-lg-4">
+        {% if messages %}
                   <ul class="messages">
                       {% for message in messages %}
                           <label style="color: crimson; font-size: x-large"
@@ -38,8 +44,7 @@
                       {% endfor %}
                   </ul>
               {% endif %}
-            </div>
-          </div>
     </div>
+  </div>
 </body>
 </html>

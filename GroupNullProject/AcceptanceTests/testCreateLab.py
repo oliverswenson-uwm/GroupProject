@@ -10,7 +10,7 @@ class TestCreateLab(TestCase):
               phoneNum="1231231111", mailAddress="123 Admin ln.").save()
         Course(name="CS250", section="401", credits=3, prereqs="None", description="None").save()
         self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
-        response = self.client.post('/createlab/', {"labName": "CS251", "labSec": "811"}, follow=True)
+        response = self.client.post('/createlab/', {"labName": "CS250", "labSec": "811"}, follow=True)
         msgs = response.context['messages']
         for msg in msgs:
             print(msg)

@@ -30,9 +30,11 @@ class Login(View):
                     return redirect("/ta/")
             else:
                 request.session.flush()  # log out logged user
+                messages.add_message(request, messages.INFO, 'INVALID Username OR Password')
                 return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
         else:  # user is None, mean invalid username or password or user does not exist
             request.session.flush()  # log out logged user
+            messages.add_message(request, messages.INFO, 'INVALID Username OR Password')
             return render(request, "index.html", {'msg': 'INVALID Username OR Password'})
 
 
@@ -89,9 +91,11 @@ class CreateUser(View):
         if 'role' in request.session:
             role = request.session['role']
             if role != 'admin':
-                return redirect('/', {'msg': 'Please logging as Admin'})
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
         else:
-            return redirect('/', {'msg': 'Please logging as Admin'})
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
 
         return render(request, "newacc.html")
 
@@ -104,7 +108,7 @@ class CreateUser(View):
         mailAdrs = request.POST['mailAdrs']
         accType = request.POST['accType']
 
-        print(request.POST)
+        print(accType)
         user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
             newUser = None
@@ -198,7 +202,6 @@ class CreateLab(View):
         if 'role' in request.session:
             role = request.session['role']
             if role != 'admin':
-                print(request.POST)
                 messages.add_message(request, messages.INFO, 'Please logging as Admin')
                 return redirect('/')
         else:
