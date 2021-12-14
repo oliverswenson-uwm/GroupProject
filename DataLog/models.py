@@ -63,9 +63,12 @@ class Admin(Staff, models.Model):
     # side effects: Admin table will get modified
     def createAdmin(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
@@ -89,9 +92,12 @@ class Admin(Staff, models.Model):
     # side effects: Professor table will get modified
     def createProf(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
@@ -115,9 +121,12 @@ class Admin(Staff, models.Model):
     # side effects: TA table will get modified
     def createTA(self, fullName, email, username, password, phNumber, mailAdrs):
         # checking fields for validity/blanks
-        if type(phNumber) != int:
+        try:
+            phNumber = int(phNumber)
+        except:
             return None
-        elif phNumber > 9999999999:
+
+        if phNumber > 9999999999:
             return None
         if fullName == "" or fullName[0] == " ":
             return None
