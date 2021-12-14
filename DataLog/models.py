@@ -351,7 +351,6 @@ class Professor(Staff, models.Model):
 
         con.save()
         print(con)
-    # testing for pull request
 
 class TA(Staff, models.Model):
 
