@@ -360,7 +360,6 @@ class Professor(Staff, models.Model):
         con.save()
         print(con)
 
-
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
