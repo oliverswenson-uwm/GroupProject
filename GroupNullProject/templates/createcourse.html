@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>New Account</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="../static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href= "/">click this link.</a></span>
+    <span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href= "index.html">click this link.</a></span>
     <h1 id="thetitle2">Create Course</h1>
     <p id="group1">
 
@@ -19,30 +20,33 @@
     <hr>
 
         {% csrf_token %}
-        <label for="name"><b>Course Name</b></label>
-        <input name="name" type="text" placeholder="Enter Course Name..." id="name" >
+        <br>
+        <table>
+        <tr><label for="name"><b>Course Name</b></label>
+        <input name="name" type="text" placeholder="Enter Course Name..." id="name" ></tr>
         <br>
 
-        <label for ="section"><b>Course Section</b></label>
-        <input name="section" type="text" placeholder="Enter Course Section..." id="section">
+        <tr><label for ="section"><b>Course Section</b></label>
+            <input name="section" type="text" placeholder="Enter Course Section..." id="section"></tr>
         <br>
 
-        <label for="credits"><b>Credits</b></label>
-        <input name="credits" type="text" placeholder="Enter Credits..." id="credits" >
+        <tr><label for="credits"><b>Credits</b></label>
+            <input name="credits" type="text" placeholder="Enter Credits..." id="credits" ></tr>
         <br>
 
-        <label for="prereqs"><b>Prereqs</b></label>
-        <input name="prereqs" type="text" placeholder="Enter Prereqs..." id="prereqs">
+        <tr><label for="prereqs"><b>Prereqs</b></label>
+            <input name="prereqs" type="text" placeholder="Enter Prereqs..." id="prereqs"></tr>
         <br>
 
 
-        <label for="desc"><b>Course Description</b></label>
-        <textarea rows="4" cols="30" name="description">
+            <tr><label for="desc"><b>Course Description</b></label>
+        <textarea id="desc" rows="4" cols="30" name="desc">
         Enter your description here...
-        </textarea>
+        </textarea></tr>
         <br>
 
         <input type="submit" value="Create Course!">
+            </table>
     </form>
     {{ msg }}
   </div>

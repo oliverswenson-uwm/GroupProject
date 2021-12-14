@@ -3,7 +3,6 @@ from DataLog.models import *
 
 class TestEditContact(TestCase):
     # PBI says that the professors and TAs can edit their contact information EXCEPT for their emails.
-    # A cry for help to work
     def testEditPhone(self):
         # First form of contact info is the phone number
         Admin.createProf(self, fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
