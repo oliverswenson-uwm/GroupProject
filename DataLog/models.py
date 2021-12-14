@@ -245,6 +245,9 @@ class Admin(Staff, models.Model):
         return targ
 
     def archiveAccount(self, account):
+        if account is None:
+            return None
+
         # get user from username
         account = Admin.getUser(self, account.username)
 
