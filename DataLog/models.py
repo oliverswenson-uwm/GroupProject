@@ -144,10 +144,11 @@ class Admin(Staff, models.Model):
         print(ta)
         return ta
 
-    # description:
-    # preconditions:
-    # post conditions:
-    # side effects:
+    # description: this function would create the new course
+    # preconditions: name, section credits of the course should not be empty. If one of them or all of them is empty the
+    # function would return None.
+    # post conditions: the new course would be created
+    # side effects: Course table will have this new course in it.
     def createCourse(self, nm, sec, cre, pre, des):
         if nm == "" or nm[0] == "":
             return None
@@ -260,6 +261,13 @@ class Admin(Staff, models.Model):
         staff.objects.get(username = account.username).delete()
         return account
 
+    # description: this function assign Ta to Lab
+    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
+    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
+    # does not exist(=None), the function will return None.
+    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
+    # of TaToLab
+    # side effects: The ta and lab would be in database of TaToLab
     def add_taLab(self, ta, lab):
         if ta is None:
             return None
@@ -413,7 +421,7 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(e):
+    def getCourse(self):
         courses = ProfessorToCourse.objects.filter(professor = self).values()
         return courses
 
@@ -433,8 +441,17 @@ class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
+    # description: this function would return the ta of TAToLab
+    # preconditions: Ta should not be None
+    # post conditions: return ta
+    # side effects: None
     def getTa(self):
         return self.ta
+
+    # description: this function would return the lab of TAToLab
+    # preconditions: Lab should not be None
+    # post conditions: return lab
+    # side effects: None
 
     def getLab(self):
         return self.lab
