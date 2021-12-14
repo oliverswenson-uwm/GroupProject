@@ -12,12 +12,19 @@ class test_Ta_Lab(TestCase):
         # self.lab1 = self.admin.createLab(name="Math101", section=401)
 
     def test_add_Ta_Lab_One(self):
-        ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+        # ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+        #                                password="testpassoneTA",
+        #                                phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
+        # lab1 = Admin.createLab(self, name="Math101", section=401)
+
+        ta1 = TA(self, name="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
                                        password="testpassoneTA",
-                                       phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
-        lab1 = Admin.createLab(self, name="Math101", section=401)
-        temp = Admin.assignTatoLab(self, ta1.username, lab1.section)
-        self.assertEqual(temp.ta.name, "TA1")
+                                       phoneNum=3334441111, mailAddress="2 TeachingAssistant Circle")
+        lab1 = Lab(self, name="Math101", section=401)
+        # temp = Admin.getLab(self, "MATH101")
+        # self.assertEqual(temp.section, lab1.section)
+        temp = Admin.assignTA(self, ta1.username, lab1.name)
+        # self.assertEqual(temp.ta.name, "TA1")
 
     # def add_Ta_Lab_Two(self):
     #     t = Admin.createTA(self, "TA2", "123@a.com", "TA2", "TA2", "222", "2nd")

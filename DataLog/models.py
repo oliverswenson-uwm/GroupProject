@@ -228,8 +228,7 @@ class Admin(Staff, models.Model):
     # =======
     # prof username and course name
     def assignProf(self, prof, course):
-        assignment = ProfessorToCourse(professor=prof, course=course)
-        assignment.save()
+        pass
 
     def assignTA(self, ta, lab):
         # >>>>>>> master
@@ -285,26 +284,10 @@ class Professor(Staff, models.Model):
     # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         assignments = []
-        courses = []
-
-
-        #FIRST get ProfessorToCourse objects with the professor in them
-        proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
-
-        #for each ProfessorToCourse object, extract the course and put it in a list
-        for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(self, e))
-
-        #iterate through the list of courses and get the CourseToLab objects associated with the courses
+        courses = ProfessorToCourse.getCourse(self)#get courses associated to professor
         for i in courses:
-            labs = []#reset labs because new course
-            coursetolabobj = LabToCourse.objects.filter(course=i)
-
-            # for each CourseToLab object, get the associated labs and add them to the list of labs
-            for k in coursetolabobj:
-                labs.append(LabToCourse.getLab(self, k))
-
-            for j in labs:#iterate through the lab sections
+            labs = LabToCourse.getLab(i.course)#for each course, get labs associated with this course
+            for j in labs:
                 str = i.course
                 str += " : "
                 str += j.lab
@@ -314,7 +297,7 @@ class Professor(Staff, models.Model):
                 #hoping to return a list like
                 # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
                 #then we could display this list as a table on webpage.
-                #TODO: for TA in labs and make assignment class with attributes so can return list of assignment objects
+                # TO DO: make sure the courses and labs return proper info
         return assignments
 
 
@@ -406,8 +389,9 @@ class LabToCourse(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getLab(self, coursetolabobj):
-        return coursetolabobj.lab
+    def getLab(self, course):
+        lab = LabToCourse.objects.filter(course = course)
+        return lab
 
     def __str__(self):
         return "Lab " + self.lab.__str__() + " is assigned to course " + self.course.__str__()
@@ -418,8 +402,9 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(self, proftocourseobj):
-        return proftocourseobj.course
+    def getCourse(self):
+        courses = ProfessorToCourse.objects.filter(professor = self).values()
+        return courses
 
     def __str__(self):
         return "Professor " + self.professor.__str__() + " is assigned to course " + self.course.__str__()
