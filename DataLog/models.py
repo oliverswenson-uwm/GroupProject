@@ -278,20 +278,7 @@ class Admin(Staff, models.Model):
         staff.objects.get(username = account.username).delete()
         return account
 
-    # description: this function assign Ta to Lab
-    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
-    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
-    # does not exist(=None), the function will return None.
-    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
-    # of TaToLab
-    # side effects: The ta and lab would be in database of TaToLab
-    def add_taLab(self, ta, lab):
-        if ta is None:
-            return None
-        if lab is None:
-            return None
-        temp = TAToLab(ta=ta, lab=lab)
-        return temp
+
 
 
 class Professor(Staff, models.Model):
@@ -359,6 +346,21 @@ class Professor(Staff, models.Model):
 
         con.save()
         print(con)
+
+    # description: this function assign Ta to Lab
+    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
+    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
+    # does not exist(=None), the function will return None.
+    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
+    # of TaToLab
+    # side effects: The ta and lab would be in database of TaToLab
+    def add_taLab(self, ta, lab):
+        if ta is None:
+            return None
+        if lab is None:
+            return None
+        temp = TAToLab(ta=ta, lab=lab)
+        return temp
 
 class TA(Staff, models.Model):
 
