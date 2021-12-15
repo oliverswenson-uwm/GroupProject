@@ -285,6 +285,8 @@ class Professor(Staff, models.Model):
     # preconditions:
     # post conditions:
     # side effects:
+    #I think this is redundant to -> def add_taLab(self, ta, lab):
+    #but not deleting until I make sure
     def assignTA(self, ta, lab):
         pass
 
@@ -355,6 +357,10 @@ class Professor(Staff, models.Model):
         if ta is None:
             return None
         if lab is None:
+            return None
+        if len(Lab.objects.filter(section=lab.section)) == 0:#check if lab exists
+            return None
+        if len(TA.objects.filter(username=ta.username)) == 0:#check if TA exists
             return None
         temp = TAToLab(ta=ta, lab=lab)
         return temp
