@@ -228,7 +228,8 @@ class Admin(Staff, models.Model):
         assignment.save()
         return assignment
 
-    def assignTA(self, ta, course):
+    #admin can assign TAs to courses
+    def assignTAToCourse(self, ta, course):
         if ta is None:
             return None
         elif course is None:
@@ -266,14 +267,11 @@ class Admin(Staff, models.Model):
         if account is None:
             return None
 
-        # get user from username
-        account = Admin.getUser(self, account.username)
-
         #create an archive of this account
         ArchivedUser.createArchive(self, username = account.username, name = account.name, password = account.password,
                                    phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
-        #delete this user
 
+        #then delete this user
         staff = account.__class__
         staff.objects.get(username = account.username).delete()
         return account
@@ -288,7 +286,7 @@ class Professor(Staff, models.Model):
     # post conditions:
     # side effects:
     def assignTA(self, ta, lab):
-        return Admin.add_taLab(self, ta, lab)
+        pass
 
     # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
@@ -317,7 +315,6 @@ class Professor(Staff, models.Model):
                 tas = []
                 for t in labtotaobj:
                     tas.append(TAToLab.getTa(t))
-
                     stri = str(i)#course
                     stri += " : "
                     stri += str(j)#lab

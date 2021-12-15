@@ -24,8 +24,9 @@ class testGetAssignmentsGood(TestCase):
         Admin.assignProf(self, prof=self.prof1, course=self.cs351)
 
         #assign TA to labs
-        Admin.assignTA(self, ta = testTaone,course = self.cs361)
-        Admin.assignTA(self, ta=testTaone ,course = self.cs351)
+        #TODO: use professor's function instead to assign to lab?
+        #Admin.assignTA(self, ta = testTaone, course = self.cs361)
+        #Admin.assignTA(self, ta=testTaone ,course = self.cs351)
 
     def testGetAssignmentOne(self):
         self.assertEqual(self.prof1.viewAssignments(),"[compsci361 : Lab08 : TestTAone]")
