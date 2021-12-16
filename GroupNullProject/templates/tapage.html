@@ -1,33 +1,96 @@
-{% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>TA Vision</title>
-    <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>TA View</title>
 </head>
 <body>
-<span style="font-weight:bold">This is the page that a TA account will see after a successful login.</span>
-<h1 id="thetitle2">Your Assignments</h1>
+<!-- ----------------- Side Bar --------------------------- -->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 14%; height: 100%; position: absolute;">
+    <span class="text-primary"><strong style="font-size: xx-large;">TA View</strong></span>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto h5">
+        <li class="nav-item">
+            <a href="/ta/" class="nav-link active" aria-current="page">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="/contactstaff/" class="nav-link link-dark">
+                Contact Staff
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="">
+        <a href="/" class="nav-link link-dark text-danger">
+            <strong>Log Out</strong>
+        </a>
+    </div>
+</div>
 
-<table>
-    <tr>
-        <th>Class No.</th>
-        <td>
-        <th>Professor</th>
-        <td>
-        <th>Section</th>
-        <td>
-    </tr>
-</table>
-<br>
-<br>
-<form action="/ta">
-    <button type="submit">Home</button>
-</form>
-<form action="/">
-    <button type="submit">Log Out</button>
-</form>
+<!-- ----------------- End Side Bar --------------------------- -->
+
+<div class="row justify-content-center">
+    <div style=" margin-left: 3%; text-align: center;" class="col-lg-5">
+        <h2 class="display-5"><strong>Your Assigned Courses</strong></h2>
+    </div>
+</div>
+
+<div style="max-width: 75%; margin-left: 20%; max-height: 37vh; overflow: auto"
+     class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Course</th>
+            <th scope="col">Section</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>test</td>
+            <td>value</td>
+            <td>@mdo</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="row justify-content-center">
+    <div style="margin-left: 3%; text-align: center;" class="col-lg-5">
+        <h2 class="display-5"><strong>Your Assigned Labs</strong></h2>
+    </div>
+</div>
+
+<div style="max-width: 75%; margin-left: 20%; max-height: 37vh; overflow: auto"
+     class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Lab</th>
+            <th scope="col">Section</th>
+            <th scope="col">handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>test</td>
+            <td>value</td>
+            <td>@mdo</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

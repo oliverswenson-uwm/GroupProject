@@ -41,11 +41,12 @@ class Staff(models.Model):
             return q
         else:
             if staff == 'admin':
-                q = Admin.objects.all()
+                q = Admin.objects.values('name', 'email')
             elif staff == 'prof':
-                q = Professor.objects.all()
+                q = Professor.objects.values('name', 'email')
             elif staff == 'ta':
-                q = TA.objects.all()
+                q = TA.objects.values('name', 'email')
+
             return q
 
     def __str__(self):

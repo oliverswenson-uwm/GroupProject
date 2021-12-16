@@ -4,47 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Login</title>
 </head>
 <body style="background-color: rgb(255, 255, 255);">
-    <div class="container">
-        <div style="margin-top: 35%; height: 35vh" class="row align-items-center">
-            <div class="col">
+<div class="container">
+    <div style="margin-top: 15%;" class="row align-items-center">
+        <div class="col">
 
-            </div>
-            <div class="col p-5 shadow-lg bg-white rounded">
-                <h1 style="background-color:#0069d9;" class="p-4 text-white rounded-pill">Log In</h1>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                      <label>Username</label>
-                      <input name ="username" type="text" class="form-control" id="user" aria-describedby="emailHelp" placeholder="Enter Username">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                  </form>
-            </div>
-            <div class="col">
-
-            </div>
-          </div>
-    </div>
-    <div class="row justify-content-center">
-    <div style="text-align: center;" class="col-lg-4">
+        </div>
+        <div class="col p-5 shadow-lg bg-white rounded">
+            <h1 style="background-color:#0069d9;" class="p-4 text-white rounded-pill">Log In</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <input name="username" type="text" class="form-control" id="user" aria-describedby="emailHelp"
+                           placeholder="Enter Username">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input name="password" type="password" class="form-control" id="exampleInputPassword1"
+                           placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <div style="text-align: center;" class="col-lg-10">
         {% if messages %}
-                  <ul class="messages">
-                      {% for message in messages %}
-                          <label style="color: crimson; font-size: x-large"
-                                  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
-                          </label>
-                      {% endfor %}
-                  </ul>
-              {% endif %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <label style="color: crimson; font-size: x-large"
+                            {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
+                    </label>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
-  </div>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+
+</div>
+
+
 </body>
 </html>
