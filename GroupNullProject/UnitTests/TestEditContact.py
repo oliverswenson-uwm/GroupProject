@@ -5,20 +5,20 @@ class TestEditContact(TestCase):
     # PBI says that the professors and TAs can edit their contact information EXCEPT for their emails.
     def testEditPhone(self):
         # First form of contact info is the phone number
-        Admin.createProf(self, fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
+        Admin.createProf(fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
                         password= "ronword", phNumber= 2222233333, mailAdrs= "123 AdminTest Way")
 
-        dummyAcc, editedUser = Staff.getUser(self, "adminonetestuser")
+        dummyAcc, editedUser = Staff.getUser("adminonetestuser")
         editedUser.EditContact(self, 1111199999, "123 AdminTest Way")
 
         self.assertEqual(editedUser.phNumber, 1111199999)
 
     def testEditAddress(self):
         # Second form of contact info is the mailing address
-        Admin.createProf(self, fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
+        Admin.createProf(fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
                         password= "ronword", phNumber= 2222233333, mailAdrs= "123 AdminTest Way")
 
-        dummyAcc, editedUser = Staff.getUser(self, "Ron Ronald")
+        dummyAcc, editedUser = Staff.getUser("Ron Ronald")
         editedUser.EditContact(self, 2222233333, "444 Changestreet Boulevard")
 
         self.assertEqual(editedUser.mailAdrs, "444 Changestreet Boulevard")
