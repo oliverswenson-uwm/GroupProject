@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from DataLog.models import Admin, Professor
+from DataLog.models import Admin
 
 
 class TestViewTAAssignments(TestCase):
@@ -12,7 +12,7 @@ class TestViewTAAssignments(TestCase):
                                        phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
         self.lab1 = self.admin.createLab(name="MATH240", section="002")
-        self.temp = Professor.add_taLab(ta=self.ta1, lab=self.lab1)
+        self.admin.add_taLab(ta=self.ta1, lab=self.lab1)
 
     def test_default(self):
         self.assignments = self.ta1.viewAssignments()

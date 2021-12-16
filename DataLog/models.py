@@ -156,7 +156,7 @@ class Admin(Staff, models.Model):
     # post conditions: the new course would be created
     # side effects: Course table will have this new course in it
     @staticmethod
-    def createCourse(nm, sec, cre, pre, des):
+    def createCourse(self, nm, sec, cre, pre, des):
         if nm == "" or nm[0] == "":
             return None
         if sec == "" or sec[0] == "":
@@ -241,7 +241,7 @@ class Admin(Staff, models.Model):
 
     #admin can assign TAs to courses
     @staticmethod
-    def assignTAToCourse(ta, course):
+    def assignTAToCourse(self, ta, course):
         if ta is None:
             return None
         elif course is None:
@@ -303,7 +303,7 @@ class Professor(Staff, models.Model):
     #I think this is redundant to -> def add_taLab(self, ta, lab):
     #but not deleting until I make sure
     @staticmethod
-    def assignTA(ta, lab):
+    def assignTA(self, ta, lab):
         pass
 
     # view whos assigned to your labs, should return , TA and course - lab section
@@ -369,8 +369,7 @@ class Professor(Staff, models.Model):
     # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
     # of TaToLab
     # side effects: The ta and lab would be in database of TaToLab
-    @staticmethod
-    def add_taLab(ta, lab):
+    def add_taLab(self, ta, lab):
         if ta is None:
             return None
         if lab is None:
@@ -380,7 +379,6 @@ class Professor(Staff, models.Model):
         if len(TA.objects.filter(username=ta.username)) == 0:#check if TA exists
             return None
         temp = TAToLab(ta=ta, lab=lab)
-        temp.save()
         return temp
 
 class TA(Staff, models.Model):
