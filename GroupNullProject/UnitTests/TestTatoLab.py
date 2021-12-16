@@ -28,6 +28,7 @@ class test_Ta_Lab(TestCase):
                              password="testpassoneTA",
                              phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
         temp = Admin.add_taLab(ta3, None)
+
         self.assertEqual(temp, None)
 
     def test_Invalid_TA_Noname(self):

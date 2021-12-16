@@ -225,19 +225,84 @@ class CreateLab(View):
         return redirect("/createlab/")
 
 
-# PROFPAGE
-class ProfPage(View):
+# public contact Info
+class ContactInfo(View):
     def get(self, request):
-        return render(request, "profpage.html")
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not the staff of school
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            print(request.session)
+            return render(request, "contactInfo.html")
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Staff')
+            return redirect('/')
 
     def post(self, request):
-        pass
+        staff = request.POST['staff']
+        contactQuery = None
+        print(staff)
+        if staff == "admin":
+            contactQuery = Admin.getContactInfo(self, staff)
+        elif staff == "prof":
+            contactQuery = Professor.getContactInfo(self, staff)
+        elif staff == "ta":
+            contactQuery = TA.getContactInfo(self, staff)
+
+        if contactQuery is None:
+            return render(request, "contactInfo.html", {'msg': "Invalid Staff Type"})
+        else:
+            return render(request, "contactInfo.html", {"query": contactQuery})
 
 
-# TA PAGE
-class TaPage(View):
+# View for admin to look up data in system
+class Lookup(View):
     def get(self, request):
-        return render(request, "tapage.html")
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
+
+        return render(request, "dataLookup.html")
 
     def post(self, request):
-        pass
+        lookup = request.POST['lookup']
+        lookupType = None
+
+        if lookup == "admin":
+            query = Admin.objects.all()
+            lookupType = "staff"
+        elif lookup == "prof":
+            query = Professor.objects.all()
+            lookupType = "staff"
+        elif lookup == "ta":
+            query = TA.objects.all()
+            lookupType = "staff"
+        elif lookup == "course":
+            query = Course.objects.all()
+            lookupType = "course"
+        elif lookup == "lab":
+            query = Lab.objects.all()
+            lookupType = "lab"
+        elif lookup == "labToCourse":
+            query = LabToCourse.objects.all()
+            lookupType = "assignment"
+        elif lookup == "profToCourse":
+            query = ProfessorToCourse.objects.all()
+            lookupType = "assignment"
+        elif lookup == "taToCourse":
+            query = TAToCourse.objects.all()
+            lookupType = "assignment"
+        elif lookup == "taToLab":
+            query = TAToLab.objects.all()
+            lookupType = "assignment"
+
+        if query is None:
+            return render(request, "dataLookup.html", {'msg': "Invalid Lookup Type"})
+        else:
+            return render(request, "dataLookup.html", {"query": query, "lookupType": lookupType})

@@ -13,54 +13,59 @@
   <body>
 
     <!-- ----------------- Side Bar --------------------------- -->
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 280px; height: 98vh; position: absolute;">
-      <span class="text-primary"><strong style="font-size: xx-large;">Admin View</strong></span>
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 14%; height: 100%; position: absolute;">
+    <span class="text-primary"><strong style="font-size: xx-large;">Admin View</strong></span>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto h5">
-      <li class="nav-item">
-        <a href="/supervisor/" class="nav-link link-dark" aria-current="page">
-          Home
-        </a>
-      </li>
-      <li>
-        <a href="/createuser/" class="nav-link ink-dark">
-          Create Account
-        </a>
-      </li>
-      <li>
-        <a href="createcourse.html" class="nav-link link-dark">
-          Create Course
-        </a>
-      </li>
-      <li>
-        <a href="createlab.html" class="nav-link active">
-          Create Lab
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link link-dark">
-          Edit Account
-        </a>
-      </li>
+        <li class="nav-item">
+            <a href="/supervisor/" class="nav-link link-dark" aria-current="page">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="/createuser/" class="nav-link link-dark">
+                Create Account
+            </a>
+        </li>
+        <li>
+            <a href="/createcourse/" class="nav-link link-dark">
+                Create Course
+            </a>
+        </li>
+        <li>
+            <a href="/createlab/" class="nav-link active">
+                Create Lab
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-dark">
+                Edit Account
+            </a>
+        </li>
+        <li>
+            <a href="/lookup/" class="nav-link link-dark">
+                Lookup Data
+            </a>
+        </li>
     </ul>
     <hr>
     <div class="">
         <a href="/" class="nav-link link-dark text-danger">
-        <strong>Log Out</strong>
-      </a>
+            <strong>Log Out</strong>
+        </a>
     </div>
-  </div>
+</div>
 
   <!-- ----------------- End Side Bar --------------------------- -->
 
 
  <div class="row justify-content-center">
-  <div style="margin-top: 10%; margin-left: 10%; text-align: center;" class="col-lg-4">
+  <div style="margin-top: 5%; margin-left: 10%; text-align: center;" class="col-lg-4">
       <h1 class="display-4"><strong>Create Lab</strong></h1>
   </div>
 </div>
 
-  <div style="margin-top: 5%; max-width: 50%; margin-left: 30%;" class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
+  <div style="margin-top: 3%; max-width: 50%; margin-left: 30%;" class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
   <form action="/createlab/" method="post">
     {% csrf_token %}
     <div class="form-group row">
@@ -89,7 +94,7 @@
     </div>
 
       <div class="row justify-content-center">
-          <div style="margin-top: 10%; text-align: center;" class="col-lg-11">
+          <div style="margin-top: 5%; text-align: center;" class="col-lg-11">
               {#        <label style="color: crimson; font-size: x-large">{{ msg }}</label>#}
               {% if messages %}
                   <ul class="messages">

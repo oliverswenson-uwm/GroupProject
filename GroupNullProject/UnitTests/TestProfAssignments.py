@@ -9,20 +9,25 @@ class testGetAssignmentsGood(TestCase):
                                            username="testprofoneuser",
                                            password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
         # create TA
-        Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+        testTaone = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
                        password="testpassoneTA", phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
         # create courses
         self.cs361 = Admin.createCourse(self, nm="compsci361", sec="401", cre="3", pre="compsci251", des="")
         self.cs351 = Admin.createCourse(self, nm="compsci351", sec="122", cre="3", pre="compsci251", des="")
+
         # create Labs
         lab1 = Admin.createLab(self, name="compsci361", section=123)
         lab2 = Admin.createLab(self, name="compsci351", section=333)
+
         # assign prof to courses
         Admin.assignProf(self, prof=self.prof1, course=self.cs361)
         Admin.assignProf(self, prof=self.prof1, course=self.cs351)
+
         #assign TA to labs
-        Admin.assignTA(self, ta = "TestTAone", lab = lab1)
-        Admin.assignTA(self, ta="TestTAone", lab=lab2)
+        #TODO: use professor's function instead to assign to lab?
+        Professor.add_taLab(self, ta = testTaone, lab = lab1)
+        Professor.add_taLab(self, ta=testTaone ,lab = lab2)
+
     def testGetAssignmentOne(self):
         self.assertEqual(self.prof1.viewAssignments(),"[compsci361 : Lab08 : TestTAone]")
 

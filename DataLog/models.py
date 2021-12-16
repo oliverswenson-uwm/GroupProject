@@ -43,11 +43,12 @@ class Staff(models.Model):
             return q
         else:
             if staff == 'admin':
-                q = Admin.objects.all()
+                q = Admin.objects.values('name', 'email')
             elif staff == 'prof':
-                q = Professor.objects.all()
+                q = Professor.objects.values('name', 'email')
             elif staff == 'ta':
-                q = TA.objects.all()
+                q = TA.objects.values('name', 'email')
+
             return q
 
     def __str__(self):
@@ -148,12 +149,14 @@ class Admin(Staff, models.Model):
         print(ta)
         return ta
 
-    # description:
-    # preconditions:
-    # post conditions:
-    # side effects:
+
+    # description: this function would create the new course
+    # preconditions: name, section credits of the course should not be empty. If one of them or all of them is empty the
+    # function would return None.
+    # post conditions: the new course would be created
+    # side effects: Course table will have this new course in it
     @staticmethod
-    def createCourse(nm, sec, cre, pre, des):
+    def createCourse(self, nm, sec, cre, pre, des):
         if nm == "" or nm[0] == "":
             return None
         if sec == "" or sec[0] == "":
@@ -210,9 +213,8 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
-        labtocourse = None
-        for e in courseExist:  # will only run once just needed to pull value out of queryset
-            labtocourse = LabToCourse(lab=lab, course=e)
+        for e in courseExist: #will only run once just needed to pull value out of queryset
+            labtocourse = LabToCourse(lab = lab, course = e)
         labtocourse.save()
         return lab
 
@@ -236,8 +238,10 @@ class Admin(Staff, models.Model):
         assignment.save()
         return assignment
 
+
+    #admin can assign TAs to courses
     @staticmethod
-    def assignTA(ta, course):
+    def assignTAToCourse(self, ta, course):
         if ta is None:
             return None
         elif course is None:
@@ -276,27 +280,17 @@ class Admin(Staff, models.Model):
         if account is None:
             return None
 
-        # get user from username
-        account = Admin.getUser(account.username)
-
         # create an archive of this account
-        ArchivedUser.createArchive(username=account.username, name=account.name, password=account.password,
-                                   phoneNum=account.phoneNum, email=account.email, mailAddress=account.mailAddress)
-        # delete this user
+        ArchivedUser.createArchive(self, username = account.username, name = account.name, password = account.password,
+                                   phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
 
+
+        #then delete this user
         staff = account.__class__
         staff.objects.get(username=account.username).delete()
         return account
 
-    @staticmethod
-    def add_taLab(ta, lab):
-        if ta is None:
-            return None
-        if lab is None:
-            return None
-        temp = TAToLab(ta=ta, lab=lab)
-        temp.save()
-        return temp
+
 
 
 class Professor(Staff, models.Model):
@@ -305,9 +299,12 @@ class Professor(Staff, models.Model):
     # preconditions:
     # post conditions:
     # side effects:
+
+    #I think this is redundant to -> def add_taLab(self, ta, lab):
+    #but not deleting until I make sure
     @staticmethod
-    def assignTA(ta, lab):
-        return Admin.add_taLab(ta, lab)
+    def assignTA(self, ta, lab):
+        pass
 
     # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
@@ -335,7 +332,7 @@ class Professor(Staff, models.Model):
                 tas = []
                 for t in labtotaobj:
                     tas.append(TAToLab.getTa(t))
-
+                    
                     stri = str(i)  # course
                     stri += " : "
                     stri += str(j)  # lab
@@ -365,6 +362,24 @@ class Professor(Staff, models.Model):
         con.save()
         print(con)
 
+    # description: this function assign Ta to Lab
+    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
+    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
+    # does not exist(=None), the function will return None.
+    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
+    # of TaToLab
+    # side effects: The ta and lab would be in database of TaToLab
+    def add_taLab(self, ta, lab):
+        if ta is None:
+            return None
+        if lab is None:
+            return None
+        if len(Lab.objects.filter(section=lab.section)) == 0:#check if lab exists
+            return None
+        if len(TA.objects.filter(username=ta.username)) == 0:#check if TA exists
+            return None
+        temp = TAToLab(ta=ta, lab=lab)
+        return temp
 
 class TA(Staff, models.Model):
 
@@ -487,9 +502,17 @@ class TAToLab(models.Model):
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
+    # description: this function would return the ta of TAToLab
+    # preconditions: Ta should not be None
+    # post conditions: return ta
+    # side effects: None
     def getTa(self):
         return self.ta
 
+    # description: this function would return the lab of TAToLab
+    # preconditions: Lab should not be None
+    # post conditions: return lab
+    # side effects: None
     def getLab(self):
         return self.lab
 
