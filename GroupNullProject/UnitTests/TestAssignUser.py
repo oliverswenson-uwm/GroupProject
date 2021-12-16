@@ -50,18 +50,18 @@ class TestAssignTA(TestCase):
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
 
     def test_default(self):
-        self.assigned = self.admin.assignTAToCourse(ta=self.ta1, course=self.course1)
+        self.assigned = self.admin.assignTA(ta=self.ta1, course=self.course1)
         self.assertEqual(self.assigned.__str__(), "TA TestTAone is assigned to course MATH240-001")
 
     def test_noTA(self):
-        self.assigned = self.admin.assignTAToCourse(ta=None, course=self.course1)
+        self.assigned = self.admin.assignTA(ta=None, course=self.course1)
         self.assertEqual(self.assigned, None)
 
     def test_noLab(self):
-        self.assigned = self.admin.assignTAToCourse(ta=self.ta1, course=None)
+        self.assigned = self.admin.assignTA(ta=self.ta1, course=None)
         self.assertEqual(self.assigned, None)
 
     def test_duplicateTA(self):
-        self.temp = self.admin.assignTAToCourse(ta=self.ta1, course=self.course1)
-        self.assigned = self.admin.assignTAToCourse(ta=self.ta1, course=self.course1)
+        self.temp = self.admin.assignTA(ta=self.ta1, course=self.course1)
+        self.assigned = self.admin.assignTA(ta=self.ta1, course=self.course1)
         self.assertEqual(self.assigned, None)
