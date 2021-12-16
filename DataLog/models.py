@@ -344,8 +344,7 @@ class Professor(Staff, models.Model):
     # preconditions: User needs to have an account (a username)
     # post conditions: A user's phNumber and/or mailAdrs will be changed
     # side effects: Alters those variables in the database
-    @staticmethod
-    def EditContact(username, phNumber, mailAdrs):
+    def EditContact(self, username, phNumber, mailAdrs):
         con = Professor.getContactInfo()
 
         if con.phNumber != phNumber:
@@ -393,8 +392,7 @@ class TA(Staff, models.Model):
     # preconditions: User needs to have an account (a username)
     # post conditions: A user's phNumber and/or mailAdrs will be changed
     # side effects: Alters those variables in the database
-    @staticmethod
-    def EditContact(username, phNumber, mailAdrs):
+    def EditContact(self, username, phNumber, mailAdrs):
         con = TA.getContactInfo()
 
         if con.phNumber != phNumber:
