@@ -377,7 +377,15 @@ class Professor(Staff, models.Model):
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
-        pass
+        tatolabs = TAToLab.objects.filter(ta=self)
+        if 0 == len(tatolabs):
+            return None
+        assignments = []
+        for i in tatolabs:
+            lab = i.lab
+            course = LabToCourse.objects.get(lab=lab).course
+            assignments.append((lab, course))
+        return assignments
 
     # description: Takes an account and alters the variables based on the inputs in the call
     # preconditions: User needs to have an account (a username)
