@@ -231,12 +231,8 @@ class Admin(Staff, models.Model):
         # converting course to object
         if course is None:
             return None
-
-        split = course.split('-') # output: ['courseName', 'section']
-        courseName = split[0]
-        courseSection = split[1]
         try:
-            courseObj = Course.objects.get(name=courseName, section=courseSection)
+            courseObj = Course.objects.get(name=course.name, section=course.section)
         except:
             return None
 
@@ -374,6 +370,7 @@ class Professor(Staff, models.Model):
         if len(TA.objects.filter(username=ta.username)) == 0:  # check if TA exists
             return None
         temp = TAToLab(ta=ta, lab=lab)
+        temp.save()
         return temp
 
 
