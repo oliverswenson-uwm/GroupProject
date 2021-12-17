@@ -109,21 +109,21 @@ class CreateUser(View):
         accType = request.POST['accType']
 
         print(accType)
-        user = Staff.getUser(username)
+        user = Staff.getUser(self, username)
         if not user:  # username does not exits(new user is being created)
             newUser = None
             if accType == 'admin':
-                newUser = Admin.createAdmin(fullName, email, username, password, phNumber, mailAdrs)
+                newUser = Admin.createAdmin(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
             elif accType == 'prof':
-                newUser = Admin.createProf(fullName, email, username, password, phNumber, mailAdrs)
+                newUser = Admin.createProf(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
             elif accType == 'ta':
-                newUser = Admin.createTA(fullName, email, username, password, phNumber, mailAdrs)
+                newUser = Admin.createTA(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
@@ -142,8 +142,8 @@ class AssignUser(View):
         courseNumber = request.Post['cnum']
         courseSection = request.Post['csec']
 
-        staff = Staff.getUser(username)
-        course = Course.getCourse(courseNumber, courseSection)
+        staff = Staff.getUser(self, username)
+        course = Course.getCourse(self, courseNumber, courseSection)
         if staff is None:
             return render(request, "assignuser.html", {'msg': "Invalid Username"})
         elif course is None:
@@ -184,7 +184,7 @@ class CreateCourse(View):
                 cre = request.POST['credits']
                 pre = request.POST['prereqs']
                 des = request.POST['description']
-                Admin.createCourse(nm, sec, cre, pre, des)
+                Admin.createCourse(self, nm, sec, cre, pre, des)
             return render(request, "createcourse.html", {'name': request.POST['name'],
                                                          'section': request.POST['section'],
                                                          'credits': request.POST['credits'],
@@ -216,7 +216,7 @@ class CreateLab(View):
         labName = request.POST['labName']
         labSec = request.POST['labSec']
         print(labName, labSec)
-        newLab = Admin.createLab(labName, labSec)
+        newLab = Admin.createLab(self, labName, labSec)
         print(newLab)
         if newLab is None:
             messages.add_message(request, messages.INFO, 'Failed to create Lab')
@@ -247,8 +247,11 @@ class AssignProf(View):
     def post(self, request):
         prof = request.POST['profSel']
         course = request.POST['courseSel']
+        print(prof, course)
         username = prof.split('-')[1] # output ['name', 'username']
+        print(username)
         assignment = Admin.assignProf(self, username, course)
+        print(assignment)
 
         return render(request, "assignprof.html")
 

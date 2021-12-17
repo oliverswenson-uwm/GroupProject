@@ -240,7 +240,7 @@ class Admin(Staff, models.Model):
             return None
         elif courseObj is None:
             return None
-        elif 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
+        elif 0 != len(ProfessorToCourse.objects.filter(professor=userObj, course=courseObj)):
             return None
         assignment = ProfessorToCourse.objects.create(professor=userObj, course=courseObj)
         assignment.save()
