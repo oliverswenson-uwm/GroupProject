@@ -13,7 +13,7 @@ class Login(View):
         username = request.POST['username']
         password = request.POST['password']
         print(username, password)
-        user = Staff.getUser(username)
+        user = Staff.getUser(self, username)
         if user:
             if password == user.password:
                 if isinstance(user, Admin):
