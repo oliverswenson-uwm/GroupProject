@@ -5,11 +5,11 @@ from DataLog.models import *
 class test_Ta_Lab(TestCase):
 
     def test_add_Ta_Lab_One(self):
-        ta1 = Admin.createTA(fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+        ta1 = Admin.createTA(self, fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
                              password="testpassoneTA",
                              phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
-        Admin.createCourse(nm="Math101", sec="401", cre="3", pre="none", des="None")
-        lab1 = Admin.createLab(name="Math101", section=801)
+        Admin.createCourse(self, nm="Math101", sec="401", cre="3", pre="none", des="None")
+        lab1 = Admin.createLab(self,name="Math101", section=801)
         temp = Professor.add_taLab(self, ta1, lab1)
         self.assertEqual(temp.ta.name, "TestTAone")
         self.assertEqual(temp.lab.name, "Math101")
@@ -18,7 +18,7 @@ class test_Ta_Lab(TestCase):
         self.assertEqual(temp.ta.name, temp.getTa().name)
 
     def test_No_TA(self):
-        Admin.createCourse(nm="COMPSCI361", sec="401", cre="3", pre="none", des="None")
+        Admin.createCourse(self, nm="COMPSCI361", sec="401", cre="3", pre="none", des="None")
         lab2 = Lab(self, name="COMPSCI361", section=801)
         temp = Professor.add_taLab(self, None, lab2)
         self.assertEqual(temp, None)

@@ -22,9 +22,9 @@ class testGetAssignmentsGood(TestCase):
         lab3 = Admin.createLab(self, name="compsci777", section=555)
 
         # assign prof to courses
-        Admin.assignProf(self, username=self.prof1.username, course=self.cs361)
-        Admin.assignProf(self, username=self.prof1.username, course=self.cs351)
-        Admin.assignProf(self, username=self.prof1.username, course=self.cs777)
+        Admin.assignProf(self, username=self.prof1.username, course=self.cs361.name, section = self.cs361.section)
+        Admin.assignProf(self, username=self.prof1.username, course=self.cs351.name, section = self.cs351.section)
+        Admin.assignProf(self, username=self.prof1.username, course=self.cs777.name, section = self.cs777.section)
 
         #assign TA to labs
         #TODO: use professor's function instead to assign to lab?
