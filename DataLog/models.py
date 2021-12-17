@@ -220,42 +220,42 @@ class Admin(Staff, models.Model):
         pass
 
     # prof username and course name
-    def assignProf(self, username, course):
+    def assignProf(self, username, course, section):
 
         # converting string type prof and string type course to Objects,
         # since HTML dont send objects type. Also using username is easier for lookup in table (username is unique)
         assignment = None
         # converting username to Staff Type
-        userObj = Admin.getUser(self, username)
-
-        # converting course to object
-        if course is None:
-            return None
         try:
-            courseObj = Course.objects.get(name=course.name, section=course.section)
+            userObj = Professor.objects.get(username=username)
         except:
             return None
 
-        if userObj is None:
+        # converting course to object
+        try:
+            courseObj = Course.objects.get(name=course, section=section)
+        except:
             return None
-        elif courseObj is None:
-            return None
-        elif 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
+
+        if 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
             return None
         assignment = ProfessorToCourse.objects.create(professor=userObj, course=courseObj)
         assignment.save()
         return assignment
 
     # admin can assign TAs to courses
-    def assignTAToCourse(self, ta, course):
-
-        if ta is None:
+    def assignTAToCourse(self, username, course, section):
+        try:
+            taObj = TA.objects.get(username=username)
+        except:
             return None
-        elif course is None:
+        try:
+            courseObj = Course.objects.get(name=course, section=section)
+        except:
             return None
-        elif 0 != len(TAToCourse.objects.filter(course=course)):
+        if 0 != len(TAToCourse.objects.filter(course=courseObj)):
             return None
-        assignment = TAToCourse.objects.create(ta=ta, course=course)
+        assignment = TAToCourse.objects.create(ta=taObj, course=courseObj)
         assignment.save()
         return assignment
 
@@ -377,7 +377,15 @@ class Professor(Staff, models.Model):
 class TA(Staff, models.Model):
 
     def viewAssignments(self):
-        pass
+        tatolabs = TAToLab.objects.filter(ta=self)
+        if 0 == len(tatolabs):
+            return None
+        assignments = []
+        for i in tatolabs:
+            lab = i.lab
+            course = LabToCourse.objects.get(lab=lab).course
+            assignments.append((lab, course))
+        return assignments
 
     # description: Takes an account and alters the variables based on the inputs in the call
     # preconditions: User needs to have an account (a username)
