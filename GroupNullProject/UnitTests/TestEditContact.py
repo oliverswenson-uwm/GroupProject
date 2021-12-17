@@ -15,10 +15,10 @@ class TestEditContact(TestCase):
 
     def testEditAddress(self):
         # Second form of contact info is the mailing address
-        Admin.createProf(fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
+        Admin.createProf(self, fullName= "Ron Ronald", email= "ronsquared@gmail.com", username= "rooon",
                         password= "ronword", phNumber= 2222233333, mailAdrs= "123 AdminTest Way")
 
-        dummyAcc, editedUser = Staff.getUser("Ron Ronald")
+        dummyAcc, editedUser = Staff.getUser(self, "Ron Ronald")
         editedUser.EditContact(self, 2222233333, "444 Changestreet Boulevard")
 
         self.assertEqual(editedUser.mailAdrs, "444 Changestreet Boulevard")

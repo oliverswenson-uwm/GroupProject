@@ -310,42 +310,35 @@ class Professor(Staff, models.Model):
     def assignTA(self, ta, lab):
         pass
 
-    # view whos assigned to your labs, should return , TA and course - lab section
     def viewAssignments(self):
         assignments = []
-        courses = []
 
-        # FIRST get ProfessorToCourse objects with the professor in them
+
         proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
 
-        # for each ProfessorToCourse object, extract the course and put it in a list
-        for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(self, e))
+        #ITERATE THROUGH COURSES
+        for c in proftocourseobj:
 
-        # iterate through the list of courses and get the CourseToLab objects associated with the courses
-        for i in courses:
+            i = ProfessorToCourse.getCourse(self, c)#get course
             labs = []  # reset labs because new course
             coursetolabobj = LabToCourse.objects.filter(course=i)
+            if len(coursetolabobj) == 0:
+                assignments.append((i, "no lab", "no TA"))
+                continue
 
-            # for each CourseToLab object, get the associated labs and add them to the list of labs
-            for k in coursetolabobj:
-                labs.append(LabToCourse.getLab(self, k))
+            for k in coursetolabobj:#ITERATE THROUGH ALL LABS OF GIVEN COURSE
 
-            for j in labs:  # iterate through the lab sections
+                j = LabToCourse.getLab(self, k)
                 labtotaobj = TAToLab.objects.filter(lab=j)
-                tas = []
-                for t in labtotaobj:
-                    tas.append(TAToLab.getTa(t))
-                    stri = str(i)  # course
-                    stri += " : "
-                    stri += str(j)  # lab
-                    stri += " : "
-                    stri += str(t)  # in those labs, get each TA assigned to them
-                    assignments.append(str)
-                # hoping to return a list like
-                # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
-                # then we could display this list as a table on webpage.
-                # TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
+                if len(labtotaobj) == 0:
+                    assignments.append((str(i), str(j), "no TA"))#add assignment if no TA
+                    continue
+
+                for t in labtotaobj:#ITERATE THROUGH ALL TAS IN GIVEN LABS
+                    a = TAToLab.getTa(t)
+                    assignments.append((str(i), str(j), str(a)))#add full assignment with course(i), lab(), ta(t)
+
+            # TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
         return assignments
 
     # description: Takes an account and alters the variables based on the inputs in the call
