@@ -224,6 +224,33 @@ class CreateLab(View):
         messages.add_message(request, messages.INFO, 'Lab created Successfully!')
         return redirect("/createlab/")
 
+# view for assigning professor to the course
+class AssignProf(View):
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
+
+        profQuery = Professor.objects.all().values('name', 'username').distinct()
+        courseQuery = Course.objects.all().values('name', 'section').distinct()
+
+        return render(request, "assignprof.html", {"profQuery": profQuery, "courseQuery": courseQuery})
+
+    def post(self, request):
+        prof = request.POST['profSel']
+        course = request.POST['courseSel']
+        username = prof.split('-')[1] # output ['name', 'username']
+        assignment = Admin.assignProf(self, username, course)
+
+        return render(request, "assignprof.html")
 
 # public contact Info
 class ContactInfo(View):

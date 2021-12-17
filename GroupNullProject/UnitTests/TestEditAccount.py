@@ -7,7 +7,8 @@ class TestEditAcc(TestCase):
         # This test is for changing the name of an account
         Admin.createAdmin(self, fullName = "Tam Sin", email = "tamsin@gmail.com", username = "tsin",
                           password = "101", phNumber = 4444444444, mailAdrs = "123 Wowee Way")
-        editedUser, prevUser = Staff.getUser(self, "adminonetestuser")
+        editedUser = Staff.getUser(self, "adminonetestuser")
+        prevUser = Staff.getUser(self, "adminonetestuser")
 
         editedUser.EditAcc(self, "Tam Sinny", "tamsin@gmail.com", "tsin", "101", 4444444444, "123 Wowee Way")
 
