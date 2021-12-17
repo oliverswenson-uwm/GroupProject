@@ -56,7 +56,7 @@ class TestEditAcc(TestCase):
 
     def testEditAdrs(self):
         # This test is for changing the name of an account
-        Admin.createAdmin(self, fullName="Tam Sin", email="tamsin@gmail.com", username="tsin",
+        Admin.createAdmin(fullName="Tam Sin", email="tamsin@gmail.com", username="tsin",
                           password="101", phNumber=4444444444, mailAdrs="123 Wowee Way")
         editedUser, prevUser = Staff.getUser(self, "adminonetestuser")
 
