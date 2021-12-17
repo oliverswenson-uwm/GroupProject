@@ -297,14 +297,37 @@ class Admin(Staff, models.Model):
 
 class Professor(Staff, models.Model):
 
-    # description:
-    # preconditions:
-    # post conditions:
-    # side effects:
-    # I think this is redundant to -> def add_taLab(self, ta, lab):
-    # but not deleting until I make sure
-    def assignTA(self, ta, lab):
-        pass
+    # description: this function assign Ta to Lab
+    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
+    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
+    # does not exist(=None), the function will return None.
+    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
+    # of TaToLab
+    # side effects: The ta and lab would be in database of TaToLab
+    def assignTA(self, username, lab_name, lab_section):
+        # converting username to Staff Type
+        try:
+            taObj = TA.objects.get(username=username)
+        except:
+            return None
+
+        # converting course to object
+        try:
+            labObj = Lab.objects.get(name=lab_name, section=lab_section)
+        except:
+            return None
+
+        if 0 != len(TAToLab.objects.filter(lab=labObj)):
+            return None
+
+        if len(Lab.objects.filter(section=lab_section)) == 0:  # check if lab exists
+            return None
+        if len(TA.objects.filter(username=username)) == 0:  # check if TA exists
+            return None
+
+        assignment = TAToLab.objects.create(ta=taObj, lab=labObj)
+        assignment.save()
+        return assignment
 
     def viewAssignments(self):
         assignments = []
@@ -352,26 +375,6 @@ class Professor(Staff, models.Model):
 
         con.save()
         print(con)
-
-    # description: this function assign Ta to Lab
-    # preconditions: variable ta which is at the parameter is the account of ta and the variable of Lab which is at the
-    # parameter is the model of lab. The account of ta and model of lab should be exist, if both of them or one of them
-    # does not exist(=None), the function will return None.
-    # post conditions: The ta and lab would be deleted on the database of theirs and they would updated to the database
-    # of TaToLab
-    # side effects: The ta and lab would be in database of TaToLab
-    def add_taLab(self, ta, lab):
-        if ta is None:
-            return None
-        if lab is None:
-            return None
-        if len(Lab.objects.filter(section=lab.section)) == 0:  # check if lab exists
-            return None
-        if len(TA.objects.filter(username=ta.username)) == 0:  # check if TA exists
-            return None
-        temp = TAToLab(ta=ta, lab=lab)
-        temp.save()
-        return temp
 
 
 class TA(Staff, models.Model):

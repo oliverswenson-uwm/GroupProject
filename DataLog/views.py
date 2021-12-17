@@ -157,6 +157,34 @@ class AssignUser(View):
         return render(request, "assignuser.html", {'usern': username, 'cnum': courseNumber, 'csec': courseSection})
 
 
+# I just added the site as assignta.html. If you want to change feel free to change it.
+class AssignTaToLab(View):
+    def get(self, request):
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'professor':
+                messages.add_message(request, messages.INFO, 'Please logging as professor')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as professor')
+            return redirect('/')
+
+        labQuery = Lab.objects.all().values('name', 'section').distinct()
+        taQuery = Course.objects.all().values('name', 'username').distinct()
+
+        return render(request, "assignta.html", {"labQuery": labQuery, "taQuery": taQuery})
+
+    def post(self, request):
+        ta = request.POST['taSel']
+        lab = request.POST['labSel']
+        username = ta.split('-')[1]
+        lab_name = lab.split('-')[1]
+        lab_section = lab_name.split('-')[1]
+        assignment = Professor.assignTA(self, username, lab_name, lab_section)
+
+        return render(request, "assignta.html")
+
+
 # CREATECOURSE
 class CreateCourse(View):
     def get(self, request):
