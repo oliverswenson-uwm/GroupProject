@@ -13,25 +13,27 @@ class TestAssignProf(TestCase):
                                  password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
 
+
     def test_default(self):
-        assigned = self.admin.assignProf(self.prof1, course=self.course1)
-        self.assertEqual(assigned.__str__(), "Professor TestprofOne is assigned to course MATH240-001")
+
+        assigned = self.admin.assignProf(self.prof1.username, self.course1.__str__())
+        self.assertEqual(assigned.__str__(), "Professor TestprofOne is assigned to course MATH240-1")
         ProfessorToCourse.objects.get(id=assigned.id).delete()
 
     def test_noProfessor(self):
-        assigned = self.admin.assignProf(prof=None, course=self.course1)
+        assigned = self.admin.assignProf(None, self.course1.__str__())
         self.assertEqual(assigned, None)
 
     def test_noCourse(self):
-        assigned = self.admin.assignProf(prof=self.prof1, course=None)
+        assigned = self.admin.assignProf(self.prof1.username, None)
         self.assertEqual(assigned, None)
 
     def test_duplicateProf(self):
-        temp = self.admin.assignProf(prof=self.prof1, course=self.course1)
+        temp = self.admin.assignProf(self.prof1.username, self.course1.__str__())
         prof2 = self.admin.createProf(fullName="TestprofTwo", email="proftesting2@gmail.com",
                                       username="testproftwouser",
                                       password="profpasstwo", phNumber=3213213211, mailAdrs="2 Professor St.")
-        assigned = self.admin.assignProf(prof=prof2, course=self.course1)
+        assigned = self.admin.assignProf(prof2.username, self.course1.__str__())
         self.assertEqual(assigned, None)
         ProfessorToCourse.objects.get(id=temp.id).delete()
 

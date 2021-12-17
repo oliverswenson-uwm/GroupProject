@@ -6,7 +6,7 @@ class Staff(models.Model):
     email = models.EmailField(max_length=75)  # email fo the staff, i.e., johnsmith@uwm.edu
     username = models.CharField(max_length=100)  # user name of the staff for login, should be unique, i.e., john123
     password = models.CharField(max_length=25)  # password of the staff for login
-    phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567 #TODO: max length 10?
+    phoneNum = models.IntegerField()  # phone number of the staff, i.e., 4141234567
     mailAddress = models.CharField(max_length=100)  # main address of staff i.e., 1234 N 12st
 
     # description: this function will look the Staff database and will return the user,
@@ -14,6 +14,7 @@ class Staff(models.Model):
     # preconditions: username can not be None type
     # post conditions: user from the table if exists, will get returned
     # side effects: none
+
     def getUser(self, username):
         queryList = [Admin.objects.filter(username=username), Professor.objects.filter(username=username),
                      TA.objects.filter(username=username)]
@@ -205,8 +206,9 @@ class Admin(Staff, models.Model):
 
         lab = Lab(name=name, section=section)
         lab.save()
-        for e in courseExist: #will only run once just needed to pull value out of queryset
-            labtocourse = LabToCourse(lab = lab, course = e)
+        labtocourse = None
+        for e in courseExist:  # will only run once just needed to pull value out of queryset
+            labtocourse = LabToCourse(lab=lab, course=e)
         labtocourse.save()
         return lab
 
@@ -217,20 +219,40 @@ class Admin(Staff, models.Model):
     def assignStaff(self, user, assignment):
         pass
 
-    #prof username and course name
-    def assignProf(self, prof, course):
-        if prof is None:
+    # prof username and course name
+    def assignProf(self, username, course):
+
+        # converting string type prof and string type course to Objects,
+        # since HTML dont send objects type. Also using username is easier for lookup in table (username is unique)
+        assignment = None
+        # converting username to Staff Type
+        userObj = Admin.getUser(self, username)
+
+        # converting course to object
+        if course is None:
             return None
-        elif course is None:
+
+        split = course.split('-') # output: ['courseName', 'section']
+        courseName = split[0]
+        courseSection = split[1]
+        try:
+            courseObj = Course.objects.get(name=courseName, section=courseSection)
+        except:
             return None
-        elif 0 != len(ProfessorToCourse.objects.filter(course=course)):
+
+        if userObj is None:
             return None
-        assignment = ProfessorToCourse.objects.create(professor=prof, course=course)
+        elif courseObj is None:
+            return None
+        elif 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
+            return None
+        assignment = ProfessorToCourse.objects.create(professor=userObj, course=courseObj)
         assignment.save()
         return assignment
 
-    #admin can assign TAs to courses
+    # admin can assign TAs to courses
     def assignTAToCourse(self, ta, course):
+
         if ta is None:
             return None
         elif course is None:
@@ -241,7 +263,6 @@ class Admin(Staff, models.Model):
         assignment.save()
         return assignment
 
-
     # removed accFlag it caused a crash, got account type from self.class
     # thank you for fixing the crash, i was planning on fixing it during lab today
     def EditAcc(self, fullName, email, username, password, phNumber, mailAdrs):
@@ -251,15 +272,15 @@ class Admin(Staff, models.Model):
 
         elif accFlag == "TA":
             targ = TA(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
-                    mailAddress=mailAdrs)
+                      mailAddress=mailAdrs)
 
         elif accFlag == "Professor":
             targ = Professor(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
-                    mailAddress=mailAdrs)
+                             mailAddress=mailAdrs)
 
         elif accFlag == "Admin":
             targ = Admin(name=fullName, email=email, username=username, password=password, phoneNum=phNumber,
-                    mailAddress=mailAdrs)
+                         mailAddress=mailAdrs)
 
         targ.save()
         return targ
@@ -268,16 +289,14 @@ class Admin(Staff, models.Model):
         if account is None:
             return None
 
-        #create an archive of this account
-        ArchivedUser.createArchive(self, username = account.username, name = account.name, password = account.password,
-                                   phoneNum= account.phoneNum, email = account.email, mailAddress=account.mailAddress)
+        # create an archive of this account
+        ArchivedUser.createArchive(self, username=account.username, name=account.name, password=account.password,
+                                   phoneNum=account.phoneNum, email=account.email, mailAddress=account.mailAddress)
 
-        #then delete this user
+        # then delete this user
         staff = account.__class__
-        staff.objects.get(username = account.username).delete()
+        staff.objects.get(username=account.username).delete()
         return account
-
-
 
 
 class Professor(Staff, models.Model):
@@ -286,8 +305,8 @@ class Professor(Staff, models.Model):
     # preconditions:
     # post conditions:
     # side effects:
-    #I think this is redundant to -> def add_taLab(self, ta, lab):
-    #but not deleting until I make sure
+    # I think this is redundant to -> def add_taLab(self, ta, lab):
+    # but not deleting until I make sure
     def assignTA(self, ta, lab):
         pass
 
@@ -296,14 +315,14 @@ class Professor(Staff, models.Model):
         assignments = []
         courses = []
 
-        #FIRST get ProfessorToCourse objects with the professor in them
+        # FIRST get ProfessorToCourse objects with the professor in them
         proftocourseobj = ProfessorToCourse.objects.filter(professor=self)
 
-        #for each ProfessorToCourse object, extract the course and put it in a list
+        # for each ProfessorToCourse object, extract the course and put it in a list
         for e in proftocourseobj:
-            courses.append(ProfessorToCourse.getCourse(self,e))
+            courses.append(ProfessorToCourse.getCourse(self, e))
 
-        #iterate through the list of courses and get the CourseToLab objects associated with the courses
+        # iterate through the list of courses and get the CourseToLab objects associated with the courses
         for i in courses:
             labs = []  # reset labs because new course
             coursetolabobj = LabToCourse.objects.filter(course=i)
@@ -312,24 +331,22 @@ class Professor(Staff, models.Model):
             for k in coursetolabobj:
                 labs.append(LabToCourse.getLab(self, k))
 
-
             for j in labs:  # iterate through the lab sections
-                labtotaobj = TAToLab.objects.filter(lab = j)
+                labtotaobj = TAToLab.objects.filter(lab=j)
                 tas = []
                 for t in labtotaobj:
                     tas.append(TAToLab.getTa(t))
-                    stri = str(i)#course
+                    stri = str(i)  # course
                     stri += " : "
-                    stri += str(j)#lab
+                    stri += str(j)  # lab
                     stri += " : "
-                    stri += str(t)#in those labs, get each TA assigned to them
+                    stri += str(t)  # in those labs, get each TA assigned to them
                     assignments.append(str)
-                #hoping to return a list like
+                # hoping to return a list like
                 # {[CS361 : Lab08 : Taiyu], [CS361 : Lab07 : Hossein], [CS 351 : Lab02 : Jimmy],}
-                #then we could display this list as a table on webpage.
-                #TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
+                # then we could display this list as a table on webpage.
+                # TO DO: for TA in labs and make assignment class with attributes so can return list of assignment objects
         return assignments
-
 
     # description: Takes an account and alters the variables based on the inputs in the call
     # preconditions: User needs to have an account (a username)
@@ -359,12 +376,13 @@ class Professor(Staff, models.Model):
             return None
         if lab is None:
             return None
-        if len(Lab.objects.filter(section=lab.section)) == 0:#check if lab exists
+        if len(Lab.objects.filter(section=lab.section)) == 0:  # check if lab exists
             return None
-        if len(TA.objects.filter(username=ta.username)) == 0:#check if TA exists
+        if len(TA.objects.filter(username=ta.username)) == 0:  # check if TA exists
             return None
         temp = TAToLab(ta=ta, lab=lab)
         return temp
+
 
 class TA(Staff, models.Model):
 
@@ -386,7 +404,6 @@ class TA(Staff, models.Model):
 
         con.save()
         print(con)
-
 
 
 class Course(models.Model):
@@ -414,6 +431,7 @@ class Course(models.Model):
     def __str__(self):
         return self.name + "-" + str(self.section)
 
+
 class Lab(models.Model):
     # name of the lab, should be similar to course name
     # since its is assigning to a course, i.e.,  CS361
@@ -423,6 +441,7 @@ class Lab(models.Model):
     def __str__(self):
         return self.name + "-" + str(self.section)
 
+
 class ArchivedUser(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=75)
@@ -430,8 +449,10 @@ class ArchivedUser(models.Model):
     password = models.CharField(max_length=25)
     phoneNum = models.IntegerField()
     mailAddress = models.CharField(max_length=100)
+
     def createArchive(self, name, email, username, password, phoneNum, mailAddress):
-        temp = ArchivedUser(name = name, email = email, username = username, password = password, phoneNum = phoneNum, mailAddress = mailAddress)
+        temp = ArchivedUser(name=name, email=email, username=username, password=password, phoneNum=phoneNum,
+                            mailAddress=mailAddress)
         temp.save()
         return temp
 
@@ -452,7 +473,7 @@ class ProfessorToCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    def getCourse(self,e):
+    def getCourse(self, e):
         return e.course
 
     def __str__(self):
