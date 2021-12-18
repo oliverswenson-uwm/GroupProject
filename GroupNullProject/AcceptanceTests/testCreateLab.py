@@ -5,15 +5,44 @@ from DataLog.models import *
 
 
 class TestCreateLab(TestCase):
-    def test_error(self):
-        Admin(name="AdminMan", email="admintestaccounttwo@uwm.edu", username="AdminTwo", password="Adminpasstwo",
-              phoneNum="1231231111", mailAddress="123 Admin ln.").save()
-        Course(name="CS250", section="401", credits=3, prereqs="None", description="None").save()
+    def setUp(self):
+        self.admin = Admin(name="AdminMan", email="admintestaccounttwo@uwm.edu", username="AdminTwo",
+                           password="Adminpasstwo", phoneNum="1231231111", mailAddress="123 Admin ln.").save()
+        self.course = Course(name="CS361", section="401", credits=3, prereqs="None", description="django").save()
+        self.lab = Lab(name="CS361", section="801").save()
+
+    def test_noCourse(self):
+        # login first
         self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
         response = self.client.post('/createlab/', {"labName": "CS250", "labSec": "811"}, follow=True)
         msgs = response.context['messages']
+        error = None
         for msg in msgs:
-            print(msg)
+            # get the first msg
+            error = msg.__str__()
+            break
+        self.assertEqual(error, "Failed to create Lab", msg="Can't create lab without CS250 course being existed")
 
+    def test_existed(self):
+        # login first
+        self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
+        response = self.client.post('/createlab/', {"labName": "CS361", "labSec": "801"}, follow=True)
+        msgs = response.context['messages']
+        error = None
+        for msg in msgs:
+            # get the first msg
+            error = msg.__str__()
+            break
+        self.assertEqual(error, "Failed to create Lab", msg="Can't create lab, since already existed")
 
-
+    def test_good(self):
+        # login first
+        self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
+        response = self.client.post('/createlab/', {"labName": "CS361", "labSec": "802"}, follow=True)
+        msgs = response.context['messages']
+        error = None
+        for msg in msgs:
+            # get the first msg
+            error = msg.__str__()
+            break
+        self.assertEqual(error, "Lab created Successfully!", msg="Lab should have been created")
