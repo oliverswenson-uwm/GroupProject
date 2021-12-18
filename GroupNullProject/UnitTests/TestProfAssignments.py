@@ -28,8 +28,8 @@ class testGetAssignmentsGood(TestCase):
 
         #assign TA to labs
         #TODO: use professor's function instead to assign to lab?
-        Professor.add_taLab(self,ta=testTaone, lab=lab1)
-        Professor.add_taLab(self,ta=testTaone, lab=lab2)
+        Professor.assignTA(self,username=testTaone.username, lab_name=lab1.name, lab_section=lab1.section)
+        Professor.assignTA(self,username=testTaone.username, lab_name=lab2.name, lab_section = lab2.section)
 
     def testGetAssignmentOne(self):
         self.assertTrue(self.prof1.viewAssignments().__contains__(('compsci361-401', 'compsci361-123', 'TestTAone')))
