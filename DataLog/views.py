@@ -453,7 +453,7 @@ class EditAccount(View):
         else:
             return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
 
-class EditAccount(View):
+class AdminEditAccount(View):
     def get(self, request):
         if 'role' in request.session:
             role = request.session['role']
