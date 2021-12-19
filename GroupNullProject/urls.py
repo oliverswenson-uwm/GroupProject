@@ -33,6 +33,6 @@ urlpatterns = [
     path('archiveacc/', views.ArchiveUser.as_view()),
     path('editownacc/', views.EditAccount.as_view()),
     path('tatocourse/', views.AssignTAToCourse.as_view()),
-    # path('profpage/', ProfPage.as_view()),
+    path('editacc/', views.EditAccount.as_view()),
     # path('tapage/', TaPage.as_view()),
 ]

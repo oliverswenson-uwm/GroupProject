@@ -452,3 +452,38 @@ class EditAccount(View):
                 return render(request, "contactinfoAdmin.html", {'msg': "Success! Account info updated."})
         else:
             return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
+
+class EditAccount(View):
+    def get(self, request):
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please login as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please login as Admin')
+            return redirect('/')
+
+        return render(request, "editacc.html")
+
+    def post(self, request):
+        fullName = request.POST['fullName']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        phNumber = request.POST['phNumber']
+        mailAdrs = request.POST['mailAdrs']
+
+        currUser = Staff.getUser(username)
+
+        if not currUser:
+            return render(request, "editacc.html", {'msg': "Account doesn't exist."})
+        else:
+            currUser.username = username
+            currUser.email = email
+            currUser.password = password
+            currUser.phNumber = phNumber
+            currUser.mailAdrs = mailAdrs
+            currUser.fullName = fullName
+
+            print(currUser)
