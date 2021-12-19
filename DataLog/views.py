@@ -132,29 +132,38 @@ class CreateUser(View):
             return render(request, "newacc.html", {'msg': "Fail: Username exist, Please Pick a new Username"})
 
 
-# ASSIGNUSER
-class AssignUser(View):
+# ASSIGNTATOCOURSE
+class AssignTAToCourse(View):
     def get(self, request):
-        return render(request, "assignuser.html")
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
+
+        taQuery = TA.objects.all().values('name', 'username').distinct()
+        courseQuery = Course.objects.all().values('name', 'section').distinct()
+
+        return render(request, "assignTAToCourse.html", {"taQuery": taQuery, "courseQuery": courseQuery})
 
     def post(self, request):
-        username = request.POST['usern']
-        courseNumber = request.Post['cnum']
-        courseSection = request.Post['csec']
+        ta = request.POST['taSel'].split('-')  # output ['name', 'username']
+        course = request.POST['courseSel'].split('-')  # output ['name', 'section']
+        username = ta[1]
+        courseName = course[0]
+        courseSection = course[1]
+        assignment = Admin.assignTAToCourse(self, username, courseName, courseSection)
 
-        staff = Staff.getUser(self, username)
-        course = Course.getCourse(self, courseNumber, courseSection)
-        if staff is None:
-            return render(request, "assignuser.html", {'msg': "Invalid Username"})
-        elif course is None:
-            return render(request, "assignuser.html", {'msg': "Invalid course number or section"})
-        elif staff is Professor:
-            if ProfessorToCourse.objects.get(professor=staff, course=course) is None:
-                ProfessorToCourse.objects.create(professor=staff, course=course)
-        elif staff is TA:
-            if TAToCourse.objects.get(ta=staff, course=course) is None:
-                TAToCourse.objects.create(ta=staff, course=course)
-        return render(request, "assignuser.html", {'usern': username, 'cnum': courseNumber, 'csec': courseSection})
+        if assignment is None:
+            return render(request, "assignTAToCourse.html", "Unable to add TA to Course")
+
+        return render(request, "assignTAToCourse.html", "TA assigned")
 
 
 # I just added the site as assignta.html. If you want to change feel free to change it.
@@ -273,12 +282,18 @@ class AssignProf(View):
         return render(request, "assignprof.html", {"profQuery": profQuery, "courseQuery": courseQuery})
 
     def post(self, request):
-        prof = request.POST['profSel']
-        course = request.POST['courseSel']
-        username = prof.split('-')[1] # output ['name', 'username']
-        assignment = Admin.assignProf(self, username, course)
+        prof = request.POST['profSel'].split('-') # output ['name', 'username']
+        course = request.POST['courseSel'].split('-') # output ['name', 'section']
+        username = prof[1]
+        courseName = course[0]
+        courseSection = course[1]
 
-        return render(request, "assignprof.html")
+        assignment = Admin.assignProf(self, username, courseName, courseSection)
+
+        if assignment is None:
+            return render(request, "assignprof.html", "Unable to add professor to Course")
+
+        return render(request, "assignprof.html", "Professor assigned")
 
 # public contact Info
 class ContactInfo(View):
@@ -364,7 +379,6 @@ class Lookup(View):
 
 
 class ArchiveUser(View):
-
     def get(self, request):
         # the following if else statement check if someone is logged in or not
         # if logged and the user is not admin
@@ -378,6 +392,7 @@ class ArchiveUser(View):
             messages.add_message(request, messages.INFO, 'Please logging as Admin')
             return redirect('/')
 
+        #TODO: make sure right html page
         return render(request, "archiveacc.html")
 
     def post(self, request):
