@@ -1,22 +1,61 @@
 <!DOCTYPE html>
 <html lang = "en">
-  <head>
+    <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Assign User</title>
-    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Assign TA</title>
   </head>
   <body>
-    <span style="font-weight:bold">This is just a test. If you want to return to the login page, <a href= "index.html">click this link.</a></span>
-    <h1 id="thetitle2">Assign User</h1>
-    <p id="group1">
+
+<!-- ----------------- Side Bar --------------------------- -->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h3" style="width: 14%; height: 100%; position: absolute;">
+    <span class="text-primary"><strong style="font-size: xx-large;">Professor View</strong></span>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto h5">
+        <li class="nav-item">
+            <a href="/professor/" class="nav-link link-dark" aria-current="page">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="/assignuser/" class="nav-link active">
+                Assign TA
+            </a>
+        </li>
+        <li>
+            <a href="/contactinfoProf/" class="nav-link link-dark">
+                Edit Contact Info
+            </a>
+        </li>
+        <li>
+            <a href="/contactstaff/" class="nav-link link-dark">
+                Contact Staff
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="">
+        <a href="/" class="nav-link link-dark text-danger">
+            <strong>Log Out</strong>
+        </a>
+    </div>
+</div>
+
+<!-- ----------------- End Side Bar --------------------------- -->
+
+ <div class="row justify-content-center">
+  <div style="margin-top: 5%; margin-left: 10%; text-align: center;" class="col-lg-4">
+      <h1 class="display-4"><strong>Assign TA</strong></h1>
+  </div>
+</div>
 
   <div class="container">
-
-    <p>Here, you can assign a user to a course. Please include the course number and the account's username to assign them to the chosen course.</p>
-
-    <hr>
- 
+  <div style="margin-top: 3%; max-width: 50%; margin-left: 30%;" class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
   <p class="formfield">
     <label for="cnum"><b>Course Number</b></label>
     <input type="text" placeholder="Enter Course Num..." id="cnum" required>
@@ -29,13 +68,12 @@
     <label for="usern"><b>User to Assign</b></label>
     <input type="text" placeholder="User to Assign..." id="usern" required>
     <br>
-  </p>
-    
-    <br><br><br>
-    <form>
-      <input type="button" value="Assign User!" onclick="history.back()">
-    </form>
 
+    <form>
+      <input type="button" value="Assign TA" onclick="history.back()">
+    </form>
+  </p>
+  </div>
   </div>
   </body>
 </html>

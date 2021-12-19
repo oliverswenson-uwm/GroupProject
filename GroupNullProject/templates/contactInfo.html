@@ -24,15 +24,15 @@
       <li class="nav-item">
           {% if request.session.role == "admin" %}
             <a href="/supervisor/" class="nav-link" aria-current="page">
-              Home
+              Admin
             </a>
           {% elif request.session.role == "professor" %}
               <a href="/professor/" class="nav-link" aria-current="page">
-              Home
+              Professor
             </a>
           {% elif request.session.role == "ta" %}
               <a href="/ta/" class="nav-link" aria-current="page">
-              Home
+              TA
             </a>
           {% endif %}
       </li>

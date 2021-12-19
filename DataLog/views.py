@@ -127,9 +127,9 @@ class CreateUser(View):
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
-            return render(request, "newacc.html", {'msg': "Success: New Account has been create "})
+            return render(request, "newacc.html", {'msg': "Success: New Account has been created "})
         else:
-            return render(request, "newacc.html", {'msg': "Fail: Username exist, Please Pick a new Username"})
+            return render(request, "newacc.html", {'msg': "Fail: Username exists, Please Pick a new Username"})
 
 
 # ASSIGNUSER
@@ -291,7 +291,7 @@ class ContactInfo(View):
             print(request.session)
             return render(request, "contactInfo.html")
         else:
-            messages.add_message(request, messages.INFO, 'Please logging as Staff')
+            messages.add_message(request, messages.INFO, 'Please login as Staff')
             return redirect('/')
 
     def post(self, request):
@@ -371,10 +371,10 @@ class ArchiveUser(View):
         if 'role' in request.session:
             role = request.session['role']
             if role != 'admin':
-                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                messages.add_message(request, messages.INFO, 'Please login as Admin')
                 return redirect('/')
         else:
-            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            messages.add_message(request, messages.INFO, 'Please login as Admin')
             return redirect('/')
 
         #TODO: make sure right html page
@@ -382,3 +382,58 @@ class ArchiveUser(View):
 
     def post(self,request):
         pass
+
+class EditAccount(View):
+    def get(self, request):
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please login as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please login as Admin')
+            return redirect('/')
+
+        return render(request, "editacc.html")
+
+    def post(self, request):
+        fullName = request.POST['fullName']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        phNumber = request.POST['phNumber']
+        mailAdrs = request.POST['mailAdrs']
+
+        currUser = Staff.getUser(username)
+
+        if not currUser:
+            return render(request, "editacc.html", {'msg': "Account doesn't exist."})
+        else:
+            currUser.username = username
+            currUser.email = email
+            currUser.password = password
+            currUser.phNumber = phNumber
+            currUser.mailAdrs = mailAdrs
+            currUser.fullName = fullName
+
+            print(currUser)
+
+class TAInfo(View):
+    def get(self, request):
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'ta':
+                messages.add_message(request, messages.INFO, 'Please login as a TA')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please login as a TA')
+            return redirect('/')
+
+        return render(request, "contactinfoTA.html")
+
+    def post(self, request):
+        phNumber = request.POST['phNumber']
+        mailAdrs = request.POST['mailAdrs']
+
+class ProfInfo(View):
+    pass
