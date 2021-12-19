@@ -361,3 +361,24 @@ class Lookup(View):
             return render(request, "dataLookup.html", {'msg': "Invalid Lookup Type"})
         else:
             return render(request, "dataLookup.html", {"query": query, "lookupType": lookupType})
+
+
+class ArchiveUser(View):
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role != 'admin':
+                messages.add_message(request, messages.INFO, 'Please logging as Admin')
+                return redirect('/')
+        else:
+            messages.add_message(request, messages.INFO, 'Please logging as Admin')
+            return redirect('/')
+
+        #TODO: make sure right html page
+        return render(request, "archiveaccount.html")
+
+    def post(self,request):
+        pass
