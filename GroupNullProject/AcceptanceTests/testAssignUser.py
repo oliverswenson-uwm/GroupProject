@@ -4,68 +4,60 @@ from django.test import TestCase, Client
 from DataLog.models import Staff, Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab
 
 
-class AssignUser(TestCase):
+class AssignProf(TestCase):
 
-    def SetUp(self):
+    def setUp(self):
         self.client = Client()
-        Professor(name="Prof", email="a@uwm.edu", username="assign",
-                  password="123", phoneNum="123", mailAddress="123").save()
-        TA(name="TA", email="t@uwm.edu", username="TA", password="123", phoneNum="123", mailAddress="123").save()
-        Course(name="MATH240", section="001", credits="3", prereqs="MATH101",
-               description="Matrices").save()
+        self.admin = Admin(name="TestAdminone", email="adminonetest@gmail.com", username="adminonetestuser",
+                           password="adminpassone", phoneNum=9529529951, mailAddress="123 AdminTest Way")
+        self.prof1 = self.admin.createProf(fullName="TestprofOne", email="proftesting1@gmail.com",
+                                           username="testprofoneuser",
+                                           password="profpassone", phNumber=1231231233, mailAdrs="1 Professor St.")
+        self.course1 = self.admin.createCourse(nm="MATH240", sec="101", cre="3", pre="None", des="matrices")
 
     def test_default(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "001", "usern": "assign"}, follow=True)
-        self.assertEqual("assign", response.context["usern"])
-        self.assertEqual("MATH240", response.context["cnum"])
-        self.assertEqual("001", response.context["csec"])
+        resp = self.client.post("/assignprof/", {"profSel": "TestprofOne-testprofoneuser",
+                                                 "courseSel": "MATH240-101"
+                                                 }, follow=True)
+        self.assertEqual("Professor assigned", resp.context["msg"])
 
-    def test_invalidUser(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "001", "usern": "invalid"}, follow=True)
-        self.assertEqual("Invalid Username", response.context['msg'])
+    def test_duplicate(self):
+        self.temp = self.admin.assignProf(self.prof1.username, self.course1.name, self.course1.section)
+        resp = self.client.post("/assignprof/", {"profSel": "TestprofOne-testprofoneuser",
+                                                 "courseSel": "MATH240-101"
+                                                 }, follow=True)
+        self.assertEqual("Unable to add professor to Course", resp.context["msg"])
 
-    def test_inValidCourse(self):
-        response = self.client.post('/assignuser/', {"cnum": "COMPSCI240", "csec": "001", "usern": "assign"}, follow=True)
-        self.assertEqual("Invalid course number or section", response.context['msg'])
+    def test_multiple(self):
+        self.admin.assignProf(self.prof1.username, self.course1.name, self.course1.section)
+        self.prof1 = self.admin.createProf(fullName="TestprofTwo", email="proftesting2@gmail.com",
+                                           username="testproftwouser",
+                                           password="profpasstwo", phNumber=2231231233, mailAdrs="2 Professor St.")
+        resp = self.client.post("/assignprof/", {"profSel": "TestprofTwo-testproftwouser",
+                                                 "courseSel": "MATH240-101"
+                                                 }, follow=True)
+        self.assertEqual("Unable to add professor to Course", resp.context["msg"])
 
-    def test_assignIncorrectSection(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "000", "usern": "TA"},
-                                    follow=True)
-        self.assertEqual("Invalid course number or section", response.context['msg'])
 
-
-class testDuplicates(TestCase):
-    def SetUp(self):
+class assignTaToCourse(TestCase):
+    def setUp(self):
         self.client = Client()
-        prof = Professor(name="Prof2", email="b@uwm.edu", username="assign2",
-                         password="123", phoneNum="123", mailAddress="123").save()
-        Professor(name="Prof", email="a@uwm.edu", username="assign",
-                  password="123", phoneNum="123", mailAddress="123").save()
-        ta = TA(name="TA", email="t@uwm.edu", username="TA", password="123", phoneNum="123", mailAddress="123").save()
-        course = Course(name="MATH240", section="001", credits="3", prereqs="MATH101",
-                        description="Matrices").save()
-        Course(name="MATH240", section="000", credits="3", prereqs="MATH101",
-               description="Matrices").save()
+        self.admin = Admin(name="TestAdminone", email="adminonetest@gmail.com", username="adminonetestuser",
+                           password="adminpassone", phoneNum=9529529951, mailAddress="123 AdminTest Way")
+        self.ta1 = self.admin.createTA(fullName="TestTAone", email="taOnGmail1@gmail.com", username="testTAone",
+                                       password="testpassoneTA",
+                                       phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
+        self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
 
-        ProfessorToCourse.objects.create(professor=prof, course=course)
-        TAToCourse.objects.create(ta=ta, course=course)
+    def test_default(self):
+        resp = self.client.post("/assignTAToCourse/", {"taSel": "TestTAone-testpassoneTA",
+                                                       "courseSel": "MATH240-101"
+                                                       }, follow=True)
+        self.assertEqual("TA assigned", resp.context["msg"])
 
-    def test_assignDuplicateToCourse(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "001", "usern": "assign"},
-                                    follow=True)
-        self.assertEqual("Professor already assigned to course", response.context['msg'])
-
-    def test_assignMultipleProfessors(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "001", "usern": "assign2"},
-                                    follow=True)
-        self.assertEqual("A different Professor is already assigned to course", response.context['msg'])
-
-    def test_assignDuplicateToSection(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "001", "usern": "TA"},
-                                    follow=True)
-        self.assertEqual("TA already assigned to section", response.context['msg'])
-
-    def test_assignMultipleSections(self):
-        response = self.client.post('/assignuser/', {"cnum": "MATH240", "csec": "000", "usern": "TA"},
-                                    follow=True)
-        self.assertEqual("TA already assigned to a different section", response.context['msg'])
+    def test_duplicate(self):
+        self.admin.assignProf(self.ta1.username, self.course1.name, self.course1.section)
+        resp = self.client.post("/assignTAToCourse/", {"taSel": "TestTAone-testpassoneTA",
+                                                       "courseSel": "MATH240-101"
+                                                       }, follow=True)
+        self.assertEqual("Unable to add TA to Course", resp.context["msg"])

@@ -1,4 +1,4 @@
-from DataLog.models import Admin, ProfessorToCourse, TAToCourse, TAToLab, Course
+from DataLog.models import Admin
 from django.test import TestCase
 
 
@@ -16,6 +16,16 @@ class TestAssignProf(TestCase):
     def test_default(self):
         self.assigned = self.admin.assignProf(self.prof1.username, self.course1.name, self.course1.section)
         self.assertEqual(self.assigned.__str__(), "Professor TestprofOne is assigned to course MATH240-1")
+
+    def test_invalidNames(self):
+        self.assigned = self.admin.assignProf("InvalidUsername", self.course1.name, self.course1.section)
+        self.assertEqual(self.assigned, None)
+
+        self.assigned = self.admin.assignProf(self.prof1.username, "InvaldCourseName", self.course1.section)
+        self.assertEqual(self.assigned, None)
+
+        self.assigned = self.admin.assignProf(self.prof1.username, self.course1.name, "InvalidSection")
+        self.assertEqual(self.assigned, None)
 
     def test_noProfessor(self):
         self.assigned = self.admin.assignProf(None, self.course1.name, self.course1.section)
@@ -57,6 +67,16 @@ class TestAssignTA(TestCase):
     def test_default(self):
         self.assigned = self.admin.assignTAToCourse(self.ta1.username, self.course1.name, self.course1.section)
         self.assertEqual(self.assigned.__str__(), "TA TestTAone is assigned to course MATH240-1")
+
+    def test_invalidNames(self):
+        self.assigned = self.admin.assignTAToCourse("InvalidUsername", self.course1.name, self.course1.section)
+        self.assertEqual(self.assigned, None)
+
+        self.assigned = self.admin.assignTAToCourse(self.ta1.username, "InvaldCourseName", self.course1.section)
+        self.assertEqual(self.assigned, None)
+
+        self.assigned = self.admin.assignTAToCourse(self.ta1.username, self.course1.name, "InvalidSection")
+        self.assertEqual(self.assigned, None)
 
     def test_noTA(self):
         self.assigned = self.admin.assignTAToCourse(None, self.course1.name, self.course1.section)
