@@ -378,7 +378,7 @@ class ArchiveUser(View):
             return redirect('/')
 
         #TODO: make sure right html page
-        return render(request, "archiveaccount.html")
+        return render(request, "archiveacc.html")
 
     def post(self,request):
         pass

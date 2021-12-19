@@ -30,6 +30,7 @@ urlpatterns = [
     path('contactstaff/', views.ContactInfo.as_view()),
     path('lookup/', views.Lookup.as_view()),
     path('assignprof/', views.AssignProf.as_view()),
+    path('archiveacc/',views.ArchiveUser.as_view())
     #path('newaccount/', NewAcc.as_view()),
     # path('profpage/', ProfPage.as_view()),
     # path('tapage/', TaPage.as_view()),
