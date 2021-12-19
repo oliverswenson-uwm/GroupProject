@@ -365,16 +365,19 @@ class Professor(Staff, models.Model):
     # post conditions: A user's phNumber and/or mailAdrs will be changed
     # side effects: Alters those variables in the database
     def EditContact(self, username, phNumber, mailAdrs):
-        con = Professor.getContactInfo(username)
+        con = Admin.getUser(self, username)
+        if con is None:
+            return None
 
-        if con.phNumber != phNumber:
-            con.phNumber = phNumber
+        if con.phoneNum != phNumber:
+            con.phoneNum = phNumber
 
         elif con.mailAdrs != mailAdrs:
             con.mailAdrs = mailAdrs
 
         con.save()
         print(con)
+        return con
 
 
 class TA(Staff, models.Model):
@@ -395,17 +398,16 @@ class TA(Staff, models.Model):
     # post conditions: A user's phNumber and/or mailAdrs will be changed
     # side effects: Alters those variables in the database
     def EditContact(self, username, phNumber, mailAdrs):
-        con = TA.getContactInfo(username)
-
-        if con.phNumber != phNumber:
-            con.phNumber = phNumber
+        con = Admin.getUser(self, username)
+        if con.phoneNum != phNumber:
+            con.phoneNum = phNumber
 
         elif con.mailAdrs != mailAdrs:
             con.mailAdrs = mailAdrs
 
         con.save()
         print(con)
-
+        return con
 
 class Course(models.Model):
     name = models.CharField(max_length=100)  # name of the course, i.e., SC361

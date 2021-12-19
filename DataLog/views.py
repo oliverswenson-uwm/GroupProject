@@ -406,3 +406,38 @@ class ArchiveUser(View):
             return render(request, "archiveacc.html", {'msg': "Failed to archive account. Double check the information entered"})
         else:
             return render(request, "archiveacc.html", {'msg': "Success! Archived account."})
+
+class EditAccount(View):
+
+    def get(self, request):
+        # the following if else statement check if someone is logged in or not
+        # if logged and the user is not admin
+        # the person will get redirected to logging page
+        if 'role' in request.session:
+            role = request.session['role']
+            if role == 'professor':
+                return render(request, "contactinfoProf.html")
+            elif role == 'ta':
+                return render(request, "contactinfoTA.html")
+            else:
+                return render(request, "/")
+
+    def post(self, request):
+        username = request.POST['username']
+        mailAdrs = request.POST['mailAdrs']
+        phNumber = request.POST['phNumber']
+        user = Admin.getUser(self, username)
+
+        if type(user) == Professor:
+            temp = Professor.EditContact(self, username=username, phNumber=phNumber, mailAdrs=mailAdrs)
+            if temp is None:
+                return render(request, "contactinfoProf.html", {'msg': "Error editing account. Check current username"})
+            else:
+                return render(request, "contactinfoTA.html", {'msg': "Success! Account info updated."})
+
+        elif type(user) == TA:
+            temp = TA.EditContact(self, username=username, phNumber=phNumber, mailAdrs=mailAdrs)
+            if temp is None:
+                return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
+            else:
+                return render(request, "contactinfoTA.html", {'msg': "Success! Account info updated."})
