@@ -294,6 +294,22 @@ class Admin(Staff, models.Model):
         staff.objects.get(username=account.username).delete()
         return account
 
+    # description: Takes an account and alters the variables based on the inputs in the call
+    # preconditions: User needs to have an account (a username)
+    # post conditions: A user's phNumber and/or mailAdrs will be changed
+    # side effects: Alters those variables in the database
+    def EditContact(self, username, phNumber, mailAdrs):
+        con = Admin.getUser(self, username)
+        if con.phoneNum != phNumber:
+            con.phoneNum = phNumber
+
+        elif con.mailAdrs != mailAdrs:
+            con.mailAdrs = mailAdrs
+
+        con.save()
+        print(con)
+        return con
+
 
 class Professor(Staff, models.Model):
 

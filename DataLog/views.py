@@ -419,6 +419,8 @@ class EditAccount(View):
                 return render(request, "contactinfoProf.html")
             elif role == 'ta':
                 return render(request, "contactinfoTA.html")
+            elif role == 'admin':
+                return render(request, "contactinfoAdmin.html")
             else:
                 return render(request, "/")
 
@@ -441,3 +443,12 @@ class EditAccount(View):
                 return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
             else:
                 return render(request, "contactinfoTA.html", {'msg': "Success! Account info updated."})
+
+        elif type(user) == Admin:
+            temp = Admin.EditContact(self, username=username, phNumber=phNumber, mailAdrs=mailAdrs)
+            if temp is None:
+                return render(request, "contactinfoAdmin.html", {'msg': "Error editing account. Check current username"})
+            else:
+                return render(request, "contactinfoAdmin.html", {'msg': "Success! Account info updated."})
+        else:
+            return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
