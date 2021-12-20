@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
 from django.test import TestCase, Client
 
-from DataLog.models import Staff, Admin, Professor, TA, Course, Lab, LabToCourse, ProfessorToCourse, TAToCourse, TAToLab
+from DataLog.models import Admin
 
 
 class AssignProf(TestCase):
