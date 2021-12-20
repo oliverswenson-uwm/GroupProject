@@ -397,7 +397,6 @@ class Professor(Staff, models.Model):
 
 
 class TA(Staff, models.Model):
-    skills =  models.CharField(max_length=256) # i.e Python, HTML, CSS, Django
 
     def viewAssignments(self):
         tatolabs = TAToLab.objects.filter(ta=self)
