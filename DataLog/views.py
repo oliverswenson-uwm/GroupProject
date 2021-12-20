@@ -409,6 +409,7 @@ class ArchiveUser(View):
         else:
             return render(request, "archiveacc.html", {'msg': "Success! Archived account."})
 
+#for people to edit their own contact info.
 class EditAccount(View):
 
     def get(self, request):
@@ -455,7 +456,7 @@ class EditAccount(View):
         else:
             return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
 
-class EditAccount(View):
+class AdminEditAccount(View):
     def get(self, request):
         if 'role' in request.session:
             role = request.session['role']
@@ -476,9 +477,9 @@ class EditAccount(View):
         phNumber = request.POST['phNumber']
         mailAdrs = request.POST['mailAdrs']
 
-        currUser = Staff.getUser(username)
+        currUser = Staff.getUser(self, username)
 
-        if not currUser:
+        if currUser is None:
             return render(request, "editacc.html", {'msg': "Account doesn't exist."})
         else:
             currUser.username = username
@@ -487,5 +488,6 @@ class EditAccount(View):
             currUser.phNumber = phNumber
             currUser.mailAdrs = mailAdrs
             currUser.fullName = fullName
-
+            currUser.save()
+            return render(request, "editacc.html", {'msg': "Account information has been updated"})
             print(currUser)
