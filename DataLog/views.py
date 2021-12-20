@@ -65,7 +65,18 @@ class ProfessorView(View):
         else:
             return redirect('/', {'msg': 'Please logging as Professor'})
 
-        return render(request, "profpage.html")
+        ProfAssignMentQ = Professor.objects.get(username=request.session["user"]).viewAssignments()
+        coursesQuery = []
+        labQuery = []
+        TAQuery = []
+        for links in ProfAssignMentQ:
+            print(links)
+            coursesQuery.append(links[0])
+            labQuery.append((links[1]))
+            TAQuery.append(links[2])
+
+
+        return render(request, "profpage.html", {"coursesQuery": coursesQuery, "TAQuery": TAQuery})
 
 
 class TaView(View):
