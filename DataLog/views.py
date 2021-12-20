@@ -88,11 +88,12 @@ class ProfessorView(View):
         labs = []
         tas = []
         for course in courseQuery:
-            temp = LabToCourse.objects.get(course=course.course)
-            labs.append(temp.lab)
-            TaToLabObj = TAToLab.objects.get(lab=temp.lab)
-            tas.append(TA.objects.get(name=TaToLabObj.ta))
-        print(labs)
+            courses = LabToCourse.objects.filter(course=course.course)
+            for course in courses:
+                labs.append(course.lab)
+                TaToLabs = TAToLab.objects.filter(lab=course.lab)
+                for ta in TaToLabs:
+                    tas.append(TA.objects.get(name=ta.ta))
         # for course in courseQuery:
         #     assignedTas.append(TAToCourse.objects.filter(course=course.course).)
 
