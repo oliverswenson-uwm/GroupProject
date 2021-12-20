@@ -65,18 +65,38 @@ class ProfessorView(View):
         else:
             return redirect('/', {'msg': 'Please logging as Professor'})
 
-        ProfAssignMentQ = Professor.objects.get(username=request.session["user"]).viewAssignments()
-        coursesQuery = []
-        labQuery = []
-        TAQuery = []
-        for links in ProfAssignMentQ:
-            print(links)
-            coursesQuery.append(links[0])
-            labQuery.append((links[1]))
-            TAQuery.append(links[2])
+        # ProfAssignMentQ = Professor.objects.get(username=request.session["user"]).viewAssignments()
+        # coursesQuery = []
+        # labQuery = []
+        # TAQuery = []
+        # for links in ProfAssignMentQ:
+        #     print(links)
+        #     coursesQuery.append(links[0])
+        #     labQuery.append((links[1]))
+        #     TAQuery.append(links[2])
 
+        user = request.session['user']
+        userObj = Admin.getUser(self, user)
 
-        return render(request, "profpage.html", {"coursesQuery": coursesQuery, "TAQuery": TAQuery})
+        courseList = []
+        courseQuery = ProfessorToCourse.objects.filter(professor=userObj)
+        for course in courseQuery:
+            courseList.append(Course.objects.get(name=course.course.name))
+        print(courseList)
+
+        assignedTas = []
+        labs = []
+        tas = []
+        for course in courseQuery:
+            temp = LabToCourse.objects.get(course=course.course)
+            labs.append(temp.lab)
+            TaToLabObj = TAToLab.objects.get(lab=temp.lab)
+            tas.append(TA.objects.get(name=TaToLabObj.ta))
+        print(labs)
+        # for course in courseQuery:
+        #     assignedTas.append(TAToCourse.objects.filter(course=course.course).)
+
+        return render(request, "profpage.html", {"coursesQuery": courseList, "tas": tas, "labs": labs})
 
 
 class TaView(View):
@@ -418,7 +438,6 @@ class ArchiveUser(View):
             messages.add_message(request, messages.INFO, 'Please logging as Admin')
             return redirect('/')
 
-        # TODO: make sure right html page
         return render(request, "archiveacc.html")
 
     def post(self, request):

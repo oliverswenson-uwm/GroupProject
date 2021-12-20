@@ -85,13 +85,19 @@
      class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
     <table class="table table-hover">
         <thead>
-
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Lab</th>
+            </tr>
         </thead>
         <tbody>
-        {% for TA in TAQuery %}
+        {% for TA in tas %}
+            {% for lab in labs %}
             <tr>
                 <td>{{ TA }}</td>
+                <td>{{ lab }}</td>
             </tr>
+                {% endfor %}
         {% endfor %}
         </tbody>
     </table>
