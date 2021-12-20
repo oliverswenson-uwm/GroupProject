@@ -61,15 +61,15 @@
         <tr>
             <th scope="col">Course</th>
             <th scope="col">Section</th>
-            <th scope="col">Handle</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>test</td>
-            <td>value</td>
-            <td>@mdo</td>
-        </tr>
+        {% for course in coursesQuery %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.section }}</td>
+                </tr>
+        {% endfor %}
 
         </tbody>
     </table>
@@ -85,19 +85,14 @@
      class="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
     <table class="table table-hover">
         <thead>
-        <tr>
-            <th scope="col">Lab</th>
-            <th scope="col">Section</th>
-            <th scope="col">handle</th>
-        </tr>
+
         </thead>
         <tbody>
-        <tr>
-            <td>test</td>
-            <td>value</td>
-            <td>@mdo</td>
-        </tr>
-
+        {% for TA in TAQuery %}
+            <tr>
+                <td>{{ TA }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
