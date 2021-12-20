@@ -474,9 +474,9 @@ class AdminEditAccount(View):
         phNumber = request.POST['phNumber']
         mailAdrs = request.POST['mailAdrs']
 
-        currUser = Staff.getUser(username)
+        currUser = Staff.getUser(self, username)
 
-        if not currUser:
+        if currUser is None:
             return render(request, "editacc.html", {'msg': "Account doesn't exist."})
         else:
             currUser.username = username
@@ -485,5 +485,6 @@ class AdminEditAccount(View):
             currUser.phNumber = phNumber
             currUser.mailAdrs = mailAdrs
             currUser.fullName = fullName
-
+            currUser.save()
+            return render(request, "editacc.html", {'msg': "Account information has been updated"})
             print(currUser)
