@@ -96,7 +96,7 @@ class TestAssignTA(TestCase):
                                        password="testpasstwoTA", phNumber=3334441111,
                                        mailAdrs="3 TeachingAssistant Circle")
         self.assigned = self.admin.assignTAToCourse(self.ta2.username, self.course1.name, self.course1.section)
-        self.assertEqual(self.assigned, None)
+        self.assertEqual(self.assigned.__str__(), "TA TestTAtwo is assigned to course MATH240-1")
 
     def test_duplicateTA(self):
         self.temp = self.admin.assignTAToCourse(self.ta1.username, self.course1.name, self.course1.section)
