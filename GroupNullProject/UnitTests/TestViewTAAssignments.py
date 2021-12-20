@@ -16,10 +16,10 @@ class TestViewTAAssignments(TestCase):
 
     def test_default(self):
         self.assignments = self.ta1.viewAssignments()
-        self.assertEqual(self.assignments, [(self.lab1, self.course1)])
+        self.assertEqual(self.assignments, [({'name': 'MATH240', 'section': 2}, {'name': 'MATH240', 'section': 1})])
 
     def test_noAssignments(self):
         self.ta2 = self.admin.createTA(fullName="TestTAtwo", email="taTwoGmail1@gmail.com", username="testTAtwo",
                                        password="testpasstwoTA", phNumber=1111111111,
                                        mailAdrs="3 TeachingAssistant Circle")
-        self.assertEqual(self.ta2.viewAssignments(), None)
+        self.assertEqual(self.ta2.viewAssignments(), [])

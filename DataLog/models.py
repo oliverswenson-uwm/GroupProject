@@ -401,12 +401,13 @@ class TA(Staff, models.Model):
     def viewAssignments(self):
         tatolabs = TAToLab.objects.filter(ta=self)
         if 0 == len(tatolabs):
-            return None
+            return []
         assignments = []
         for i in tatolabs:
             lab = i.lab
             course = LabToCourse.objects.get(lab=lab).course
-            assignments.append((lab, course))
+            assignments.append(({"name": lab.name, "section": lab.section},
+                                {"name": course.name, "section": course.section}))
         return assignments
 
     # description: Takes an account and alters the variables based on the inputs in the call
