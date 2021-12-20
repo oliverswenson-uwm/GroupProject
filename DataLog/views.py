@@ -161,9 +161,10 @@ class AssignTAToCourse(View):
         assignment = Admin.assignTAToCourse(self, username, courseName, courseSection)
 
         if assignment is None:
-            return render(request, "assignTAToCourse.html", "Unable to add TA to Course")
-
-        return render(request, "assignTAToCourse.html", "TA assigned")
+            messages.add_message(request, messages.INFO, 'Unable to add professor to Course')
+            return redirect("/assignprof/")
+        messages.add_message(request, messages.INFO, 'Professor assigned')
+        return redirect("/assignprof/")
 
 
 # I just added the site as assignta.html. If you want to change feel free to change it.
@@ -291,9 +292,10 @@ class AssignProf(View):
         assignment = Admin.assignProf(self, username, courseName, courseSection)
 
         if assignment is None:
-            return render(request, "assignprof.html", "Unable to add professor to Course")
-
-        return render(request, "assignprof.html", "Professor assigned")
+            messages.add_message(request, messages.INFO, 'Unable to add professor to Course')
+            return redirect("/assignprof/")
+        messages.add_message(request, messages.INFO, 'Professor assigned')
+        return redirect("/assignprof/")
 
 # public contact Info
 class ContactInfo(View):

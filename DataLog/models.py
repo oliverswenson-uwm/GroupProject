@@ -140,7 +140,7 @@ class Admin(Staff, models.Model):
         elif mailAdrs == "" or mailAdrs[0] == " ":
             return None
         ta = TA(name=fullName, email=email, username=username, password=password,
-                phoneNum=phNumber, mailAddress=mailAdrs)
+                phoneNum=phNumber, mailAddress=mailAdrs, skills="")
         ta.save()
         print(ta)
         return ta
@@ -221,23 +221,23 @@ class Admin(Staff, models.Model):
 
     # prof username and course name
     def assignProf(self, username, course, section):
-
-        # converting string type prof and string type course to Objects,
-        # since HTML dont send objects type. Also using username is easier for lookup in table (username is unique)
         assignment = None
         # converting username to Staff Type
-        try:
-            userObj = Professor.objects.get(username=username)
-        except:
-            return None
-
+        userObj = Admin.getUser(self, username)
         # converting course to object
+        if course is None:
+            return None
         try:
             courseObj = Course.objects.get(name=course, section=section)
         except:
             return None
 
-        if 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
+        print(len(ProfessorToCourse.objects.filter(course=courseObj)))
+        if userObj is None:
+            return None
+        elif courseObj is None:
+            return None
+        elif 0 != len(ProfessorToCourse.objects.filter(course=courseObj)):
             return None
         assignment = ProfessorToCourse.objects.create(professor=userObj, course=courseObj)
         assignment.save()
@@ -253,7 +253,7 @@ class Admin(Staff, models.Model):
             courseObj = Course.objects.get(name=course, section=section)
         except:
             return None
-        if 0 != len(TAToCourse.objects.filter(course=courseObj)):
+        if 0 != len(TAToCourse.objects.filter(ta=taObj, course=courseObj)):
             return None
         assignment = TAToCourse.objects.create(ta=taObj, course=courseObj)
         assignment.save()
@@ -397,6 +397,7 @@ class Professor(Staff, models.Model):
 
 
 class TA(Staff, models.Model):
+    skills =  models.CharField(max_length=256) # i.e Python, HTML, CSS, Django
 
     def viewAssignments(self):
         tatolabs = TAToLab.objects.filter(ta=self)
