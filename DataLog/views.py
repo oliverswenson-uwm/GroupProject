@@ -113,7 +113,7 @@ class CreateUser(View):
         if not user:  # username does not exits(new user is being created)
             newUser = None
             if accType == 'admin':
-                newUser = Admin.createAdmin(self,fullName, email, username, password, phNumber, mailAdrs)
+                newUser = Admin.createAdmin(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
@@ -123,7 +123,7 @@ class CreateUser(View):
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
             elif accType == 'ta':
-                newUser = Admin.createTA(self,fullName, email, username, password, phNumber, mailAdrs)
+                newUser = Admin.createTA(self, fullName, email, username, password, phNumber, mailAdrs)
                 print(newUser)
                 if newUser is None:
                     return render(request, "newacc.html", {'msg': "Failed: A empty field in form"})
@@ -262,6 +262,7 @@ class CreateLab(View):
         messages.add_message(request, messages.INFO, 'Lab created Successfully!')
         return redirect("/createlab/")
 
+
 # view for assigning professor to the course
 class AssignProf(View):
     def get(self, request):
@@ -283,8 +284,8 @@ class AssignProf(View):
         return render(request, "assignprof.html", {"profQuery": profQuery, "courseQuery": courseQuery})
 
     def post(self, request):
-        prof = request.POST['profSel'].split('-') # output ['name', 'username']
-        course = request.POST['courseSel'].split('-') # output ['name', 'section']
+        prof = request.POST['profSel'].split('-')  # output ['name', 'username']
+        course = request.POST['courseSel'].split('-')  # output ['name', 'section']
         username = prof[1]
         courseName = course[0]
         courseSection = course[1]
@@ -296,6 +297,7 @@ class AssignProf(View):
             return redirect("/assignprof/")
         messages.add_message(request, messages.INFO, 'Professor assigned')
         return redirect("/assignprof/")
+
 
 # public contact Info
 class ContactInfo(View):
@@ -394,7 +396,7 @@ class ArchiveUser(View):
             messages.add_message(request, messages.INFO, 'Please logging as Admin')
             return redirect('/')
 
-        #TODO: make sure right html page
+        # TODO: make sure right html page
         return render(request, "archiveacc.html")
 
     def post(self, request):
@@ -405,25 +407,30 @@ class ArchiveUser(View):
         account = Admin.getUser(self, username)
         temp = Admin.archiveAccount(self, account)
         if temp is None:
-            return render(request, "archiveacc.html", {'msg': "Failed to archive account. Double check the information entered"})
+            return render(request, "archiveacc.html",
+                          {'msg': "Failed to archive account. Double check the information entered"})
         else:
             return render(request, "archiveacc.html", {'msg': "Success! Archived account."})
 
-#for people to edit their own contact info.
-class EditAccount(View):
 
+# for people to edit their own contact info.
+class EditAccount(View):
     def get(self, request):
         # the following if else statement check if someone is logged in or not
         # if logged and the user is not admin
         # the person will get redirected to logging page
         if 'role' in request.session:
             role = request.session['role']
+            username = request.session['user']
             if role == 'professor':
-                return render(request, "contactinfoProf.html")
+                query = Professor.objects.get(username=username)
+                return render(request, "contactinfoProf.html", {'user': query})
             elif role == 'ta':
-                return render(request, "contactinfoTA.html")
+                query = TA.objects.get(username=username)
+                return render(request, "contactinfoTA.html", {'user': query})
             elif role == 'admin':
-                return render(request, "contactinfoAdmin.html")
+                query = Admin.objects.get(username=username)
+                return render(request, "contactinfoAdmin.html", {'user': query})
             else:
                 return render(request, "/")
 
@@ -438,7 +445,7 @@ class EditAccount(View):
             if temp is None:
                 return render(request, "contactinfoProf.html", {'msg': "Error editing account. Check current username"})
             else:
-                return render(request, "contactinfoTA.html", {'msg': "Success! Account info updated."})
+                return render(request, "contactinfoProf.html", {'msg': "Success! Account info updated."})
 
         elif type(user) == TA:
             temp = TA.EditContact(self, username=username, phNumber=phNumber, mailAdrs=mailAdrs)
@@ -450,11 +457,13 @@ class EditAccount(View):
         elif type(user) == Admin:
             temp = Admin.EditContact(self, username=username, phNumber=phNumber, mailAdrs=mailAdrs)
             if temp is None:
-                return render(request, "contactinfoAdmin.html", {'msg': "Error editing account. Check current username"})
+                return render(request, "contactinfoAdmin.html",
+                              {'msg': "Error editing account. Check current username"})
             else:
                 return render(request, "contactinfoAdmin.html", {'msg': "Success! Account info updated."})
         else:
-            return render(request, "contactinfoTA.html", {'msg': "Error editing account. Check current username"})
+            return render(request, "contactinfoAdmin.html", {'msg': "Error editing account. Check current username"})
+
 
 class AdminEditAccount(View):
     def get(self, request):
