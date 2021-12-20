@@ -409,6 +409,7 @@ class ArchiveUser(View):
         else:
             return render(request, "archiveacc.html", {'msg': "Success! Archived account."})
 
+#for people to edit their own contact info.
 class EditAccount(View):
 
     def get(self, request):

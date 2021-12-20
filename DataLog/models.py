@@ -140,7 +140,7 @@ class Admin(Staff, models.Model):
         elif mailAdrs == "" or mailAdrs[0] == " ":
             return None
         ta = TA(name=fullName, email=email, username=username, password=password,
-                phoneNum=phNumber, mailAddress=mailAdrs, skills="")
+                phoneNum=phNumber, mailAddress=mailAdrs)
         ta.save()
         print(ta)
         return ta
@@ -397,7 +397,6 @@ class Professor(Staff, models.Model):
 
 
 class TA(Staff, models.Model):
-    skills =  models.CharField(max_length=256) # i.e Python, HTML, CSS, Django
 
     def viewAssignments(self):
         tatolabs = TAToLab.objects.filter(ta=self)
