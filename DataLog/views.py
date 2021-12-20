@@ -65,16 +65,6 @@ class ProfessorView(View):
         else:
             return redirect('/', {'msg': 'Please logging as Professor'})
 
-        # ProfAssignMentQ = Professor.objects.get(username=request.session["user"]).viewAssignments()
-        # coursesQuery = []
-        # labQuery = []
-        # TAQuery = []
-        # for links in ProfAssignMentQ:
-        #     print(links)
-        #     coursesQuery.append(links[0])
-        #     labQuery.append((links[1]))
-        #     TAQuery.append(links[2])
-
         user = request.session['user']
         userObj = Admin.getUser(self, user)
 
@@ -83,30 +73,22 @@ class ProfessorView(View):
         for course in courseQuery:
             courseList.append(Course.objects.get(name=course.course.name, section=course.course.section))
 
-
-        print(courseList)
-
-
-        labs = []
-        tas = []
+        taAssignList = []
 
         for course in courseList:
             # print(course)
             labsToCou = LabToCourse.objects.filter(course=course)
             print(labsToCou)
-        # for c in courseQuery:
-        #     courses = LabToCourse.objects.filter(course=c.course)
-        #     print(courses)
-        #     for course in courses:
-        #         labs.append(course.lab)
-        #         TaToLabs = TAToLab.objects.filter(lab=course.lab)
-        #         # print(TaToLabs)
-        #         for ta in TaToLabs:
-        #             tas.append(TA.objects.get(name=ta.ta))
-        # for course in courseQuery:
-        #     assignedTas.append(TAToCourse.objects.filter(course=course.course).)
+            for lab in labsToCou:
+                taFromLab = TAToLab.objects.get(lab=lab.lab)
+                print(taFromLab)
+                dictionary = {
+                    "ta": taFromLab.ta,
+                    "lab": taFromLab.lab
+                }
+                taAssignList.append(dictionary)
 
-        return render(request, "profpage.html", {"coursesQuery": courseList, "tas": tas, "labs": labs})
+        return render(request, "profpage.html", {"coursesQuery": courseList, "taList": taAssignList})
 
 
 class TaView(View):
@@ -121,9 +103,7 @@ class TaView(View):
         else:
             return redirect('/', {'msg': 'Please logging as TA'})
 
-        username = request.session["user"]
-        print(username)
-        labCourseQuery = TA.objects.get(username=username).viewAssignments()
+        labCourseQuery = TA.objects.get(username=request.session["user"]).viewAssignments()
         coursesQuery = []
         labsQuery = []
         for links in labCourseQuery:
