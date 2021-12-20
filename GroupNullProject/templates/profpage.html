@@ -91,13 +91,11 @@
             </tr>
         </thead>
         <tbody>
-        {% for TA in tas %}
-            {% for lab in labs %}
+        {% for t in taList %}
             <tr>
-                <td>{{ TA }}</td>
-                <td>{{ lab }}</td>
+                <td>{{ t.ta }}</td>
+                <td>{{ t.lab }}</td>
             </tr>
-                {% endfor %}
         {% endfor %}
         </tbody>
     </table>
