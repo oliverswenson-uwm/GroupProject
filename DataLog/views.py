@@ -80,7 +80,7 @@ class TaView(View):
         else:
             return redirect('/', {'msg': 'Please logging as TA'})
 
-        labCourseQuery = TA.objects.get(username=request.session["username"]).viewAssignments(self)
+        labCourseQuery = TA.objects.get(username=request.session["user"]).viewAssignments()
         coursesQuery = []
         labsQuery = []
         for links in labCourseQuery:
