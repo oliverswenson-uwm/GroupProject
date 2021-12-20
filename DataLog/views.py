@@ -83,6 +83,10 @@ class ProfessorView(View):
         for course in courseQuery:
             courseList.append(Course.objects.get(name=course.course.name, section=course.course.section))
 
+
+        print(courseList)
+
+
         labs = []
         tas = []
 
@@ -117,7 +121,9 @@ class TaView(View):
         else:
             return redirect('/', {'msg': 'Please logging as TA'})
 
-        labCourseQuery = TA.objects.get(username=request.session["user"]).viewAssignments()
+        username = request.session["user"]
+        print(username)
+        labCourseQuery = TA.objects.get(username=username).viewAssignments()
         coursesQuery = []
         labsQuery = []
         for links in labCourseQuery:
