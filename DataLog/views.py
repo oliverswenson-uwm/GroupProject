@@ -161,10 +161,10 @@ class AssignTAToCourse(View):
         assignment = Admin.assignTAToCourse(self, username, courseName, courseSection)
 
         if assignment is None:
-            messages.add_message(request, messages.INFO, 'Unable to add professor to Course')
-            return redirect("/assignprof/")
-        messages.add_message(request, messages.INFO, 'Professor assigned')
-        return redirect("/assignprof/")
+            messages.add_message(request, messages.INFO, 'Unable to add TA to Course')
+            return redirect("/tatocourse/")
+        messages.add_message(request, messages.INFO, 'TA assigned')
+        return redirect("/tatocourse/")
 
 
 # I just added the site as assignta.html. If you want to change feel free to change it.
