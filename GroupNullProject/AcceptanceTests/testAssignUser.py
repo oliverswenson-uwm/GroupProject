@@ -50,14 +50,14 @@ class assignTaToCourse(TestCase):
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
 
     def test_default(self):
-        resp = self.client.post("/assignTAToCourse/", {"taSel": "TestTAone-testpassoneTA",
+        resp = self.client.post("/tatocourse/", {"taSel": "TestTAone-testpassoneTA",
                                                        "courseSel": "MATH240-101"
                                                        }, follow=True)
         self.assertEqual("TA assigned", resp.context["msg"])
 
     def test_duplicate(self):
         self.admin.assignProf(self.ta1.username, self.course1.name, self.course1.section)
-        resp = self.client.post("/assignTAToCourse/", {"taSel": "TestTAone-testpassoneTA",
+        resp = self.client.post("/tatocourse/", {"taSel": "TestTAone-testpassoneTA",
                                                        "courseSel": "MATH240-101"
                                                        }, follow=True)
         self.assertEqual("Unable to add TA to Course", resp.context["msg"])

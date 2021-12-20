@@ -80,7 +80,14 @@ class TaView(View):
         else:
             return redirect('/', {'msg': 'Please logging as TA'})
 
-        return render(request, "tapage.html")
+        labCourseQuery = TA.objects.get(username=request.session["username"]).viewAssignments(self)
+        coursesQuery = []
+        labsQuery = []
+        for links in labCourseQuery:
+            labsQuery.append(links[0])
+            coursesQuery.append(links[1])
+
+        return render(request, "tapage.html", {"coursesQuery": coursesQuery, "labsQuery": labsQuery})
 
 
 class CreateUser(View):
