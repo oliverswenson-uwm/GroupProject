@@ -280,15 +280,17 @@ class CreateLab(View):
             messages.add_message(request, messages.INFO, 'Please logging as Admin')
             return redirect('/')
 
-        courseQuery = Course.objects.all().values('name').distinct()
+        courseQuery = Course.objects.all().values('name', 'section').distinct()
 
         return render(request, "createLab.html", {"courseQuery": courseQuery})
 
     def post(self, request):
-        labName = request.POST['labName']
+        names = request.POST['nameSel'].split('-')  # output ['name', 'section']
+        name = names[0]
+        courseSec = names[1]
         labSec = request.POST['labSec']
-        print(labName, labSec)
-        newLab = Admin.createLab(self, labName, labSec)
+        print(name, labSec)
+        newLab = Admin.createLab(self, name, labSec, courseSec)
         print(newLab)
         if newLab is None:
             messages.add_message(request, messages.INFO, 'Failed to create Lab')

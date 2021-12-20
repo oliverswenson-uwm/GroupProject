@@ -168,13 +168,13 @@ class Admin(Staff, models.Model):
     # preconditions: name should be similar to course that the lab will assign to
     # post conditions: the new lab for course will get created
     # side effects: Lab table will have this new lab in it
-    def createLab(self, name, section):
+    def createLab(self, name, labSection, courseSection):
         lab = None
-        if not name or not section:
+        if not name or not labSection:
             return lab
 
         try:
-            section = int(section)
+            labSection = int(labSection)
         except:
             return lab
 
@@ -189,14 +189,14 @@ class Admin(Staff, models.Model):
             return lab
         elif name[0] in [' @_!#$%^&*()<>?/\|}{~: ']:
             return lab
-        elif section > 99999:
+        elif labSection > 99999:
             return lab
-        elif section < 1:
+        elif labSection < 1:
             return lab
 
-        courseExist = Course.objects.filter(name=name)
-        courseSimToLab = Course.objects.filter(name=name, section=section)
-        labExist = Lab.objects.filter(name=name, section=section)
+        courseExist = Course.objects.filter(name=name, section=courseSection)
+        courseSimToLab = Course.objects.filter(name=name, section=labSection)
+        labExist = Lab.objects.filter(name=name, section=labSection)
         if not courseExist:
             return lab
         elif courseSimToLab:
@@ -204,7 +204,7 @@ class Admin(Staff, models.Model):
         elif labExist:
             return lab
 
-        lab = Lab(name=name, section=section)
+        lab = Lab(name=name, section=labSection)
         lab.save()
         labtocourse = None
         for e in courseExist:  # will only run once just needed to pull value out of queryset

@@ -14,7 +14,7 @@ class TestCreateLab(TestCase):
     def test_noCourse(self):
         # login first
         self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
-        response = self.client.post('/createlab/', {"labName": "CS250", "labSec": "811"}, follow=True)
+        response = self.client.post('/createlab/', {"nameSel": "CS250-401", "labSec": "811"}, follow=True)
         msgs = response.context['messages']
         error = None
         for msg in msgs:
@@ -26,7 +26,7 @@ class TestCreateLab(TestCase):
     def test_existed(self):
         # login first
         self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
-        response = self.client.post('/createlab/', {"labName": "CS361", "labSec": "801"}, follow=True)
+        response = self.client.post('/createlab/', {"nameSel": "CS361-401", "labSec": "801"}, follow=True)
         msgs = response.context['messages']
         error = None
         for msg in msgs:
@@ -38,7 +38,7 @@ class TestCreateLab(TestCase):
     def test_good(self):
         # login first
         self.client.post("", {"username": "AdminTwo", "password": "Adminpasstwo"}, follow=True)
-        response = self.client.post('/createlab/', {"labName": "CS361", "labSec": "802"}, follow=True)
+        response = self.client.post('/createlab/', {"nameSel": "CS361-401", "labSec": "802"}, follow=True)
         msgs = response.context['messages']
         error = None
         for msg in msgs:

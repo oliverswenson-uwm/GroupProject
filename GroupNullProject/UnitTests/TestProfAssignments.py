@@ -17,9 +17,9 @@ class testGetAssignmentsGood(TestCase):
         self.cs777 = Admin.createCourse(self, nm="compsci777", sec="444", cre="3", pre="compsci251", des="")
 
         # create Labs
-        lab1 = Admin.createLab(self, name="compsci361", section=123)
-        lab2 = Admin.createLab(self, name="compsci351", section=333)
-        lab3 = Admin.createLab(self, name="compsci777", section=555)
+        lab1 = Admin.createLab(self, name="compsci361", labSection=123, courseSection=401)
+        lab2 = Admin.createLab(self, name="compsci351", labSection=333, courseSection=122)
+        lab3 = Admin.createLab(self, name="compsci777", labSection=555, courseSection=444)
 
         # assign prof to courses
         Admin.assignProf(self, username=self.prof1.username, course=self.cs361.name, section = self.cs361.section)

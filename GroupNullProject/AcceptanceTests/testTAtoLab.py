@@ -16,7 +16,7 @@ class AssignProf(TestCase):
                                        username="TA1",
                                        password="taone", phNumber=1231231233, mailAdrs="1 TA St.")
         self.course1 = self.admin.createCourse(nm="MATH240", sec="101", cre="3", pre="None", des="matrices")
-        self.lab1 = self.admin.createLab(name="MATH240", section=801)
+        self.lab1 = self.admin.createLab(name="MATH240", labSection=801, courseSection=101)
         self.ta2 = self.admin.createTA(fullName="ta2", email="tatest2@gmail.com",
                                        username="TA2",
                                        password="tatwo", phNumber=1231231233, mailAdrs="2 TA St.")

@@ -11,7 +11,7 @@ class TestViewTAAssignments(TestCase):
                                        password="testpassoneTA",
                                        phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
-        self.lab1 = self.admin.createLab(name="MATH240", section="002")
+        self.lab1 = self.admin.createLab(name="MATH240", labSection="002", courseSection=1)
         self.temp = Professor.assignTA(self, username=self.ta1.username, lab_name = self.lab1.name, lab_section=self.lab1.section)
 
     def test_default(self):

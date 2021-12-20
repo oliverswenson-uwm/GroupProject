@@ -12,50 +12,50 @@ class TestCreateLab(TestCase):
         self.labExist.save()
 
     def test_none(self):
-        lab = self.admin.createLab(None, None)
+        lab = self.admin.createLab(None, None, None)
         self.assertIsNone(lab, "Cannot create lab with None type fields")
 
     def test_empty(self):
-        lab = self.admin.createLab("", "")
+        lab = self.admin.createLab("", "", "")
         self.assertIsNone(lab, "Cannot create lab with empty fields")
 
     def test_whiteSpace(self):
-        lab = self.admin.createLab(" ", " ")
+        lab = self.admin.createLab(" ", " ", " ")
         self.assertIsNone(lab, "Cannot create lab with empty fields")
 
     def test_intTypeName(self):
-        lab = self.admin.createLab(123, 801)
+        lab = self.admin.createLab(123, 801, 123)
         self.assertIsNone(lab, "Cannot create lab with int type name fields")
 
     def test_badName(self):
-        lab = self.admin.createLab("-CS361", 801)
+        lab = self.admin.createLab("-CS361", 801, 123)
         self.assertIsNone(lab, "Cannot create lab with special char in front of name fields")
 
     def test_negSec(self):
-        lab = self.admin.createLab("CS361", -801)
+        lab = self.admin.createLab("CS361", -801, 123)
         self.assertIsNone(lab, "Cannot create lab with negative section fields")
 
     def test_zeroSec(self):
-        lab = self.admin.createLab("CS361", 0)
+        lab = self.admin.createLab("CS361", 0, 123)
         self.assertIsNone(lab, "Cannot create lab with section 0 fields")
 
     def test_badSec(self):
-        lab = self.admin.createLab("CS361", 9999999)
+        lab = self.admin.createLab("CS361", 9999999, 123)
         self.assertIsNone(lab, "Cannot create lab with big section fields")
 
     def test_labExist(self):
-        lab = self.admin.createLab("CS999", 321)
+        lab = self.admin.createLab("CS999", 321, 123)
         self.assertIsNone(lab, "Cannot create lab since new lab already exist")
 
     def test_labSimilarToCourse(self):
-        lab = self.admin.createLab("CS999", 123)
+        lab = self.admin.createLab("CS999", 123, 123)
         print(lab)
         self.assertIsNone(lab, "Cannot create lab similar to course")
 
     def test_courseNotExit(self):
-        lab = self.admin.createLab("CS111", 321)
+        lab = self.admin.createLab("CS111", 321, 123)
         self.assertIsNone(lab, "Cannot create lab without course being in existence")
 
     def test_newLab(self):
-        lab = self.admin.createLab("CS999", 456)
+        lab = self.admin.createLab("CS999", 456, 123)
         self.assertEquals("CS999-456", lab.__str__(), "Lab was not created")

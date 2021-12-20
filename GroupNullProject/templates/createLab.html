@@ -89,12 +89,12 @@
   <form action="/createlab/" method="post">
     {% csrf_token %}
     <div class="form-group row">
-        <label for="courseSel" class="col-sm-5 col-form-label">Select a Course</label>
-        <div class="col-sm-7">
-            <select name="labName" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+        <label for="courseSel" class="col-lg-12 col-form-label">Select a Course</label>
+        <div class="col-sm-12">
+            <select name="nameSel" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 <option disabled>Choose...</option>
                 {% for course in courseQuery %}
-                <option>{{ course.name }}</option>
+                <option>{{ course.name }}-{{ course.section }}</option>
                 {% endfor %}
             </select>
         </div>

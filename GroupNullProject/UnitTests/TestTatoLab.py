@@ -13,8 +13,8 @@ class test_Ta_Lab(TestCase):
                                        password="testpassoneTA",
                                        phNumber=3334441111, mailAdrs="2 TeachingAssistant Circle")
         self.course1 = self.admin.createCourse(nm="MATH240", sec="001", cre="3", pre="None", des="matrices")
-        self.lab1 = self.admin.createLab(name="MATH240", section=801)
-        self.lab2 = self.admin.createLab(name="compsci314", section=802)
+        self.lab1 = self.admin.createLab(name="MATH240", labSection=801, courseSection=1)
+        self.lab2 = self.admin.createLab(name="compsci314", labSection=802, courseSection=1)
 
     def test_add_Ta_Lab_One(self):
         temp = self.prof1.assignTA(self.ta1.username, self.lab1.name, self.lab1.section)
