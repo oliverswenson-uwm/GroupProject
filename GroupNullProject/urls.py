@@ -34,5 +34,6 @@ urlpatterns = [
     path('editownacc/', views.EditAccount.as_view()),
     path('tatocourse/', views.AssignTAToCourse.as_view()),
     path('editacc/', views.AdminEditAccount.as_view()),
+    path('tatoLab/', views.AssignTaToLab.as_view())
     # path('tapage/', TaPage.as_view()),
 ]

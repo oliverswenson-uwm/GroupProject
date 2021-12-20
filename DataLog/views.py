@@ -180,19 +180,23 @@ class AssignTaToLab(View):
             return redirect('/')
 
         labQuery = Lab.objects.all().values('name', 'section').distinct()
-        taQuery = Course.objects.all().values('name', 'username').distinct()
+        taQuery = TA.objects.all().values('name', 'username').distinct()
 
-        return render(request, "assignta.html", {"labQuery": labQuery, "taQuery": taQuery})
+        return render(request, "assignTAToLab.html", {"labQuery": labQuery, "taQuery": taQuery})
 
     def post(self, request):
         ta = request.POST['taSel']
-        lab = request.POST['labSel']
+        lab = request.POST['labSel'].split('-')
         username = ta.split('-')[1]
-        lab_name = lab.split('-')[1]
-        lab_section = lab_name.split('-')[1]
+        lab_name = lab[0]
+        lab_section = lab[1]
         assignment = Professor.assignTA(self, username, lab_name, lab_section)
 
-        return render(request, "assignta.html")
+        if assignment is None:
+            messages.add_message(request, messages.INFO, 'Unable to add Ta to Lab')
+            return redirect("/tatoLab/")
+        messages.add_message(request, messages.INFO, 'TA assigned')
+        return redirect("/tatoLab/")
 
 
 # CREATECOURSE
