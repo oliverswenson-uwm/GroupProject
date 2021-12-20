@@ -80,7 +80,10 @@ class ProfessorView(View):
             labsToCou = LabToCourse.objects.filter(course=course)
             print(labsToCou)
             for lab in labsToCou:
-                taFromLab = TAToLab.objects.get(lab=lab.lab)
+                try:
+                    taFromLab = TAToLab.objects.get(lab=lab.lab)
+                except:
+                    continue
                 print(taFromLab)
                 dictionary = {
                     "ta": taFromLab.ta,

@@ -487,6 +487,8 @@ class LabToCourse(models.Model):
     def getLab(self, coursetolabobj):
         return coursetolabobj.lab
 
+    def getCourse(self, coursetolabobj):
+        return coursetolabobj.course
     def __str__(self):
         return "Lab " + self.lab.__str__() + " is assigned to course " + self.course.__str__()
 
